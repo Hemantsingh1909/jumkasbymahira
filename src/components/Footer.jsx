@@ -8,7 +8,7 @@ import {
   FaPinterest,
   FaWhatsapp,
 } from "react-icons/fa";
-import logo from "../assets/logo.png"; // Import the logo
+import logo from "../assets/Logo.png"; // Import the logo with correct capitalization
 
 const Footer = () => {
   const [email, setEmail] = useState("");
