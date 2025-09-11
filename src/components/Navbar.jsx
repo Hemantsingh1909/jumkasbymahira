@@ -83,7 +83,7 @@ const Navbar = () => {
             <div className="text-jewelry-800 font-display">
               <span className="text-2xl font-bold">Jhumkas</span>
               <span className="text-xl text-jewelry-600 italic ml-1">
-                by Mahira
+                by Malti
               </span>
             </div>
           </Link>
