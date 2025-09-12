@@ -2,8 +2,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  FaFacebookF,
-  FaTwitter,
   FaInstagram,
   FaPinterest,
   FaWhatsapp,
@@ -44,31 +42,22 @@ const Footer = () => {
             </p>
             <div className="flex space-x-4 mt-4">
               <a
-                href="#"
-                className="text-gray-400 hover:text-jewelry-400 transition-colors"
-              >
-                <FaFacebookF size={18} />
-              </a>
-              <a
-                href="#"
-                className="text-gray-400 hover:text-jewelry-400 transition-colors"
-              >
-                <FaTwitter size={18} />
-              </a>
-              <a
-                href="#"
+                href="https://www.instagram.com/jhumkas_by_malti/"
+                target="_blank"
                 className="text-gray-400 hover:text-jewelry-400 transition-colors"
               >
                 <FaInstagram size={18} />
               </a>
               <a
-                href="#"
+                href="https://pin.it/4RhiTEUIl"
+                target="_blank"
                 className="text-gray-400 hover:text-jewelry-400 transition-colors"
               >
                 <FaPinterest size={18} />
               </a>
               <a
-                href="#"
+                href="https://wa.me/8238672255"
+                target="_blank"
                 className="text-gray-400 hover:text-jewelry-400 transition-colors"
               >
                 <FaWhatsapp size={18} />
