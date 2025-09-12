@@ -137,7 +137,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center">
                 <span className="mr-2">✉️</span>
-                <span>info@jhumkasbymalti.com</span>
+                <email>sshreecolllection593@gmail.com</email>
               </li>
             </ul>
           </div>
@@ -153,7 +153,7 @@ const Footer = () => {
             {subscribed ? (
               <div className="bg-gray-800 p-3 rounded">
                 <p className="text-jewelry-300 text-sm">
-                  Thank you for subscribing! You'll receive our updates soon.
+                  Thank you for subscribing! You will receive our updates soon.
                 </p>
               </div>
             ) : (
