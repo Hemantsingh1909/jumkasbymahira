@@ -133,11 +133,11 @@ const Footer = () => {
               </li>
               <li className="flex items-center">
                 <span className="mr-2">📱</span>
-                <span>+91 98765 43210</span>
+                <span>+91 8238672255</span>
               </li>
               <li className="flex items-center">
                 <span className="mr-2">✉️</span>
-                <span>info@jhumkasbymahira.com</span>
+                <span>info@jhumkasbymalti.com</span>
               </li>
             </ul>
           </div>
@@ -188,7 +188,7 @@ const Footer = () => {
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
           <p>
-            &copy; {new Date().getFullYear()} Jhumkas by Mahira. All rights
+            &copy; {new Date().getFullYear()} Jhumkas by Malti. All rights
             reserved.
           </p>
           <div className="mt-4 md:mt-0 space-x-4">
