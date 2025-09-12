@@ -112,14 +112,6 @@ const Footer = () => {
               Contact Us
             </h4>
             <ul className="space-y-2 text-gray-400">
-              <li className="flex items-start">
-                <span className="mr-2">📍</span>
-                <span>
-                  123 Jewelry Lane, Fashion District
-                  <br />
-                  Mumbai, Maharashtra 400001
-                </span>
-              </li>
               <li className="flex items-center">
                 <span className="mr-2">📱</span>
                 <span>+91 8238672255</span>
