@@ -1,16 +1,18 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { NavLink, Link, useNavigate } from "react-router-dom";
-import "@fortawesome/fontawesome-free/css/all.min.css"; // Import Font Awesome CSS
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const Navbar = () => {
   const cartItems = useSelector((state) => state.cart.items || []);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
   const [wishlistCount, setWishlistCount] = useState(0);
-  const navigate = useNavigate();
+  const router = useRouter();
 
   // Handle scroll effect for navbar
   useEffect(() => {
@@ -57,8 +59,8 @@ const Navbar = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/products?search=${encodeURIComponent(searchQuery)}`);
-      setSearchQuery("");
+      router.push(`/products?search=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery('');
       setIsMenuOpen(false);
     }
   };
@@ -79,7 +81,7 @@ const Navbar = () => {
       <div className="container-custom mx-auto">
         <div className="flex flex-wrap justify-between items-center">
           {/* Logo */}
-          <Link to="/" className="flex items-center">
+          <Link href="/" className="flex items-center">
             <div className="text-jewelry-800 font-display">
               <span className="text-2xl font-bold">Jhumkas</span>
               <span className="text-xl text-jewelry-600 italic ml-1">
@@ -110,7 +112,7 @@ const Navbar = () => {
           {/* Mobile Menu Button */}
           <div className="flex items-center md:hidden">
             <Link
-              to="/wishlist"
+              href="/wishlist"
               className="mr-4 text-jewelry-800 relative"
               aria-label="Wishlist"
             >
@@ -122,7 +124,7 @@ const Navbar = () => {
               )}
             </Link>
             <Link
-              to="/cart"
+              href="/cart"
               className="mr-4 text-jewelry-800 relative"
               aria-label="Shopping cart"
             >
@@ -148,80 +150,60 @@ const Navbar = () => {
 
           {/* Navigation Links - Desktop */}
           <div className="hidden md:flex items-center space-x-6">
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-jewelry-700 font-semibold border-b-2 border-jewelry-500 pb-1"
-                  : "text-gray-700 hover:text-jewelry-600 transition-colors"
-              }
+            <Link
+              href="/"
+              className="text-gray-700 hover:text-jewelry-600 transition-colors"
             >
               Home
-            </NavLink>
-            <NavLink
-              to="/collections"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-jewelry-700 font-semibold border-b-2 border-jewelry-500 pb-1"
-                  : "text-gray-700 hover:text-jewelry-600 transition-colors"
-              }
+            </Link>
+            <Link
+              href="/collections"
+              className="text-gray-700 hover:text-jewelry-600 transition-colors"
             >
               Collections
-            </NavLink>
-            <NavLink
-              to="/state-collections"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-jewelry-700 font-semibold border-b-2 border-jewelry-500 pb-1"
-                  : "text-gray-700 hover:text-jewelry-600 transition-colors"
-              }
+            </Link>
+            <Link
+              href="/state-collections"
+              className="text-gray-700 hover:text-jewelry-600 transition-colors"
             >
               State Jhumkas
-            </NavLink>
-            <NavLink
-              to="/products"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-jewelry-700 font-semibold border-b-2 border-jewelry-500 pb-1"
-                  : "text-gray-700 hover:text-jewelry-600 transition-colors"
-              }
+            </Link>
+            <Link
+              href="/products"
+              className="text-gray-700 hover:text-jewelry-600 transition-colors"
             >
               All Products
-            </NavLink>
-            <NavLink
-              to="/contact"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-jewelry-700 font-semibold border-b-2 border-jewelry-500 pb-1"
-                  : "text-gray-700 hover:text-jewelry-600 transition-colors"
-              }
+            </Link>
+            <Link
+              href="/contact"
+              className="text-gray-700 hover:text-jewelry-600 transition-colors"
             >
               Contact
-            </NavLink>
-            <NavLink
-              to="/wishlist"
+            </Link>
+            <Link
+              href="/wishlist"
               className="text-jewelry-800 hover:text-jewelry-600 transition-colors relative"
               aria-label="Wishlist"
             >
-              <i className="fas fa-heart text-xl"></i>
+              <i className="fas fa-heart text-lg"></i>
               {wishlistCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {wishlistCount}
                 </span>
               )}
-            </NavLink>
-            <NavLink
-              to="/cart"
+            </Link>
+            <Link
+              href="/cart"
               className="text-jewelry-800 hover:text-jewelry-600 transition-colors relative"
               aria-label="Shopping cart"
             >
-              <i className="fas fa-shopping-bag text-xl"></i>
+              <i className="fas fa-shopping-bag text-lg"></i>
               {totalCartItems > 0 && (
                 <span className="absolute -top-2 -right-2 bg-jewelry-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {totalCartItems}
                 </span>
               )}
-            </NavLink>
+            </Link>
           </div>
         </div>
 
@@ -251,79 +233,51 @@ const Navbar = () => {
           </div>
 
           <div className="flex flex-col space-y-3 py-3">
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-jewelry-700 font-semibold border-l-4 border-jewelry-500 pl-3 py-2"
-                  : "text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
-              }
+            <Link
+              href="/"
+              className="text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
               onClick={() => setIsMenuOpen(false)}
             >
               Home
-            </NavLink>
-            <NavLink
-              to="/collections"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-jewelry-700 font-semibold border-l-4 border-jewelry-500 pl-3 py-2"
-                  : "text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
-              }
+            </Link>
+            <Link
+              href="/collections"
+              className="text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
               onClick={() => setIsMenuOpen(false)}
             >
               Collections
-            </NavLink>
-            <NavLink
-              to="/state-collections"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-jewelry-700 font-semibold border-l-4 border-jewelry-500 pl-3 py-2"
-                  : "text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
-              }
+            </Link>
+            <Link
+              href="/state-collections"
+              className="text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
               onClick={() => setIsMenuOpen(false)}
             >
               State Jhumkas
-            </NavLink>
-            <NavLink
-              to="/products"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-jewelry-700 font-semibold border-l-4 border-jewelry-500 pl-3 py-2"
-                  : "text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
-              }
+            </Link>
+            <Link
+              href="/products"
+              className="text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
               onClick={() => setIsMenuOpen(false)}
             >
               All Products
-            </NavLink>
-            <NavLink
-              to="/wishlist"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-jewelry-700 font-semibold border-l-4 border-jewelry-500 pl-3 py-2"
-                  : "text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
-              }
+            </Link>
+            <Link
+              href="/wishlist"
+              className="text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
               onClick={() => setIsMenuOpen(false)}
             >
               Wishlist
-            </NavLink>
-            <NavLink
-              to="/contact"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-jewelry-700 font-semibold border-l-4 border-jewelry-500 pl-3 py-2"
-                  : "text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
-              }
+            </Link>
+            <Link
+              href="/contact"
+              className="text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
               onClick={() => setIsMenuOpen(false)}
             >
               Contact
-            </NavLink>
-            <NavLink
-              to="/cart"
-              className={({ isActive }) =>
-                isActive
-                  ? "text-jewelry-700 font-semibold border-l-4 border-jewelry-500 pl-3 py-2 flex items-center"
-                  : "text-gray-700 hover:text-jewelry-600 pl-3 py-2 flex items-center hover:bg-jewelry-50 rounded"
-              }
+            </Link>
+            <Link
+              href="/cart"
+              className="text-gray-700 hover:text-jewelry-600 pl-3 py-2 flex items-center hover:bg-jewelry-50 rounded"
               onClick={() => setIsMenuOpen(false)}
             >
               <i className="fas fa-shopping-bag mr-2"></i> Cart
@@ -332,7 +286,7 @@ const Navbar = () => {
                   {totalCartItems}
                 </span>
               )}
-            </NavLink>
+            </Link>
           </div>
         </div>
       </div>

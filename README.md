@@ -1,33 +1,149 @@
 # Jhumkas by Mahira
 
-A modern e-commerce website for handcrafted jewelry, built with React, Redux, and Tailwind CSS.
+A modern e-commerce platform for handcrafted jhumkas (traditional Indian earrings), built with **Next.js 14**, **React 18**, **Redux Toolkit**, and **Tailwind CSS**.
 
 ## Features
 
-- Responsive design for all devices
-- Product catalog with filtering and sorting
-- Detailed product pages
-- Shopping cart functionality
-- Wishlist for saving favorite items
-- Checkout process
-- State-specific jewelry collections
+- 🛍️ Browse and filter products
+- 🛒 Shopping cart with persistent storage
+- ❤️ Wishlist functionality
+- 📦 Checkout process
+- 🎨 Beautiful, responsive design
+- 📱 Mobile-friendly interface
+- 🔍 Product search and filtering
 
 ## Tech Stack
 
-- React 18
-- Redux Toolkit for state management
-- React Router for navigation
-- Tailwind CSS for styling
-- Vite for build tooling
+- **Frontend Framework**: [Next.js 14](https://nextjs.org/)
+- **React**: 18.3.1
+- **State Management**: [Redux Toolkit](https://redux-toolkit.js.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Icons**: [Font Awesome](https://fontawesome.com/) & [React Icons](https://react-icons.github.io/react-icons/)
+- **HTTP Client**: [Axios](https://axios-http.com/)
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18 or higher
+- Node.js 18.0.0 or higher
 - npm or yarn
 
 ### Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd jumkasbymahira
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Run the development server:
+```bash
+npm run dev
+```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+### Build for Production
+
+```bash
+npm run build
+npm start
+```
+
+## Project Structure
+
+```
+├── app/                    # Next.js App Router
+│   ├── layout.jsx         # Root layout
+│   ├── page.jsx           # Home page
+│   ├── products/          # Products page
+│   ├── product/[id]/      # Product detail page
+│   ├── cart/              # Cart page
+│   ├── checkout/          # Checkout page
+│   ├── contact/           # Contact page
+│   ├── collections/       # Collections page
+│   ├── state-collections/ # State collections page
+│   └── wishlist/          # Wishlist page
+├── src/
+│   ├── components/        # React components
+│   │   ├── Navbar.jsx
+│   │   ├── Footer.jsx
+│   │   └── ProductCard.jsx
+│   ├── store/             # Redux store configuration
+│   │   ├── index.js
+│   │   ├── cartSlice.js
+│   │   └── productSlice.js
+│   ├── assets/            # Images and static files
+│   └── index.css          # Global styles
+├── public/                # Static files
+├── package.json
+├── next.config.js         # Next.js configuration
+├── tailwind.config.js     # Tailwind CSS configuration
+└── jsconfig.json          # JavaScript path configuration
+```
+
+## Available Scripts
+
+- `npm run dev` - Start the development server
+- `npm run build` - Build for production
+- `npm start` - Start the production server
+- `npm run lint` - Run ESLint
+
+## Features
+
+### Product Management
+- Browse all products with filtering options
+- Search products by name
+- Filter by price range and categories
+- Sort by price and name
+
+### Shopping Cart
+- Add/remove products from cart
+- Update quantities
+- Persistent storage using localStorage
+- Real-time cart updates
+
+### Wishlist
+- Add/remove products from wishlist
+- View all wishlist items
+- Add wishlist items to cart
+- Persistent storage using localStorage
+
+### Checkout
+- Form validation
+- Order summary
+- Multiple payment options
+- Order confirmation
+
+## Styling
+
+The project uses Tailwind CSS with custom configurations for jewelry-themed colors:
+- Custom color palette with jewelry tones
+- Custom fonts (Poppins, Playfair Display, Cinzel)
+- Responsive design with mobile-first approach
+
+## Performance
+
+- Next.js 14 App Router for optimal performance
+- Image optimization
+- Code splitting and lazy loading
+- Fast refresh during development
+
+## Browser Support
+
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+## License
+
+This project is private and proprietary to Jhumkas by Mahira.
 
 1. Clone the repository:
 

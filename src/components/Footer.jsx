@@ -1,12 +1,15 @@
 // src/components/Footer.jsx
-import { useState } from "react";
-import { Link } from "react-router-dom";
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
 import {
   FaInstagram,
   FaPinterest,
   FaWhatsapp,
-} from "react-icons/fa";
-import logo from "../assets/Logo.png"; // Import the logo with correct capitalization
+} from 'react-icons/fa';
+import logo from '../assets/Logo.png'; // Import the logo with correct capitalization
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -29,7 +32,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Brand Section */}
           <div className="space-y-4">
-            <Link to="/" className="inline-block">
+            <Link href="/" className="inline-block">
               <img
                 src={logo}
                 alt="Jhumkas by Mahira"
@@ -44,6 +47,7 @@ const Footer = () => {
               <a
                 href="https://www.instagram.com/jhumkas_by_malti/"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="text-gray-400 hover:text-jewelry-400 transition-colors"
               >
                 <FaInstagram size={18} />
@@ -51,6 +55,7 @@ const Footer = () => {
               <a
                 href="https://pin.it/4RhiTEUIl"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="text-gray-400 hover:text-jewelry-400 transition-colors"
               >
                 <FaPinterest size={18} />
@@ -58,6 +63,7 @@ const Footer = () => {
               <a
                 href="https://wa.me/8238672255"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="text-gray-400 hover:text-jewelry-400 transition-colors"
               >
                 <FaWhatsapp size={18} />
@@ -73,7 +79,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link
-                  to="/"
+                  href="/"
                   className="text-gray-400 hover:text-jewelry-300 transition-colors"
                 >
                   Home
@@ -81,7 +87,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/collections"
+                  href="/collections"
                   className="text-gray-400 hover:text-jewelry-300 transition-colors"
                 >
                   Collections
@@ -89,7 +95,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/products"
+                  href="/products"
                   className="text-gray-400 hover:text-jewelry-300 transition-colors"
                 >
                   All Products
@@ -97,7 +103,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  to="/contact"
+                  href="/contact"
                   className="text-gray-400 hover:text-jewelry-300 transition-colors"
                 >
                   Contact Us

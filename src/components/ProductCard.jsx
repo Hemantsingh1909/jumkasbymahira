@@ -1,8 +1,10 @@
+'use client';
+
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../store/cartSlice";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -61,7 +63,7 @@ const ProductCard = ({ product }) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Product Image */}
-      <Link to={`/product/${product.id}`} className="block relative">
+      <Link href={`/product/${product.id}`} className="block relative">
         <div className="relative h-64 overflow-hidden bg-gray-50">
           <img
             src={product.image}
@@ -114,7 +116,7 @@ const ProductCard = ({ product }) => {
 
       {/* Product Info */}
       <div className="p-4">
-        <Link to={`/product/${product.id}`} className="block">
+        <Link href={`/product/${product.id}`} className="block">
           <h3 className="font-serif text-lg font-medium text-gray-800 mb-1 hover:text-jewelry-600 transition-colors">
             {product.name}
           </h3>
