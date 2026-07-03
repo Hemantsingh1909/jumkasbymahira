@@ -1,7 +1,7 @@
-import { supabasePublic } from '@/src/lib/supabase';
+import { supabasePublic, getSiteUrl } from '@/src/lib/supabase';
 
 export default async function sitemap() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://jhumkasbymalti.in';
+  const siteUrl = getSiteUrl();
 
   // Base routes
   const routes = ['', '/products', '/collections', '/state-collections', '/contact', '/wishlist', '/cart', '/checkout', '/admin'].map((route) => ({

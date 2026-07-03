@@ -1,7 +1,8 @@
 import CartClient from './cart-client';
+import { getSiteUrl } from '@/src/lib/supabase';
 
 export async function generateMetadata() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001';
+  const siteUrl = getSiteUrl();
   return {
     title: 'Shopping Cart | Jhumkas by Malti',
     description: 'Review the exquisite handcrafted Indian earrings in your shopping cart and proceed to secure checkout.',

@@ -45,7 +45,7 @@ const Footer = () => {
           <div className="space-y-4">
             <Link href="/" className="inline-block">
               <img
-                src={logo}
+                src={logo?.src || logo}
                 alt="Jhumkas by Malti"
                 className="h-20 object-contain bg-white rounded-lg p-2"
               />

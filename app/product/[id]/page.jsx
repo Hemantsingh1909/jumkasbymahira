@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { supabasePublic } from '@/src/lib/supabase';
+import { supabasePublic, getSiteUrl } from '@/src/lib/supabase';
 import ProductDetailClient from './product-detail-client';
 
 function mapStockStatusToFrontend(status) {
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }) {
     };
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001';
+  const siteUrl = getSiteUrl();
   const imageUrl = `${siteUrl}${product.images?.[0] || '/images/products/one.jpeg'}`;
 
   return {

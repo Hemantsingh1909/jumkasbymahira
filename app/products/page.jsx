@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { supabasePublic } from '@/src/lib/supabase';
+import { supabasePublic, getSiteUrl } from '@/src/lib/supabase';
 import ProductsContent from './products-content';
 
 function mapStockStatusToFrontend(status) {
@@ -10,7 +10,7 @@ function mapStockStatusToFrontend(status) {
 }
 
 export async function generateMetadata() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001';
+  const siteUrl = getSiteUrl();
   return {
     title: 'Handcrafted Jhumkas & Earrings Collection | Jhumkas by Malti',
     description: 'Explore the ultimate collection of handcrafted luxury Indian earrings, traditional Gold Jhumkas, Chandbali, Kundan, and designer wedding jewelry sets.',

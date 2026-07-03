@@ -1,7 +1,8 @@
 import Link from 'next/link';
+import { getSiteUrl } from '@/src/lib/supabase';
 
 export async function generateMetadata() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001';
+  const siteUrl = getSiteUrl();
   return {
     title: 'State-wise Jhumka Collections | Jhumkas by Malti',
     description: 'Explore traditional Indian earrings styled uniquely by state, including heritage collections from Rajasthan, Gujarat, Tamil Nadu, and Kashmir.',

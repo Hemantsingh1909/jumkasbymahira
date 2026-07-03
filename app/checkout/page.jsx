@@ -1,7 +1,8 @@
 import CheckoutClient from './checkout-client';
+import { getSiteUrl } from '@/src/lib/supabase';
 
 export async function generateMetadata() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001';
+  const siteUrl = getSiteUrl();
   return {
     title: 'Checkout | Jhumkas by Malti',
     description: 'Provide your shipping address and complete your order for handcrafted jewelry.',

@@ -1,4 +1,4 @@
-import { supabasePublic } from '@/src/lib/supabase';
+import { supabasePublic, getSiteUrl } from '@/src/lib/supabase';
 import HomepageClient from './homepage-client';
 
 function mapStockStatusToFrontend(status) {
@@ -9,7 +9,7 @@ function mapStockStatusToFrontend(status) {
 }
 
 export async function generateMetadata() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001';
+  const siteUrl = getSiteUrl();
   return {
     title: 'Jhumkas by Malti - Handcrafted Traditional Indian Jewelry',
     description: 'Exquisite handcrafted traditional Indian earrings and designer jhumkas. Discover our signature gold plated, Meenakari, Kundan, and Chandbali collections.',
