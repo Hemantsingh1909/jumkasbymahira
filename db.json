@@ -1,0 +1,207 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "sku": "JM-GD-001",
+      "name": "Gold Jhumka",
+      "price": 12999.99,
+      "images": [
+        "/images/products/one.jpeg"
+      ],
+      "category": "jhumkas",
+      "description": "Exquisite traditional gold-plated jhumkas featuring intricate filigree work and delicate pearl hangings. Handmade by skilled artisans.",
+      "stockStatus": "In Stock",
+      "tags": [
+        "traditional",
+        "bridal",
+        "festive"
+      ],
+      "material": "Gold Plated",
+      "occasion": "Bridal",
+      "color": "Gold"
+    },
+    {
+      "id": 2,
+      "sku": "JM-PL-002",
+      "name": "Pearl Earrings",
+      "price": 8499.5,
+      "images": [
+        "/images/products/two.jpeg"
+      ],
+      "category": "bridal sets",
+      "description": "Stunning teardrop earrings decorated with high-luster freshwater pearls and sparkling cubic zirconia accent stones.",
+      "stockStatus": "In Stock",
+      "tags": [
+        "elegant",
+        "pearly",
+        "formal"
+      ],
+      "material": "Silver",
+      "occasion": "Everyday",
+      "color": "White"
+    },
+    {
+      "id": 3,
+      "sku": "JM-DM-003",
+      "name": "Diamond Studs",
+      "price": 24999.99,
+      "images": [
+        "/images/products/three.jpeg"
+      ],
+      "category": "everyday",
+      "description": "Brilliant round-cut diamond studs set in a classic four-prong 18k white gold setting. The ultimate statement of luxury.",
+      "stockStatus": "In Stock",
+      "tags": [
+        "luxury",
+        "sparkling",
+        "classic"
+      ],
+      "material": "Gold Plated",
+      "occasion": "Everyday",
+      "color": "White"
+    },
+    {
+      "id": 4,
+      "sku": "JM-RB-004",
+      "name": "Ruby Danglers",
+      "price": 15999.99,
+      "images": [
+        "/images/products/four.jpeg"
+      ],
+      "category": "bridal sets",
+      "description": "Glamorous drop earrings featuring deep red synthetic ruby centerstones surrounded by crystal micro-pave accents.",
+      "stockStatus": "In Stock",
+      "tags": [
+        "gemstone",
+        "ruby",
+        "statement"
+      ],
+      "material": "Brass",
+      "occasion": "Bridal",
+      "color": "Red"
+    },
+    {
+      "id": 5,
+      "sku": "JM-EM-005",
+      "name": "Emerald Drops",
+      "price": 18499.5,
+      "images": [
+        "/images/products/five.jpeg"
+      ],
+      "category": "bridal sets",
+      "description": "Stunning drop earrings highlighting cushion-cut lab-created emeralds in a vintage gold border. Radiates majestic beauty.",
+      "stockStatus": "Low Stock",
+      "tags": [
+        "emerald",
+        "vintage",
+        "elegant"
+      ],
+      "material": "Gold Plated",
+      "occasion": "Festive",
+      "color": "Green"
+    },
+    {
+      "id": 6,
+      "sku": "JM-SV-006",
+      "name": "Silver Hoops",
+      "price": 5999.99,
+      "images": [
+        "/images/products/six.jpeg"
+      ],
+      "category": "everyday",
+      "description": "Polished sterling silver hoop earrings with a secure clasp mechanism. Versatile design suitable for daily wear.",
+      "stockStatus": "In Stock",
+      "tags": [
+        "silver",
+        "modern",
+        "casual"
+      ],
+      "material": "Silver",
+      "occasion": "Everyday",
+      "color": "Silver"
+    },
+    {
+      "id": 7,
+      "sku": "JM-KN-007",
+      "name": "Kundan Jhumka",
+      "price": 9999.99,
+      "images": [
+        "/images/products/seven.jpeg"
+      ],
+      "category": "kundan",
+      "description": "Authentic Kundan earrings featuring traditional foil-set gemstones, green glass beads, and meenakari paint detailing on the reverse.",
+      "stockStatus": "In Stock",
+      "tags": [
+        "kundan",
+        "royal",
+        "traditional"
+      ],
+      "material": "Kundan",
+      "occasion": "Festive",
+      "color": "Gold"
+    },
+    {
+      "id": 8,
+      "sku": "JM-CB-008",
+      "name": "Antique Chandbali",
+      "price": 11499.5,
+      "images": [
+        "/images/products/eight.jpeg"
+      ],
+      "category": "chandbali",
+      "description": "Moon-shaped antique chandbali earrings finished in oxidized metal tones, showcasing tribal carvings and cascading silver bells.",
+      "stockStatus": "In Stock",
+      "tags": [
+        "chandbali",
+        "antique",
+        "rustic"
+      ],
+      "material": "Brass",
+      "occasion": "Festive",
+      "color": "Gold"
+    },
+    {
+      "id": 9,
+      "sku": "JM-MN-009",
+      "name": "Meenakari Earrings",
+      "price": 7999.99,
+      "images": [
+        "/images/products/nine.jpeg"
+      ],
+      "category": "meenakari",
+      "description": "Brightly enameled meenakari drop earrings with floral motifs, pink enamel colors, and tiny white seed pearl fringes.",
+      "stockStatus": "In Stock",
+      "tags": [
+        "meenakari",
+        "enamel",
+        "colorful"
+      ],
+      "material": "Brass",
+      "occasion": "Festive",
+      "color": "Pink"
+    },
+    {
+      "id": 10,
+      "sku": "JM-CR-010",
+      "name": "Crystal Danglers",
+      "price": 6499.99,
+      "images": [
+        "/images/products/ten.jpeg"
+      ],
+      "category": "everyday",
+      "description": "Chic long dangle earrings constructed with high-quality multi-faceted glass crystals that capture and reflect light beautifully.",
+      "stockStatus": "Out of Stock",
+      "tags": [
+        "crystal",
+        "modern",
+        "dazzling"
+      ],
+      "material": "Silver",
+      "occasion": "Everyday",
+      "color": "White"
+    }
+  ],
+  "orders": [],
+  "newsletter": [],
+  "contactMessages": []
+}

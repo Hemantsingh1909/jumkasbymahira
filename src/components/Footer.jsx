@@ -15,13 +15,24 @@ const Footer = () => {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (email) {
-      console.log("Subscribed with email:", email);
-      setSubscribed(true);
-      setEmail("");
-      // In a real app, you would send this to your backend
+      try {
+        const response = await fetch('/api/newsletter', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email }),
+        });
+        if (response.ok) {
+          setSubscribed(true);
+          setEmail("");
+        }
+      } catch (error) {
+        console.error("Subscription error:", error);
+      }
     }
   };
 
@@ -35,7 +46,7 @@ const Footer = () => {
             <Link href="/" className="inline-block">
               <img
                 src={logo}
-                alt="Jhumkas by Mahira"
+                alt="Jhumkas by Malti"
                 className="h-20 object-contain bg-white rounded-lg p-2"
               />
             </Link>

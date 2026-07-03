@@ -3,7 +3,7 @@ import LayoutWrapper from './layout-wrapper';
 import '../src/index.css';
 
 export const metadata = {
-  title: 'Jhumkas by Mahira',
+  title: 'Jhumkas by Malti',
   description: 'Premium handcrafted jhumkas and earrings',
 };
 

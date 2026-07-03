@@ -63,56 +63,56 @@ const ProductCard = ({ product }) => {
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Product Image */}
-      <Link href={`/product/${product.id}`} className="block relative">
-        <div className="relative h-64 overflow-hidden bg-gray-50">
+      <div className="relative h-64 overflow-hidden bg-gray-50">
+        <Link href={`/product/${product.id}`} className="block w-full h-full">
           <img
             src={product.image}
             alt={product.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
+        </Link>
 
-          {/* Wishlist Button */}
+        {/* Wishlist Button */}
+        <button
+          onClick={toggleWishlist}
+          className="absolute top-3 right-3 bg-white w-8 h-8 flex items-center justify-center rounded-full shadow-md z-20 transition-transform hover:scale-110"
+          aria-label={
+            isInWishlist ? "Remove from wishlist" : "Add to wishlist"
+          }
+        >
+          <i
+            className={`fas fa-heart ${
+              isInWishlist ? "text-red-500" : "text-gray-400"
+            }`}
+          ></i>
+        </button>
+
+        {/* Quick Add Button - Visible on Hover */}
+        <div
+          className={`absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center transition-opacity duration-300 ${
+            isHovered ? "opacity-100" : "opacity-0"
+          }`}
+        >
           <button
-            onClick={toggleWishlist}
-            className="absolute top-3 right-3 bg-white w-8 h-8 flex items-center justify-center rounded-full shadow-md z-20 transition-transform hover:scale-110"
-            aria-label={
-              isInWishlist ? "Remove from wishlist" : "Add to wishlist"
-            }
+            onClick={handleAddToCart}
+            className="bg-white text-jewelry-600 py-2 px-4 rounded-md hover:bg-jewelry-50 transition-colors transform hover:scale-105 font-medium"
+            disabled={isInCart}
           >
-            <i
-              className={`fas fa-heart ${
-                isInWishlist ? "text-red-500" : "text-gray-400"
-              }`}
-            ></i>
+            {isInCart ? "Added to Cart" : "Quick Add"}
           </button>
-
-          {/* Quick Add Button - Visible on Hover */}
-          <div
-            className={`absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center transition-opacity duration-300 ${
-              isHovered ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <button
-              onClick={handleAddToCart}
-              className="bg-white text-jewelry-600 py-2 px-4 rounded-md hover:bg-jewelry-50 transition-colors transform hover:scale-105 font-medium"
-              disabled={isInCart}
-            >
-              {isInCart ? "Added to Cart" : "Quick Add"}
-            </button>
-          </div>
-
-          {/* Added to Cart Message */}
-          <div
-            className={`absolute bottom-0 left-0 right-0 bg-jewelry-600 text-white text-center py-2 transition-transform duration-300 ${
-              showAddedMessage
-                ? "transform translate-y-0"
-                : "transform translate-y-full"
-            }`}
-          >
-            Added to cart!
-          </div>
         </div>
-      </Link>
+
+        {/* Added to Cart Message */}
+        <div
+          className={`absolute bottom-0 left-0 right-0 bg-jewelry-600 text-white text-center py-2 transition-transform duration-300 ${
+            showAddedMessage
+              ? "transform translate-y-0"
+              : "transform translate-y-full"
+          }`}
+        >
+          Added to cart!
+        </div>
+      </div>
 
       {/* Product Info */}
       <div className="p-4">

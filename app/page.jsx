@@ -6,28 +6,6 @@ import { setProducts } from '@/src/store/productSlice';
 import ProductCard from '@/src/components/ProductCard';
 import Link from 'next/link';
 
-// Import all 10 images directly
-import one from '@/src/assets/one.jpeg';
-import two from '@/src/assets/two.jpeg';
-import three from '@/src/assets/three.jpeg';
-import four from '@/src/assets/four.jpeg';
-import five from '@/src/assets/five.jpeg';
-import six from '@/src/assets/six.jpeg';
-import seven from '@/src/assets/seven.jpeg';
-import eight from '@/src/assets/eight.jpeg';
-import nine from '@/src/assets/nine.jpeg';
-import ten from '@/src/assets/ten.jpeg';
-
-// Import state SVGs
-import rajasthanSvg from '@/src/assets/1.svg';
-import gujaratSvg from '@/src/assets/2.svg';
-import tamilnaduSvg from '@/src/assets/3.svg';
-import karnatakaImg from '@/src/assets/4.svg';
-import bengalImg from '@/src/assets/5.svg';
-import kashmirImg from '@/src/assets/6.svg';
-import keralaImg from '@/src/assets/7.svg';
-import upImg from '@/src/assets/8.svg';
-
 export default function Home() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.products.products);
@@ -35,33 +13,31 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
-  // Load products
+  // Load products dynamically from database API
   useEffect(() => {
-    const localProducts = [
-      { id: 1, name: 'Gold Jhumka', image: one, price: 12999.99 },
-      { id: 2, name: 'Pearl Earrings', image: two, price: 8499.5 },
-      { id: 3, name: 'Diamond Studs', image: three, price: 24999.99 },
-      { id: 4, name: 'Ruby Danglers', image: four, price: 15999.99 },
-      { id: 5, name: 'Emerald Drops', image: five, price: 18499.5 },
-      { id: 6, name: 'Silver Hoops', image: six, price: 5999.99 },
-      { id: 7, name: 'Kundan Jhumka', image: seven, price: 9999.99 },
-      { id: 8, name: 'Antique Chandbali', image: eight, price: 11499.5 },
-      { id: 9, name: 'Meenakari Earrings', image: nine, price: 7999.99 },
-      { id: 10, name: 'Crystal Danglers', image: ten, price: 6499.99 },
-    ];
-
-    dispatch(setProducts(localProducts));
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch('/api/products');
+        if (res.ok) {
+          const data = await res.json();
+          dispatch(setProducts(data));
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+    fetchProducts();
   }, [dispatch]);
 
   const stateCollections = [
-    { id: 'rajasthan', name: 'Rajasthan', image: rajasthanSvg, description: 'Known for vibrant colors and intricate meenakari work' },
-    { id: 'gujarat', name: 'Gujarat', image: gujaratSvg, description: 'Features delicate filigree work and colorful beads' },
-    { id: 'tamilnadu', name: 'Tamil Nadu', image: tamilnaduSvg, description: 'Characterized by temple-inspired designs' },
-    { id: 'karnataka', name: 'Karnataka', image: karnatakaImg, description: 'Famous for traditional Kasuti embroidery-inspired designs' },
-    { id: 'bengal', name: 'West Bengal', image: bengalImg, description: 'Renowned for intricate filigree work and Dokra art' },
-    { id: 'kashmir', name: 'Kashmir', image: kashmirImg, description: 'Celebrated for delicate enamel work and nature motifs' },
-    { id: 'kerala', name: 'Kerala', image: keralaImg, description: 'Known for traditional temple jewelry designs' },
-    { id: 'up', name: 'Uttar Pradesh', image: upImg, description: 'Famous for Kundan and Polki work from Varanasi' },
+    { id: 'rajasthan', name: 'Rajasthan', image: '/images/collections/1.svg', description: 'Known for vibrant colors and intricate meenakari work' },
+    { id: 'gujarat', name: 'Gujarat', image: '/images/collections/2.svg', description: 'Features delicate filigree work and colorful beads' },
+    { id: 'tamilnadu', name: 'Tamil Nadu', image: '/images/collections/3.svg', description: 'Characterized by temple-inspired designs' },
+    { id: 'karnataka', name: 'Karnataka', image: '/images/collections/4.svg', description: 'Famous for traditional Kasuti embroidery-inspired designs' },
+    { id: 'bengal', name: 'West Bengal', image: '/images/collections/5.svg', description: 'Renowned for intricate filigree work and Dokra art' },
+    { id: 'kashmir', name: 'Kashmir', image: '/images/collections/6.svg', description: 'Celebrated for delicate enamel work and nature motifs' },
+    { id: 'kerala', name: 'Kerala', image: '/images/collections/7.svg', description: 'Known for traditional temple jewelry designs' },
+    { id: 'up', name: 'Uttar Pradesh', image: '/images/collections/8.svg', description: 'Famous for Kundan and Polki work from Varanasi' },
   ];
 
   // Auto-slide effect
@@ -154,7 +130,7 @@ export default function Home() {
                       <div className="md:w-1/2">
                         <div className="h-64 md:h-96 overflow-hidden bg-jewelry-50">
                           <img
-                            src={state.image.src}
+                            src={state.image}
                             alt={state.name}
                             className="w-full h-full object-contain p-4"
                           />

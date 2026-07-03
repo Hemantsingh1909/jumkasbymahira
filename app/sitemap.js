@@ -1,0 +1,34 @@
+import { supabasePublic } from '@/src/lib/supabase';
+
+export default async function sitemap() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://jhumkasbymalti.in';
+
+  // Base routes
+  const routes = ['', '/products', '/collections', '/state-collections', '/contact', '/wishlist', '/cart', '/checkout', '/admin'].map((route) => ({
+    url: `${siteUrl}${route}`,
+    lastModified: new Date(),
+    changeFrequency: 'daily',
+    priority: route === '' ? 1.0 : 0.8,
+  }));
+
+  // Dynamic product routes from Supabase
+  let productRoutes = [];
+  try {
+    const { data: products } = await supabasePublic
+      .from('products')
+      .select('id');
+    
+    if (products) {
+      productRoutes = products.map((product) => ({
+        url: `${siteUrl}/product/${product.id}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.6,
+      }));
+    }
+  } catch (error) {
+    console.error('Error generating sitemap products:', error);
+  }
+
+  return [...routes, ...productRoutes];
+}

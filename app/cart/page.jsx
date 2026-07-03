@@ -13,11 +13,14 @@ export default function CartPage() {
     window.scrollTo(0, 0);
   }, []);
 
-  const calculateTotal = () => {
+  const calculateSubtotal = () => {
     return cartItems
-      .reduce((total, item) => total + item.price * item.quantity, 0)
-      .toFixed(2);
+      .reduce((total, item) => total + item.price * item.quantity, 0);
   };
+
+  const subtotal = calculateSubtotal();
+  const shippingFee = subtotal >= 5000 || subtotal === 0 ? 0 : 99;
+  const total = subtotal + shippingFee;
 
   return (
     <div className="bg-gray-50 py-12">
@@ -117,15 +120,17 @@ export default function CartPage() {
                   Order Summary
                 </h3>
                 <div className="space-y-3 mb-6 pb-6 border-b border-gray-100">
-                  <div className="flex justify-between">
+                  <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Subtotal</span>
-                    <span className="font-medium">₹{calculateTotal()}</span>
+                    <span className="font-medium">₹{subtotal.toFixed(2)}</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Shipping</span>
-                    <span className="font-medium">₹0.00 (Free)</span>
+                    <span className="font-medium text-green-600">
+                      {shippingFee === 0 ? 'Free' : `₹${shippingFee.toFixed(2)}`}
+                    </span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Tax</span>
                     <span className="font-medium">₹0.00</span>
                   </div>
@@ -133,7 +138,7 @@ export default function CartPage() {
                 <div className="flex justify-between mb-6 text-lg">
                   <span className="font-medium">Total</span>
                   <span className="font-bold text-jewelry-600">
-                    ₹{calculateTotal()}
+                    ₹{total.toFixed(2)}
                   </span>
                 </div>
                 <Link

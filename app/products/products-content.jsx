@@ -1,28 +1,71 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'next/navigation';
+import { setProducts } from '@/src/store/productSlice';
 import ProductCard from '@/src/components/ProductCard';
 
 export default function ProductsContent() {
   const products = useSelector((state) => state.products.products);
+  const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
   const [priceRange, setPriceRange] = useState([0, 30000]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedMaterials, setSelectedMaterials] = useState([]);
+  const [selectedOccasions, setSelectedOccasions] = useState([]);
+  const [selectedColors, setSelectedColors] = useState([]);
   const [sortOption, setSortOption] = useState('featured');
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isSortOpen, setIsSortOpen] = useState(false);
   const sortRef = useRef(null);
 
   const categories = [
-    { id: 'gold', name: 'Gold' },
-    { id: 'pearl', name: 'Pearl' },
-    { id: 'kundan', name: 'Kundan' },
-    { id: 'silver', name: 'Silver' },
-    { id: 'diamond', name: 'Diamond' },
+    { id: 'jhumkas', name: 'Jhumkas' },
+    { id: 'meenakari', name: 'Meenakari' },
+    { id: 'chandbali', name: 'Chandbali' },
+    { id: 'bridal sets', name: 'Bridal Sets' },
+    { id: 'everyday', name: 'Everyday Wear' },
   ];
+
+  const materials = [
+    { id: 'Gold Plated', name: 'Gold Plated' },
+    { id: 'Silver', name: 'Silver' },
+    { id: 'Brass', name: 'Brass' },
+    { id: 'Kundan', name: 'Kundan' },
+  ];
+
+  const occasions = [
+    { id: 'Bridal', name: 'Bridal / Wedding' },
+    { id: 'Festive', name: 'Festive / Traditional' },
+    { id: 'Everyday', name: 'Everyday Wear' },
+  ];
+
+  const colors = [
+    { id: 'Gold', name: 'Gold' },
+    { id: 'White', name: 'White / Pearl' },
+    { id: 'Red', name: 'Red / Ruby' },
+    { id: 'Green', name: 'Green / Emerald' },
+    { id: 'Silver', name: 'Silver' },
+    { id: 'Pink', name: 'Pink' },
+  ];
+
+  // Fetch products from database
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch('/api/products');
+        if (res.ok) {
+          const data = await res.json();
+          dispatch(setProducts(data));
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+    fetchProducts();
+  }, [dispatch]);
 
   // Check for search query in URL
   useEffect(() => {
@@ -40,7 +83,9 @@ export default function ProductsContent() {
     if (searchTerm) {
       const lowerCaseSearch = searchTerm.toLowerCase();
       result = result.filter((product) =>
-        product.name.toLowerCase().includes(lowerCaseSearch)
+        product.name.toLowerCase().includes(lowerCaseSearch) ||
+        product.sku?.toLowerCase().includes(lowerCaseSearch) ||
+        product.tags?.some(t => t.toLowerCase().includes(lowerCaseSearch))
       );
     }
 
@@ -51,9 +96,25 @@ export default function ProductsContent() {
 
     if (selectedCategories.length > 0) {
       result = result.filter((product) =>
-        selectedCategories.some((category) =>
-          product.name.toLowerCase().includes(category.toLowerCase())
-        )
+        selectedCategories.includes(product.category?.toLowerCase())
+      );
+    }
+
+    if (selectedMaterials.length > 0) {
+      result = result.filter((product) =>
+        selectedMaterials.includes(product.material)
+      );
+    }
+
+    if (selectedOccasions.length > 0) {
+      result = result.filter((product) =>
+        selectedOccasions.includes(product.occasion)
+      );
+    }
+
+    if (selectedColors.length > 0) {
+      result = result.filter((product) =>
+        selectedColors.includes(product.color)
       );
     }
 
@@ -75,9 +136,9 @@ export default function ProductsContent() {
     }
 
     setFilteredProducts(result);
-  }, [products, searchTerm, priceRange, selectedCategories, sortOption]);
+  }, [products, searchTerm, priceRange, selectedCategories, selectedMaterials, selectedOccasions, selectedColors, sortOption]);
 
-  // Handle click outside
+  // Handle click outside for sort dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sortRef.current && !sortRef.current.contains(event.target)) {
@@ -91,11 +152,9 @@ export default function ProductsContent() {
     };
   }, []);
 
-  const toggleCategory = (categoryId) => {
-    setSelectedCategories((prev) =>
-      prev.includes(categoryId)
-        ? prev.filter((id) => id !== categoryId)
-        : [...prev, categoryId]
+  const toggleFilter = (list, setList, id) => {
+    setList((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
@@ -108,11 +167,24 @@ export default function ProductsContent() {
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar Filters */}
-          <aside className="w-full lg:w-64">
-            <div className="bg-white rounded-lg p-6 space-y-6">
+          <aside className="w-full lg:w-72">
+            <div className="bg-white rounded-lg p-6 space-y-6 shadow-sm">
+              {/* Search Result Info */}
+              {searchTerm && (
+                <div className="pb-4 border-b border-gray-100">
+                  <p className="text-sm text-gray-500">Search query:</p>
+                  <p className="text-md font-semibold text-jewelry-700 flex justify-between items-center mt-1">
+                    &quot;{searchTerm}&quot;
+                    <button onClick={() => setSearchTerm('')} className="text-xs text-red-500 hover:underline">
+                      clear
+                    </button>
+                  </p>
+                </div>
+              )}
+
               {/* Price Filter */}
               <div>
-                <h3 className="font-semibold text-gray-800 mb-4">Price Range</h3>
+                <h3 className="font-semibold text-gray-800 mb-3">Price Range</h3>
                 <input
                   type="range"
                   min="0"
@@ -122,7 +194,7 @@ export default function ProductsContent() {
                   onChange={(e) =>
                     setPriceRange([priceRange[0], parseInt(e.target.value)])
                   }
-                  className="w-full"
+                  className="w-full accent-jewelry-600"
                 />
                 <div className="flex justify-between text-sm text-gray-600 mt-2">
                   <span>₹{priceRange[0]}</span>
@@ -132,20 +204,71 @@ export default function ProductsContent() {
 
               {/* Categories Filter */}
               <div>
-                <h3 className="font-semibold text-gray-800 mb-4">Categories</h3>
+                <h3 className="font-semibold text-gray-800 mb-3">Categories</h3>
                 <div className="space-y-2">
                   {categories.map((category) => (
-                    <label
-                      key={category.id}
-                      className="flex items-center cursor-pointer"
-                    >
+                    <label key={category.id} className="flex items-center cursor-pointer text-sm">
                       <input
                         type="checkbox"
                         checked={selectedCategories.includes(category.id)}
-                        onChange={() => toggleCategory(category.id)}
-                        className="w-4 h-4 rounded border-gray-300"
+                        onChange={() => toggleFilter(selectedCategories, setSelectedCategories, category.id)}
+                        className="w-4 h-4 rounded border-gray-300 accent-jewelry-500"
                       />
                       <span className="ml-2 text-gray-700">{category.name}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Materials Filter */}
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-3">Material</h3>
+                <div className="space-y-2">
+                  {materials.map((mat) => (
+                    <label key={mat.id} className="flex items-center cursor-pointer text-sm">
+                      <input
+                        type="checkbox"
+                        checked={selectedMaterials.includes(mat.id)}
+                        onChange={() => toggleFilter(selectedMaterials, setSelectedMaterials, mat.id)}
+                        className="w-4 h-4 rounded border-gray-300 accent-jewelry-500"
+                      />
+                      <span className="ml-2 text-gray-700">{mat.name}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Occasions Filter */}
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-3">Occasion</h3>
+                <div className="space-y-2">
+                  {occasions.map((occ) => (
+                    <label key={occ.id} className="flex items-center cursor-pointer text-sm">
+                      <input
+                        type="checkbox"
+                        checked={selectedOccasions.includes(occ.id)}
+                        onChange={() => toggleFilter(selectedOccasions, setSelectedOccasions, occ.id)}
+                        className="w-4 h-4 rounded border-gray-300 accent-jewelry-500"
+                      />
+                      <span className="ml-2 text-gray-700">{occ.name}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Colors Filter */}
+              <div>
+                <h3 className="font-semibold text-gray-800 mb-3">Color</h3>
+                <div className="space-y-2">
+                  {colors.map((color) => (
+                    <label key={color.id} className="flex items-center cursor-pointer text-sm">
+                      <input
+                        type="checkbox"
+                        checked={selectedColors.includes(color.id)}
+                        onChange={() => toggleFilter(selectedColors, setSelectedColors, color.id)}
+                        className="w-4 h-4 rounded border-gray-300 accent-jewelry-500"
+                      />
+                      <span className="ml-2 text-gray-700">{color.name}</span>
                     </label>
                   ))}
                 </div>
@@ -157,28 +280,31 @@ export default function ProductsContent() {
                   setSearchTerm('');
                   setPriceRange([0, 30000]);
                   setSelectedCategories([]);
+                  setSelectedMaterials([]);
+                  setSelectedOccasions([]);
+                  setSelectedColors([]);
                   setSortOption('featured');
                 }}
-                className="w-full bg-jewelry-600 text-white py-2 rounded hover:bg-jewelry-700"
+                className="w-full bg-jewelry-600 text-white py-2 rounded hover:bg-jewelry-700 text-sm font-medium transition-colors"
               >
-                Clear Filters
+                Clear All Filters
               </button>
             </div>
           </aside>
 
-          {/* Products */}
+          {/* Products Grid Section */}
           <div className="flex-1">
             {/* Sort Dropdown */}
             <div className="mb-6 flex justify-between items-center">
-              <p className="text-gray-600">
+              <p className="text-gray-600 text-sm">
                 Showing {filteredProducts.length} products
               </p>
               <div className="relative" ref={sortRef}>
                 <button
                   onClick={() => setIsSortOpen(!isSortOpen)}
-                  className="bg-white px-4 py-2 rounded border border-gray-300 hover:border-jewelry-600"
+                  className="bg-white px-4 py-2 rounded border border-gray-300 hover:border-jewelry-600 text-sm flex items-center gap-2"
                 >
-                  Sort: {sortOption} <i className="fas fa-chevron-down ml-2"></i>
+                  Sort: {sortOption} <i className="fas fa-chevron-down text-xs"></i>
                 </button>
                 {isSortOpen && (
                   <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded shadow-lg z-10 min-w-48">
@@ -195,7 +321,7 @@ export default function ProductsContent() {
                           setSortOption(option.value);
                           setIsSortOpen(false);
                         }}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                        className="w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors"
                       >
                         {option.label}
                       </button>
@@ -213,8 +339,9 @@ export default function ProductsContent() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">No products found</p>
+              <div className="text-center py-16 bg-white rounded-lg shadow-sm">
+                <i className="fas fa-search text-4xl text-gray-300 mb-3"></i>
+                <p className="text-gray-500 text-md">No products match your filters</p>
               </div>
             )}
           </div>
