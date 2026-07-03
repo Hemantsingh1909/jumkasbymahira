@@ -274,18 +274,6 @@ const Navbar = () => {
             >
               Contact
             </Link>
-            <Link
-              href="/cart"
-              className="text-gray-700 hover:text-jewelry-600 pl-3 py-2 flex items-center hover:bg-jewelry-50 rounded"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <i className="fas fa-shopping-bag mr-2"></i> Cart
-              {totalCartItems > 0 && (
-                <span className="ml-2 bg-jewelry-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {totalCartItems}
-                </span>
-              )}
-            </Link>
           </div>
         </div>
       </div>
