@@ -19,6 +19,7 @@ export default function ProductsContent({ initialProducts = [] }) {
   const [sortOption, setSortOption] = useState('featured');
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isSortOpen, setIsSortOpen] = useState(false);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const sortRef = useRef(null);
 
   const categories = [
@@ -170,8 +171,8 @@ export default function ProductsContent({ initialProducts = [] }) {
         </h1>
 
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar Filters */}
-          <aside className="w-full lg:w-72">
+          {/* Sidebar Filters - Desktop Only */}
+          <aside className="hidden lg:block lg:w-72">
             <div className="bg-white rounded-lg p-6 space-y-6 shadow-sm">
               {/* Search Result Info */}
               {searchTerm && (
@@ -351,6 +352,219 @@ export default function ProductsContent({ initialProducts = [] }) {
           </div>
         </div>
       </div>
+
+      {/* Floating Mobile Filter Trigger */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 lg:hidden">
+        <button
+          onClick={() => setIsMobileFilterOpen(true)}
+          className="bg-jewelry-900 text-white font-display font-semibold py-3.5 px-6 rounded-full shadow-lg border border-jewelry-800 flex items-center gap-3 active:scale-95 transition-transform"
+        >
+          <svg
+            className="w-5 h-5 text-jewelry-200"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+            />
+          </svg>
+          Filters
+        </button>
+      </div>
+
+      {/* Mobile Filters Drawer Overlay */}
+      {isMobileFilterOpen && (
+        <div className="fixed inset-0 z-50 overflow-hidden lg:hidden" aria-modal="true" role="dialog">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" 
+            onClick={() => setIsMobileFilterOpen(false)}
+          />
+
+          {/* Drawer Panel */}
+          <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
+            <div className="w-screen max-w-md bg-white flex flex-col shadow-xl animate-slide-in">
+              {/* Header */}
+              <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+                <h2 className="text-xl font-bold text-jewelry-900 flex items-center gap-2">
+                  <i className="fas fa-sliders-h text-jewelry-600"></i> Filters
+                </h2>
+                <button
+                  onClick={() => setIsMobileFilterOpen(false)}
+                  className="text-gray-400 hover:text-gray-500 p-1"
+                >
+                  <i className="fas fa-times text-lg"></i>
+                </button>
+              </div>
+
+              {/* Scrollable Body */}
+              <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+                {/* Search query tag */}
+                {searchTerm && (
+                  <div className="pb-4 border-b border-gray-100">
+                    <p className="text-sm text-gray-500">Search query:</p>
+                    <p className="text-md font-semibold text-jewelry-700 flex justify-between items-center mt-1">
+                      &quot;{searchTerm}&quot;
+                      <button onClick={() => setSearchTerm('')} className="text-xs text-red-500 hover:underline">
+                        clear
+                      </button>
+                    </p>
+                  </div>
+                )}
+
+                {/* Price range */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-3">Price Range</h3>
+                  <input
+                    type="range"
+                    min="0"
+                    max="30000"
+                    step="500"
+                    value={priceRange[1]}
+                    onChange={(e) =>
+                      setPriceRange([priceRange[0], parseInt(e.target.value)])
+                    }
+                    className="w-full accent-jewelry-600"
+                  />
+                  <div className="flex justify-between text-sm text-gray-600 mt-2">
+                    <span>₹{priceRange[0]}</span>
+                    <span>₹{priceRange[1]}</span>
+                  </div>
+                </div>
+
+                {/* Categories */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-3">Categories</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    {categories.map((category) => (
+                      <label 
+                        key={category.id} 
+                        className={`flex items-center justify-center p-3 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
+                          selectedCategories.includes(category.id) 
+                            ? 'border-jewelry-600 bg-jewelry-50/50 text-jewelry-800' 
+                            : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedCategories.includes(category.id)}
+                          onChange={() => toggleFilter(selectedCategories, setSelectedCategories, category.id)}
+                          className="sr-only"
+                        />
+                        <span>{category.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Materials */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-3">Material</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    {materials.map((mat) => (
+                      <label 
+                        key={mat.id} 
+                        className={`flex items-center justify-center p-3 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
+                          selectedMaterials.includes(mat.id) 
+                            ? 'border-jewelry-600 bg-jewelry-50/50 text-jewelry-800' 
+                            : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedMaterials.includes(mat.id)}
+                          onChange={() => toggleFilter(selectedMaterials, setSelectedMaterials, mat.id)}
+                          className="sr-only"
+                        />
+                        <span>{mat.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Occasion */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-3">Occasion</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    {occasions.map((occ) => (
+                      <label 
+                        key={occ.id} 
+                        className={`flex items-center justify-center p-3 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
+                          selectedOccasions.includes(occ.id) 
+                            ? 'border-jewelry-600 bg-jewelry-50/50 text-jewelry-800' 
+                            : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedOccasions.includes(occ.id)}
+                          onChange={() => toggleFilter(selectedOccasions, setSelectedOccasions, occ.id)}
+                          className="sr-only"
+                        />
+                        <span>{occ.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Colors */}
+                <div>
+                  <h3 className="font-semibold text-gray-800 mb-3">Color</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    {colors.map((color) => (
+                      <label 
+                        key={color.id} 
+                        className={`flex items-center justify-center p-3 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
+                          selectedColors.includes(color.id) 
+                            ? 'border-jewelry-600 bg-jewelry-50/50 text-jewelry-800' 
+                            : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedColors.includes(color.id)}
+                          onChange={() => toggleFilter(selectedColors, setSelectedColors, color.id)}
+                          className="sr-only"
+                        />
+                        <span>{color.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer Actions */}
+              <div className="px-6 py-4 border-t border-gray-100 flex gap-4 bg-gray-50">
+                <button
+                  onClick={() => {
+                    setSearchTerm('');
+                    setPriceRange([0, 30000]);
+                    setSelectedCategories([]);
+                    setSelectedMaterials([]);
+                    setSelectedOccasions([]);
+                    setSelectedColors([]);
+                    setSortOption('featured');
+                  }}
+                  className="flex-1 bg-white border border-gray-300 text-gray-700 py-3 rounded-lg font-medium text-sm hover:bg-gray-50 transition-colors"
+                >
+                  Clear All
+                </button>
+                <button
+                  onClick={() => setIsMobileFilterOpen(false)}
+                  className="flex-1 bg-jewelry-600 text-white py-3 rounded-lg font-bold text-sm hover:bg-jewelry-700 transition-colors"
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
