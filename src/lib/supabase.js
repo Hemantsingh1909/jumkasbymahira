@@ -1,17 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder-url-for-build-only.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key';
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-key';
+
 // Server-side client — uses the service role key, bypasses RLS.
 // Only import this inside app/api/** route handlers, never in client components.
-export const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
 // Public client — safe for use in Server Components for read-only product fetches.
-export const supabasePublic = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-);
+export const supabasePublic = createClient(supabaseUrl, supabaseAnonKey);
 
 // Server-side helper to verify auth headers and enforce Malti's admin restriction
 export async function verifyAdminSession(request) {
