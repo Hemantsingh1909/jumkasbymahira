@@ -190,15 +190,15 @@ const Footer = () => {
             reserved.
           </p>
           <div className="mt-4 md:mt-0 space-x-4">
-            <a href="#" className="hover:text-jewelry-300 transition-colors">
+            <Link href="/privacy-policy" className="hover:text-jewelry-300 transition-colors">
               Privacy Policy
-            </a>
-            <a href="#" className="hover:text-jewelry-300 transition-colors">
+            </Link>
+            <Link href="/terms-of-service" className="hover:text-jewelry-300 transition-colors">
               Terms of Service
-            </a>
-            <a href="#" className="hover:text-jewelry-300 transition-colors">
+            </Link>
+            <Link href="/shipping-policy" className="hover:text-jewelry-300 transition-colors">
               Shipping Policy
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -4,7 +4,20 @@ export default async function sitemap() {
   const siteUrl = getSiteUrl();
 
   // Base routes
-  const routes = ['', '/products', '/collections', '/state-collections', '/contact', '/wishlist', '/cart', '/checkout', '/admin'].map((route) => ({
+  const routes = [
+    '', 
+    '/products', 
+    '/collections', 
+    '/state-collections', 
+    '/contact', 
+    '/wishlist', 
+    '/cart', 
+    '/checkout', 
+    '/admin',
+    '/privacy-policy',
+    '/terms-of-service',
+    '/shipping-policy'
+  ].map((route) => ({
     url: `${siteUrl}${route}`,
     lastModified: new Date(),
     changeFrequency: 'daily',
