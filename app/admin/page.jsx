@@ -89,8 +89,15 @@ export default function AdminDashboard() {
   const fetchData = async () => {
     setLoading(true);
     try {
+      const { data: { session } } = await supabasePublic.auth.getSession();
+      const token = session?.access_token;
+
       const [ordersRes, productsRes] = await Promise.all([
-        fetch('/api/orders'),
+        fetch('/api/orders', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }),
         fetch('/api/products')
       ]);
 
@@ -116,10 +123,14 @@ export default function AdminDashboard() {
   // Update order status
   const handleStatusChange = async (orderId, newStatus) => {
     try {
+      const { data: { session } } = await supabasePublic.auth.getSession();
+      const token = session?.access_token;
+
       const res = await fetch(`/api/orders/${orderId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ status: newStatus }),
       });
@@ -141,8 +152,14 @@ export default function AdminDashboard() {
     if (!confirm('Are you sure you want to delete this product?')) return;
 
     try {
+      const { data: { session } } = await supabasePublic.auth.getSession();
+      const token = session?.access_token;
+
       const res = await fetch(`/api/products/${productId}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
 
       if (res.ok) {
@@ -205,10 +222,14 @@ export default function AdminDashboard() {
     const method = editingProduct ? 'PUT' : 'POST';
 
     try {
+      const { data: { session } } = await supabasePublic.auth.getSession();
+      const token = session?.access_token;
+
       const res = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(formattedPayload),
       });

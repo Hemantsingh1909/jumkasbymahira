@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabasePublic, supabaseAdmin } from '@/src/lib/supabase';
+import { supabasePublic, supabaseAdmin, verifyAdminSession } from '@/src/lib/supabase';
 
 function mapStockStatusToFrontend(status) {
   if (status === 'in_stock') return 'In Stock';
@@ -43,6 +43,11 @@ export async function GET(request, { params }) {
 
 export async function PUT(request, { params }) {
   const { id } = params;
+  const isAdmin = await verifyAdminSession(request);
+  if (!isAdmin) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const {
@@ -95,6 +100,11 @@ export async function PUT(request, { params }) {
 
 export async function DELETE(request, { params }) {
   const { id } = params;
+  const isAdmin = await verifyAdminSession(request);
+  if (!isAdmin) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const { error } = await supabaseAdmin
       .from('products')

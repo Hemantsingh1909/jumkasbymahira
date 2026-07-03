@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/src/lib/supabase';
+import { supabaseAdmin, verifyAdminSession } from '@/src/lib/supabase';
 
 function mapOrderStatusToFrontend(status) {
   if (status === 'new') return 'New';
@@ -25,6 +25,11 @@ function formatInvoiceNo(orderId, dateString) {
 
 export async function PUT(request, { params }) {
   const { id } = params;
+  const isAdmin = await verifyAdminSession(request);
+  if (!isAdmin) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const { status } = await request.json();
 

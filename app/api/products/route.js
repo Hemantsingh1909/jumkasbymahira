@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabasePublic, supabaseAdmin } from '@/src/lib/supabase';
+import { supabasePublic, supabaseAdmin, verifyAdminSession } from '@/src/lib/supabase';
 
 function mapStockStatusToFrontend(status) {
   if (status === 'in_stock') return 'In Stock';
@@ -43,6 +43,11 @@ export async function GET() {
 }
 
 export async function POST(request) {
+  const isAdmin = await verifyAdminSession(request);
+  if (!isAdmin) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const body = await request.json();
     const {
