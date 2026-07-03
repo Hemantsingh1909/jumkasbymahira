@@ -181,12 +181,6 @@ const Navbar = () => {
               Contact
             </Link>
             <Link
-              href="/admin"
-              className="text-gray-700 hover:text-jewelry-600 transition-colors font-medium border-l border-gray-200 pl-4"
-            >
-              Admin
-            </Link>
-            <Link
               href="/wishlist"
               className="text-jewelry-800 hover:text-jewelry-600 transition-colors relative"
               aria-label="Wishlist"
@@ -213,10 +207,9 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Menu - Collapsible */}
         <div
           className={`${
-            isMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+            isMenuOpen ? "max-h-screen opacity-100 visible pointer-events-auto" : "max-h-0 opacity-0 invisible pointer-events-none"
           } md:hidden overflow-hidden transition-all duration-300 ease-in-out`}
         >
           {/* Search Bar - Mobile */}
@@ -280,13 +273,6 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               Contact
-            </Link>
-            <Link
-              href="/admin"
-              className="text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Admin
             </Link>
             <Link
               href="/cart"

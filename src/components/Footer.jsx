@@ -199,6 +199,9 @@ const Footer = () => {
             <Link href="/shipping-policy" className="hover:text-jewelry-300 transition-colors">
               Shipping Policy
             </Link>
+            <Link href="/admin" className="hover:text-jewelry-300 transition-colors border-l border-gray-700 pl-4">
+              Admin Panel
+            </Link>
           </div>
         </div>
       </div>
