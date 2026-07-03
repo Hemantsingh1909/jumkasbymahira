@@ -20,7 +20,7 @@ export default function AdminDashboard() {
   // Authentication check - Strict Admin Email Restriction
   useEffect(() => {
     supabasePublic.auth.getSession().then(({ data: { session } }) => {
-      if (session && session.user?.email !== 'sshreecolllection593@gmail.com') {
+      if (session && session.user?.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
         supabasePublic.auth.signOut();
         setSession(null);
       } else {
@@ -30,7 +30,7 @@ export default function AdminDashboard() {
     });
 
     const { data: { subscription } } = supabasePublic.auth.onAuthStateChange((_event, session) => {
-      if (session && session.user?.email !== 'sshreecolllection593@gmail.com') {
+      if (session && session.user?.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
         supabasePublic.auth.signOut();
         setSession(null);
       } else {
@@ -53,7 +53,7 @@ export default function AdminDashboard() {
       });
       if (error) throw error;
 
-      if (data.user?.email !== 'sshreecolllection593@gmail.com') {
+      if (data.user?.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
         await supabasePublic.auth.signOut();
         throw new Error('Access denied: Unauthorized email address.');
       }

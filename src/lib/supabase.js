@@ -23,7 +23,7 @@ export async function verifyAdminSession(request) {
     const token = authHeader.split(' ')[1];
     const { data: { user }, error } = await supabasePublic.auth.getUser(token);
     if (error || !user) return false;
-    return user.email === 'sshreecolllection593@gmail.com';
+    return user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
   } catch (error) {
     console.error('Admin verification error:', error);
     return false;
