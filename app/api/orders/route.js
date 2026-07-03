@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabasePublic, supabaseAdmin, verifyAdminSession } from '@/src/lib/supabase';
+import { calculateShippingFee, calculateOrderTotal } from '@/src/lib/shipping';
 
 function mapOrderStatusToFrontend(status) {
   if (status === 'new') return 'New';
@@ -56,7 +57,12 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { items, customer, subtotal, shipping, total } = body;
+    const { items, customer } = body;
+
+    // Secure server-side calculation using centralized utility
+    const subtotal = (items || []).reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const shipping = calculateShippingFee(subtotal);
+    const total = calculateOrderTotal(subtotal);
 
     const { data, error } = await supabaseAdmin
       .from('orders')

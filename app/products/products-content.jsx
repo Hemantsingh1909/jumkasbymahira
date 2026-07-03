@@ -6,8 +6,8 @@ import { useSearchParams } from 'next/navigation';
 import { setProducts } from '@/src/store/productSlice';
 import ProductCard from '@/src/components/ProductCard';
 
-export default function ProductsContent() {
-  const products = useSelector((state) => state.products.products);
+export default function ProductsContent({ initialProducts = [] }) {
+  const products = useSelector((state) => state.products.products || []);
   const dispatch = useDispatch();
   const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
@@ -53,6 +53,10 @@ export default function ProductsContent() {
 
   // Fetch products from database
   useEffect(() => {
+    if (initialProducts && initialProducts.length > 0) {
+      dispatch(setProducts(initialProducts));
+      return;
+    }
     const fetchProducts = async () => {
       try {
         const res = await fetch('/api/products');
@@ -65,7 +69,7 @@ export default function ProductsContent() {
       }
     };
     fetchProducts();
-  }, [dispatch]);
+  }, [dispatch, initialProducts]);
 
   // Check for search query in URL
   useEffect(() => {
