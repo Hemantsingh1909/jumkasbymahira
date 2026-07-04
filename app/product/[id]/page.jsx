@@ -26,7 +26,8 @@ export async function generateMetadata({ params }) {
   }
 
   const siteUrl = getSiteUrl();
-  const imageUrl = `${siteUrl}${product.images?.[0] || '/images/products/one.jpeg'}`;
+  const rawImage = product.images?.[0] || '/images/products/one.jpeg';
+  const imageUrl = rawImage.startsWith('http') ? rawImage : `${siteUrl}${rawImage}`;
 
   return {
     title: `${product.name} - Handcrafted Indian Earrings | Jhumkas by Malti`,
@@ -36,7 +37,7 @@ export async function generateMetadata({ params }) {
       description: `${product.description} - Price: ₹${product.price}`,
       url: `${siteUrl}/product/${id}`,
       siteName: 'Jhumkas by Malti',
-      type: 'og:product',
+      type: 'website',
       images: [
         {
           url: imageUrl,
