@@ -35,7 +35,7 @@ export default function HomepageClient({ initialProducts = [] }) {
     <div className="bg-gray-50">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-jewelry-50 to-jewelry-100 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1611591437281-460bfbe1220a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')] bg-cover bg-center opacity-10"></div>
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&w=1000&q=70')] bg-cover bg-center opacity-10"></div>
         <div className="container-custom relative py-20 md:py-32 flex flex-col items-center text-center">
           <h1 className="font-display text-4xl md:text-6xl font-bold text-jewelry-900 mb-6">
             Exquisite <span className="text-jewelry-600">Jhumkas</span> for

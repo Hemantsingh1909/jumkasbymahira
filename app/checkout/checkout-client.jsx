@@ -34,6 +34,7 @@ export default function CheckoutClient() {
     }
   }, [cartItems.length, router, orderPlaced]);
 
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -98,37 +99,40 @@ export default function CheckoutClient() {
     if (validateForm() && !submitting) {
       setSubmitting(true);
       try {
-        const response = await fetch('/api/orders', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            items: cartItems.map(item => ({
-              id: item.id,
-              name: item.name,
-              price: item.price,
-              quantity: item.quantity
-            })),
-            customer: formData,
-            subtotal,
-            shipping: shippingFee,
-            total,
-          }),
-        });
+        if (formData.paymentMethod === 'cod') {
+          // Process Cash on Delivery immediately
+          const response = await fetch('/api/orders', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              items: cartItems.map(item => ({
+                id: item.id,
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity
+              })),
+              customer: formData,
+              subtotal,
+              shipping: shippingFee,
+              total,
+            }),
+          });
 
-        if (response.ok) {
-          const newOrder = await response.json();
-          setPlacedOrder(newOrder);
-          setOrderPlaced(true);
-          dispatch(clearCart());
-        } else {
-          const data = await response.json();
-          alert(data.error || 'Failed to place order.');
+          if (response.ok) {
+            const newOrder = await response.json();
+            setPlacedOrder(newOrder);
+            setOrderPlaced(true);
+            dispatch(clearCart());
+          } else {
+            const data = await response.json();
+            alert(data.error || 'Failed to place order.');
+          }
         }
       } catch (error) {
-        console.error('Error placing order:', error);
-        alert('An unexpected error occurred.');
+        console.error('Error processing order flow:', error);
+        alert(error.message || 'An unexpected checkout error occurred.');
       } finally {
         setSubmitting(false);
       }
@@ -448,18 +452,6 @@ Please confirm my order. Thank you!`;
                   className="mr-2.5 h-4 w-4 accent-jewelry-600"
                 />
                 <span>Cash on Delivery (COD)</span>
-              </label>
-              <label className="flex items-center text-sm font-medium cursor-not-allowed text-gray-400">
-                <input
-                  type="radio"
-                  name="paymentMethod"
-                  value="online"
-                  disabled
-                  checked={formData.paymentMethod === 'online'}
-                  onChange={handleChange}
-                  className="mr-2.5 h-4 w-4 accent-jewelry-600"
-                />
-                <span>Online UPI / Card Payment (Unavailable)</span>
               </label>
             </div>
 

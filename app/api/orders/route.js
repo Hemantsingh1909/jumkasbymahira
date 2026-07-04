@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabasePublic, supabaseAdmin, verifyAdminSession } from '@/src/lib/supabase';
 import { calculateShippingFee, calculateOrderTotal } from '@/src/lib/shipping';
+import crypto from 'crypto';
 
 function mapOrderStatusToFrontend(status) {
   if (status === 'new') return 'New';

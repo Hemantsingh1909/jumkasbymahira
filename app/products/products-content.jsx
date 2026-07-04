@@ -72,12 +72,16 @@ export default function ProductsContent({ initialProducts = [] }) {
     fetchProducts();
   }, [dispatch, initialProducts]);
 
-  // Check for search query in URL
+  // Check for search query or category filter in URL
   useEffect(() => {
     window.scrollTo(0, 0);
     const searchQuery = searchParams.get('search');
     if (searchQuery) {
       setSearchTerm(searchQuery);
+    }
+    const catQuery = searchParams.get('category');
+    if (catQuery) {
+      setSelectedCategories([catQuery.toLowerCase()]);
     }
   }, [searchParams]);
 
@@ -302,7 +306,7 @@ export default function ProductsContent({ initialProducts = [] }) {
             {/* Sort Dropdown */}
             <div className="mb-6 flex justify-between items-center">
               <p className="text-gray-600 text-sm">
-                Showing {filteredProducts.length} products
+                Showing {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
               </p>
               <div className="relative" ref={sortRef}>
                 <button

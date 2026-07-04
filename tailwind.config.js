@@ -4,9 +4,9 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Poppins", "sans-serif"],
-        serif: ["Playfair Display", "serif"],
-        display: ["Cinzel", "serif"],
+        sans: ["var(--font-poppins)", "sans-serif"],
+        serif: ["var(--font-playfair)", "serif"],
+        display: ["var(--font-cinzel)", "serif"],
       },
       colors: {
         jewelry: {

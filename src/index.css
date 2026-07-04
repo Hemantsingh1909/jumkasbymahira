@@ -1,5 +1,29 @@
 @import "@fortawesome/fontawesome-free/css/all.min.css";
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Cinzel:wght@400;500;600;700&display=swap");
+
+/* Enforce font-display: swap on FontAwesome webfonts to resolve Lighthouse performance warnings */
+@font-face {
+  font-family: 'Font Awesome 5 Free';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("./fonts/fa-solid-900.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: 'Font Awesome 5 Brands';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/fa-brands-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: 'Font Awesome 5 Free';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/fa-regular-400.woff2") format("woff2");
+}
 
 @tailwind base;
 @tailwind components;

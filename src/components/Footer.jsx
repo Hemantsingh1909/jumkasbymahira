@@ -40,9 +40,9 @@ const Footer = () => {
     <footer className="bg-gray-900 text-white pt-16 pb-8">
       <div className="container-custom">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 mb-12">
           {/* Brand Section */}
-          <div className="space-y-4">
+          <div className="space-y-4 lg:col-span-3">
             <Link href="/" className="inline-block">
               <img
                 src={logo?.src || logo}
@@ -60,6 +60,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-jewelry-400 transition-colors"
+                aria-label="Visit our Instagram page"
               >
                 <FaInstagram size={18} />
               </a>
@@ -68,6 +69,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-jewelry-400 transition-colors"
+                aria-label="Visit our Pinterest boards"
               >
                 <FaPinterest size={18} />
               </a>
@@ -76,6 +78,7 @@ const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-jewelry-400 transition-colors"
+                aria-label="Contact us on WhatsApp"
               >
                 <FaWhatsapp size={18} />
               </a>
@@ -83,7 +86,7 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div className="lg:col-span-2">
             <h4 className="text-lg font-serif font-semibold mb-4 text-white">
               Quick Links
             </h4>
@@ -124,18 +127,18 @@ const Footer = () => {
           </div>
 
           {/* Contact Information */}
-          <div>
+          <div className="lg:col-span-4">
             <h4 className="text-lg font-serif font-semibold mb-4 text-white">
               Contact Us
             </h4>
             <ul className="space-y-2 text-gray-400">
               <li className="flex items-center">
-                <span className="mr-2">📱</span>
+                <i className="fas fa-phone mr-2 text-jewelry-400"></i>
                 <span>+91 8238672255</span>
               </li>
               <li className="flex items-center">
-                <span className="mr-2">✉️</span>
-                <a href="mailto:sshreecollection593@gmail.com" className="hover:text-jewelry-300 transition-colors">
+                <i className="fas fa-envelope mr-2 text-jewelry-400"></i>
+                <a href="mailto:sshreecollection593@gmail.com" className="hover:text-jewelry-300 transition-colors break-all">
                   sshreecollection593@gmail.com
                 </a>
               </li>
@@ -143,7 +146,7 @@ const Footer = () => {
           </div>
 
           {/* Newsletter */}
-          <div>
+          <div className="lg:col-span-3">
             <h4 className="text-lg font-serif font-semibold mb-4 text-white">
               Join Our Newsletter
             </h4>

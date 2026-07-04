@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const Navbar = () => {
@@ -13,6 +13,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [wishlistCount, setWishlistCount] = useState(0);
   const router = useRouter();
+  const pathname = usePathname();
 
   // Handle scroll effect for navbar
   useEffect(() => {
@@ -103,6 +104,7 @@ const Navbar = () => {
               <button
                 type="submit"
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-jewelry-600 hover:text-jewelry-800"
+                aria-label="Search"
               >
                 <i className="fas fa-search"></i>
               </button>
@@ -110,7 +112,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex items-center md:hidden">
+          <div className="flex items-center lg:hidden">
             <Link
               href="/wishlist"
               className="mr-4 text-jewelry-800 relative"
@@ -149,7 +151,7 @@ const Navbar = () => {
           </div>
 
           {/* Navigation Links - Desktop */}
-          <div className="hidden md:flex items-center space-x-6">
+          <div className="hidden lg:flex items-center space-x-6">
             <Link
               href="/"
               className="text-gray-700 hover:text-jewelry-600 transition-colors"
@@ -205,10 +207,10 @@ const Navbar = () => {
         <div
           className={`${
             isMenuOpen ? "max-h-screen opacity-100 visible pointer-events-auto" : "max-h-0 opacity-0 invisible pointer-events-none"
-          } md:hidden overflow-hidden transition-all duration-300 ease-in-out`}
+          } lg:hidden overflow-hidden transition-all duration-300 ease-in-out`}
         >
           {/* Search Bar - Mobile */}
-          <div className="mt-4 mb-3">
+          <div className="mt-4 mb-3 md:hidden">
             <form onSubmit={handleSearch} className="relative">
               <input
                 type="text"
@@ -220,49 +222,111 @@ const Navbar = () => {
               <button
                 type="submit"
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-jewelry-600 hover:text-jewelry-800"
+                aria-label="Search"
               >
                 <i className="fas fa-search"></i>
               </button>
             </form>
           </div>
 
-          <div className="flex flex-col space-y-3 py-3">
+          <div className="flex flex-col space-y-1.5 py-2">
             <Link
               href="/"
-              className="text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
+              className={pathname === '/' 
+                ? "flex items-center text-jewelry-900 bg-jewelry-50/70 border-l-4 border-jewelry-600 rounded-r font-semibold pl-3 py-3 transition-colors" 
+                : "flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
+              }
               onClick={() => setIsMenuOpen(false)}
             >
-              Home
+              <i className={`fas fa-home mr-3 w-5 text-center text-base ${pathname === '/' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
+              <span>Home</span>
             </Link>
             <Link
               href="/collections"
-              className="text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
+              className={pathname === '/collections' 
+                ? "flex items-center text-jewelry-900 bg-jewelry-50/70 border-l-4 border-jewelry-600 rounded-r font-semibold pl-3 py-3 transition-colors" 
+                : "flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
+              }
               onClick={() => setIsMenuOpen(false)}
             >
-              Collections
+              <i className={`fas fa-tags mr-3 w-5 text-center text-base ${pathname === '/collections' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
+              <span>Collections</span>
             </Link>
-
             <Link
               href="/products"
-              className="text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
+              className={pathname === '/products' 
+                ? "flex items-center text-jewelry-900 bg-jewelry-50/70 border-l-4 border-jewelry-600 rounded-r font-semibold pl-3 py-3 transition-colors" 
+                : "flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
+              }
               onClick={() => setIsMenuOpen(false)}
             >
-              All Products
+              <i className={`fas fa-gem mr-3 w-5 text-center text-base ${pathname === '/products' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
+              <span>All Products</span>
             </Link>
             <Link
               href="/wishlist"
-              className="text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
+              className={pathname === '/wishlist' 
+                ? "flex items-center text-jewelry-900 bg-jewelry-50/70 border-l-4 border-jewelry-600 rounded-r font-semibold pl-3 py-3 transition-colors" 
+                : "flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
+              }
               onClick={() => setIsMenuOpen(false)}
             >
-              Wishlist
+              <i className={`fas fa-heart mr-3 w-5 text-center text-base ${pathname === '/wishlist' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
+              <span>Wishlist</span>
             </Link>
             <Link
               href="/contact"
-              className="text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
+              className={pathname === '/contact' 
+                ? "flex items-center text-jewelry-900 bg-jewelry-50/70 border-l-4 border-jewelry-600 rounded-r font-semibold pl-3 py-3 transition-colors" 
+                : "flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
+              }
               onClick={() => setIsMenuOpen(false)}
             >
-              Contact
+              <i className={`fas fa-envelope mr-3 w-5 text-center text-base ${pathname === '/contact' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
+              <span>Contact</span>
             </Link>
+
+            {/* Quick Category Shortcuts */}
+            <div className="border-t border-gray-100 pt-3 mt-2">
+              <p className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Shop Categories</p>
+              <div className="grid grid-cols-2 gap-x-2 gap-y-2 px-3">
+                <Link
+                  href="/products?category=jhumkas"
+                  className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <i className="fas fa-gem text-xs mr-2 text-jewelry-500/80"></i> Jhumkas
+                </Link>
+                <Link
+                  href="/products?category=meenakari"
+                  className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <i className="fas fa-palette text-xs mr-2 text-jewelry-500/80"></i> Meenakari
+                </Link>
+                <Link
+                  href="/products?category=chandbali"
+                  className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <i className="fas fa-moon text-xs mr-2 text-jewelry-500/80"></i> Chandbali
+                </Link>
+                <Link
+                  href="/products?category=bridal sets"
+                  className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <i className="fas fa-crown text-xs mr-2 text-jewelry-500/80"></i> Bridal Sets
+                </Link>
+                <Link
+                  href="/products?category=everyday"
+                  className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <i className="fas fa-star text-xs mr-2 text-jewelry-500/80"></i> Everyday
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
