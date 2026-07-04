@@ -26,7 +26,7 @@ export async function POST(request) {
         const adminEmail = process.env.ADMIN_EMAIL || 'sshreecollection593@gmail.com';
         const fromEmail = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
 
-        await fetch('https://api.resend.com/emails', {
+        const emailRes = await fetch('https://api.resend.com/emails', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -67,6 +67,14 @@ export async function POST(request) {
             `
           })
         });
+
+        if (!emailRes.ok) {
+          const errText = await emailRes.text();
+          console.error('Resend API error response:', emailRes.status, errText);
+        } else {
+          const resJson = await emailRes.json();
+          console.log('Resend email sent successfully:', resJson);
+        }
       } catch (emailError) {
         console.error('Resend notification failed:', emailError);
       }
