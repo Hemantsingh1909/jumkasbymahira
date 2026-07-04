@@ -8,7 +8,6 @@ export default async function sitemap() {
     '', 
     '/products', 
     '/collections', 
-    '/state-collections', 
     '/contact', 
     '/wishlist', 
     '/cart', 

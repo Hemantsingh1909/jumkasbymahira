@@ -162,12 +162,7 @@ const Navbar = () => {
             >
               Collections
             </Link>
-            <Link
-              href="/state-collections"
-              className="text-gray-700 hover:text-jewelry-600 transition-colors"
-            >
-              State Jhumkas
-            </Link>
+
             <Link
               href="/products"
               className="text-gray-700 hover:text-jewelry-600 transition-colors"
@@ -246,13 +241,7 @@ const Navbar = () => {
             >
               Collections
             </Link>
-            <Link
-              href="/state-collections"
-              className="text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              State Jhumkas
-            </Link>
+
             <Link
               href="/products"
               className="text-gray-700 hover:text-jewelry-600 pl-3 py-2 hover:bg-jewelry-50 rounded"
