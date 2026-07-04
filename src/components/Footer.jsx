@@ -135,7 +135,9 @@ const Footer = () => {
               </li>
               <li className="flex items-center">
                 <span className="mr-2">✉️</span>
-                <email>sshreecolllection593@gmail.com</email>
+                <a href="mailto:sshreecollection593@gmail.com" className="hover:text-jewelry-300 transition-colors">
+                  sshreecollection593@gmail.com
+                </a>
               </li>
             </ul>
           </div>

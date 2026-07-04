@@ -61,7 +61,7 @@ export default function PrivacyPolicy() {
 
             <h2 className="text-xl font-bold text-jewelry-800 pt-4">5. Your Rights & Contacts</h2>
             <p>
-              You have the right to access, edit, or request deletion of your personal details at any time. For privacy inquiries, please contact us on WhatsApp at <strong>+91 8238672255</strong> or email us at <strong>sshreecolllection593@gmail.com</strong>.
+              You have the right to access, edit, or request deletion of your personal details at any time. For privacy inquiries, please contact us on WhatsApp at <strong>+91 8238672255</strong> or email us at <strong>sshreecollection593@gmail.com</strong>.
             </p>
           </div>
         </div>
