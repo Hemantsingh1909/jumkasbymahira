@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
 import { incrementItem, decrementItem, removeItem } from '@/src/store/cartSlice';
 import { calculateShippingFee, calculateOrderTotal } from '@/src/lib/shipping';
+import { getProductUrl } from '@/src/lib/slug';
 
 export default function CartClient() {
   const cartItems = useSelector((state) => state.cart.items || []);
@@ -59,7 +60,7 @@ export default function CartClient() {
                   >
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                       <div className="flex items-center">
-                        <Link href={`/product/${item.id}`} className="block">
+                        <Link href={getProductUrl(item)} className="block">
                           <img
                             src={item.image}
                             alt={item.name}
@@ -68,7 +69,7 @@ export default function CartClient() {
                         </Link>
                         <div>
                           <Link
-                            href={`/product/${item.id}`}
+                            href={getProductUrl(item)}
                             className="font-medium text-gray-800 hover:text-jewelry-600 transition-colors"
                           >
                             {item.name}

@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { supabasePublic, getSiteUrl } from '@/src/lib/supabase';
 import ProductDetailClient from './product-detail-client';
+import { parseProductId } from '@/src/lib/slug';
 
 function mapStockStatusToFrontend(status) {
   if (status === 'in_stock') return 'In Stock';
@@ -10,7 +11,7 @@ function mapStockStatusToFrontend(status) {
 }
 
 export async function generateMetadata({ params }) {
-  const { id } = params;
+  const id = parseProductId(params.id);
   
   const { data: product } = await supabasePublic
     .from('products')
@@ -57,7 +58,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ProductDetailPage({ params }) {
-  const { id } = params;
+  const id = parseProductId(params.id);
   
   const { data: product } = await supabasePublic
     .from('products')

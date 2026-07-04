@@ -1,4 +1,5 @@
 import { supabasePublic, getSiteUrl } from '@/src/lib/supabase';
+import { getProductUrl } from '@/src/lib/slug';
 
 export default async function sitemap() {
   const siteUrl = getSiteUrl();
@@ -28,11 +29,11 @@ export default async function sitemap() {
   try {
     const { data: products } = await supabasePublic
       .from('products')
-      .select('id');
+      .select('id, name');
     
     if (products) {
       productRoutes = products.map((product) => ({
-        url: `${siteUrl}/product/${product.id}`,
+        url: `${siteUrl}${getProductUrl(product)}`,
         lastModified: new Date(),
         changeFrequency: 'weekly',
         priority: 0.6,

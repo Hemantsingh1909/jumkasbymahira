@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../store/cartSlice";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { getProductUrl } from "../lib/slug";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -64,7 +65,7 @@ const ProductCard = ({ product }) => {
     >
       {/* Product Image */}
       <div className="relative h-64 overflow-hidden bg-gray-50">
-        <Link href={`/product/${product.id}`} className="block w-full h-full">
+        <Link href={getProductUrl(product)} className="block w-full h-full">
           <img
             src={product.image}
             alt={product.name}
@@ -87,21 +88,6 @@ const ProductCard = ({ product }) => {
           ></i>
         </button>
 
-        {/* Quick Add Button - Visible on Hover */}
-        <div
-          className={`absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center transition-opacity duration-300 ${
-            isHovered ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <button
-            onClick={handleAddToCart}
-            className="bg-white text-jewelry-600 py-2 px-4 rounded-md hover:bg-jewelry-50 transition-colors transform hover:scale-105 font-medium"
-            disabled={isInCart}
-          >
-            {isInCart ? "Added to Cart" : "Quick Add"}
-          </button>
-        </div>
-
         {/* Added to Cart Message */}
         <div
           className={`absolute bottom-0 left-0 right-0 bg-jewelry-600 text-white text-center py-2 transition-transform duration-300 ${
@@ -116,7 +102,7 @@ const ProductCard = ({ product }) => {
 
       {/* Product Info */}
       <div className="p-4">
-        <Link href={`/product/${product.id}`} className="block">
+        <Link href={getProductUrl(product)} className="block">
           <h3 className="font-serif text-lg font-medium text-gray-800 mb-1 hover:text-jewelry-600 transition-colors">
             {product.name}
           </h3>
