@@ -246,6 +246,49 @@ export default function AdminDashboard() {
     }
   };
 
+  const [uploading, setUploading] = useState(false);
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const { data: { session } } = await supabasePublic.auth.getSession();
+      const token = session?.access_token;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        body: formData
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setProductForm(prev => ({
+          ...prev,
+          images: prev.images[0] === '/images/products/one.jpeg' 
+            ? [data.url] 
+            : [...prev.images, data.url]
+        }));
+      } else {
+        const errorData = await res.json();
+        alert(errorData.error || 'Failed to upload image');
+      }
+    } catch (error) {
+      console.error('Image upload error:', error);
+      alert('An error occurred during upload.');
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  };
+
   // Calculate analytics totals
   const totalRevenue = orders.reduce((sum, o) => sum + o.total, 0);
   const averageOrder = orders.length > 0 ? (totalRevenue / orders.length).toFixed(2) : 0;
@@ -619,6 +662,41 @@ export default function AdminDashboard() {
                   onChange={(e) => setProductForm({ ...productForm, description: e.target.value })}
                   className="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-jewelry-500"
                 ></textarea>
+              </div>
+
+              <div>
+                <label className="block text-gray-700 text-sm font-medium mb-1">Product Images</label>
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {productForm.images?.map((img, idx) => (
+                    <div key={idx} className="relative w-20 h-20 border rounded-lg overflow-hidden group">
+                      <img src={img} alt="Product preview" className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => setProductForm(prev => ({
+                          ...prev,
+                          images: prev.images.filter((_, i) => i !== idx)
+                        }))}
+                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                        aria-label="Remove image"
+                      >
+                        <i className="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex items-center gap-3">
+                  <label className={`cursor-pointer inline-flex items-center px-4 py-2 bg-gray-100 border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                    <i className="fas fa-upload mr-2"></i> {uploading ? 'Uploading...' : 'Upload Image'}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      disabled={uploading}
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                  </label>
+                  <span className="text-xs text-gray-500">Supports JPG, PNG, WEBP (Max 5MB)</span>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

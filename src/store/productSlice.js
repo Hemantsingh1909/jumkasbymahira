@@ -2,69 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // Initial state for products
 const initialState = {
-  products: [
-    // Initial products with prices in rupees
-    {
-      id: 1,
-      name: "Gold Jhumka",
-      image: "/images/products/one.jpeg",
-      price: 12999.99,
-    },
-    {
-      id: 2,
-      name: "Pearl Earrings",
-      image: "/images/products/two.jpeg",
-      price: 8499.5,
-    },
-    {
-      id: 3,
-      name: "Diamond Studs",
-      image: "/images/products/three.jpeg",
-      price: 24999.99,
-    },
-    {
-      id: 4,
-      name: "Ruby Danglers",
-      image: "/images/products/four.jpeg",
-      price: 15999.99,
-    },
-    {
-      id: 5,
-      name: "Emerald Drops",
-      image: "/images/products/five.jpeg",
-      price: 18499.5,
-    },
-    {
-      id: 6,
-      name: "Silver Hoops",
-      image: "/images/products/six.jpeg",
-      price: 5999.99,
-    },
-    {
-      id: 7,
-      name: "Kundan Jhumka",
-      image: "/images/products/seven.jpeg",
-      price: 9999.99,
-    },
-    {
-      id: 8,
-      name: "Antique Chandbali",
-      image: "/images/products/eight.jpeg",
-      price: 11499.5,
-    },
-    {
-      id: 9,
-      name: "Meenakari Earrings",
-      image: "/images/products/nine.jpeg",
-      price: 7999.99,
-    },
-    {
-      id: 10,
-      name: "Crystal Danglers",
-      image: "/images/products/ten.jpeg",
-      price: 6499.99,
-    },
-  ],
+  products: [],
   loading: false,
   error: null,
 };
