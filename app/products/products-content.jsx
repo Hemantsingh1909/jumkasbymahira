@@ -2,15 +2,17 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useSearchParams } from 'next/navigation';
 import { setProducts } from '@/src/store/productSlice';
 import ProductCard from '@/src/components/ProductCard';
 import { ChevronDown, Search, SlidersHorizontal, X } from 'lucide-react';
 
-export default function ProductsContent({ initialProducts = [] }) {
+export default function ProductsContent({ initialProducts = [], searchParams = {} }) {
   const products = useSelector((state) => state.products.products || []);
   const dispatch = useDispatch();
-  const searchParams = useSearchParams();
+  
+  const searchQuery = searchParams?.search;
+  const categoryQuery = searchParams?.category;
+
   const [searchTerm, setSearchTerm] = useState('');
   const [priceRange, setPriceRange] = useState([0, 30000]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -27,7 +29,7 @@ export default function ProductsContent({ initialProducts = [] }) {
     { id: 'jhumkas', name: 'Jhumkas' },
     { id: 'meenakari', name: 'Meenakari' },
     { id: 'chandbali', name: 'Chandbali' },
-    { id: 'bridal sets', name: 'Bridal Sets' },
+    { id: 'bridal-sets', name: 'Bridal Sets' },
     { id: 'everyday', name: 'Everyday Wear' },
   ];
 
@@ -76,15 +78,13 @@ export default function ProductsContent({ initialProducts = [] }) {
   // Check for search query or category filter in URL
   useEffect(() => {
     window.scrollTo(0, 0);
-    const searchQuery = searchParams.get('search');
     if (searchQuery) {
       setSearchTerm(searchQuery);
     }
-    const catQuery = searchParams.get('category');
-    if (catQuery) {
-      setSelectedCategories([catQuery.toLowerCase()]);
+    if (categoryQuery) {
+      setSelectedCategories([categoryQuery.toLowerCase()]);
     }
-  }, [searchParams]);
+  }, [searchQuery, categoryQuery]);
 
   // Filter and sort products
   useEffect(() => {
@@ -105,9 +105,12 @@ export default function ProductsContent({ initialProducts = [] }) {
     );
 
     if (selectedCategories.length > 0) {
-      result = result.filter((product) =>
-        selectedCategories.includes(product.category?.toLowerCase())
-      );
+      result = result.filter((product) => {
+        const prodCat = product.category?.toLowerCase();
+        return selectedCategories.some(cat => 
+          cat === prodCat || cat.replace('-', ' ') === prodCat
+        );
+      });
     }
 
     if (selectedMaterials.length > 0) {

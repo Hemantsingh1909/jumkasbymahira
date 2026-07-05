@@ -38,7 +38,7 @@ export async function generateMetadata() {
   };
 }
 
-export default async function ProductsPage() {
+export default async function ProductsPage({ searchParams }) {
   const { data } = await supabasePublic
     .from('products')
     .select('*')
@@ -53,8 +53,6 @@ export default async function ProductsPage() {
   }));
 
   return (
-    <Suspense fallback={<div className="container-custom py-12 text-center text-gray-500 font-medium">Loading collection catalog...</div>}>
-      <ProductsContent initialProducts={products} />
-    </Suspense>
+    <ProductsContent initialProducts={products} searchParams={searchParams} />
   );
 }

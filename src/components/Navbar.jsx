@@ -312,7 +312,7 @@ const Navbar = () => {
                   <Moon className="w-3.5 h-3.5 mr-2 text-jewelry-500/80" /> Chandbali
                 </Link>
                 <Link
-                  href="/products?category=bridal sets"
+                  href="/products?category=bridal-sets"
                   className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
                   onClick={() => setIsMenuOpen(false)}
                 >
