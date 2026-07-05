@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useSearchParams } from 'next/navigation';
 import { setProducts } from '@/src/store/productSlice';
 import ProductCard from '@/src/components/ProductCard';
+import { ChevronDown, Search, SlidersHorizontal, X } from 'lucide-react';
 
 export default function ProductsContent({ initialProducts = [] }) {
   const products = useSelector((state) => state.products.products || []);
@@ -313,7 +314,7 @@ export default function ProductsContent({ initialProducts = [] }) {
                   onClick={() => setIsSortOpen(!isSortOpen)}
                   className="bg-white px-4 py-2 rounded border border-gray-300 hover:border-jewelry-600 text-sm flex items-center gap-2"
                 >
-                  Sort: {sortOption} <i className="fas fa-chevron-down text-xs"></i>
+                   Sort: {sortOption} <ChevronDown className="w-3.5 h-3.5" />
                 </button>
                 {isSortOpen && (
                   <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded shadow-lg z-10 min-w-48">
@@ -349,7 +350,7 @@ export default function ProductsContent({ initialProducts = [] }) {
               </div>
             ) : (
               <div className="text-center py-16 bg-white rounded-lg shadow-sm">
-                <i className="fas fa-search text-4xl text-gray-300 mb-3"></i>
+                 <Search className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                 <p className="text-gray-500 text-md">No products match your filters</p>
               </div>
             )}
@@ -396,13 +397,13 @@ export default function ProductsContent({ initialProducts = [] }) {
               {/* Header */}
               <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
                 <h2 className="text-xl font-bold text-jewelry-900 flex items-center gap-2">
-                  <i className="fas fa-sliders-h text-jewelry-600"></i> Filters
+                   <SlidersHorizontal className="w-5 h-5 text-jewelry-600 inline" /> Filters
                 </h2>
                 <button
                   onClick={() => setIsMobileFilterOpen(false)}
                   className="text-gray-400 hover:text-gray-500 p-1"
                 >
-                  <i className="fas fa-times text-lg"></i>
+                   <X className="w-5 h-5" />
                 </button>
               </div>
 

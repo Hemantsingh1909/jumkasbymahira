@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { incrementItem, decrementItem, removeItem } from '@/src/store/cartSlice';
 import { calculateShippingFee, calculateOrderTotal } from '@/src/lib/shipping';
 import { getProductUrl } from '@/src/lib/slug';
+import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react';
 
 export default function CartClient() {
   const cartItems = useSelector((state) => state.cart.items || []);
@@ -83,7 +84,7 @@ export default function CartClient() {
                                 onClick={() => dispatch(decrementItem(item.id))}
                                 className="bg-gray-100 text-gray-600 px-3 py-1 rounded-l-md hover:bg-gray-200 transition-colors"
                               >
-                                <i className="fas fa-minus text-xs"></i>
+                                <Minus className="w-3 h-3 mx-auto" />
                               </button>
                               <span className="px-4 py-1 text-gray-800 font-medium">
                                 {item.quantity}
@@ -92,14 +93,14 @@ export default function CartClient() {
                                 onClick={() => dispatch(incrementItem(item.id))}
                                 className="bg-gray-100 text-gray-600 px-3 py-1 rounded-r-md hover:bg-gray-200 transition-colors"
                               >
-                                <i className="fas fa-plus text-xs"></i>
+                                <Plus className="w-3 h-3 mx-auto" />
                               </button>
                             </div>
                             <button
                               onClick={() => dispatch(removeItem(item.id))}
-                              className="ml-4 text-red-500 text-sm hover:text-red-700 transition-colors"
+                              className="ml-4 text-red-500 text-sm hover:text-red-700 transition-colors flex items-center"
                             >
-                              <i className="fas fa-trash-alt mr-1"></i> Remove
+                              <Trash2 className="w-3.5 h-3.5 mr-1" /> Remove
                             </button>
                           </div>
                         </div>
@@ -160,7 +161,7 @@ export default function CartClient() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <i className="fas fa-shopping-bag text-6xl text-gray-300 mb-4"></i>
+            <ShoppingBag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <p className="text-xl text-gray-600 mb-6">Your cart is empty</p>
             <Link
               href="/products"

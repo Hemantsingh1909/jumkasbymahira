@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabasePublic } from '@/src/lib/supabase';
+import { Plus, Edit, Trash2, X, Upload } from 'lucide-react';
 
 export default function AdminDashboard() {
   const [session, setSession] = useState(null);
@@ -473,7 +474,7 @@ export default function AdminDashboard() {
                     onClick={() => openModal()}
                     className="bg-jewelry-600 hover:bg-jewelry-700 text-white px-4 py-2 rounded text-sm font-semibold shadow-sm transition-colors flex items-center gap-1.5"
                   >
-                    <i className="fas fa-plus"></i> Add New Product
+                    <Plus className="w-4 h-4" /> Add New Product
                   </button>
                 </div>
                 <div className="overflow-x-auto">
@@ -513,15 +514,15 @@ export default function AdminDashboard() {
                           <td className="p-4 space-x-2">
                             <button
                               onClick={() => openModal(product)}
-                              className="text-blue-500 hover:text-blue-700 font-medium text-xs px-2 py-1 rounded hover:bg-blue-50 transition-colors"
+                              className="text-blue-500 hover:text-blue-700 font-medium text-xs px-2 py-1 rounded hover:bg-blue-50 transition-colors inline-flex items-center"
                             >
-                              <i className="fas fa-edit mr-1"></i> Edit
+                              <Edit className="w-3 h-3 mr-1" /> Edit
                             </button>
                             <button
                               onClick={() => handleDeleteProduct(product.id)}
-                              className="text-red-500 hover:text-red-700 font-medium text-xs px-2 py-1 rounded hover:bg-red-50 transition-colors"
+                              className="text-red-500 hover:text-red-700 font-medium text-xs px-2 py-1 rounded hover:bg-red-50 transition-colors inline-flex items-center"
                             >
-                              <i className="fas fa-trash-alt mr-1"></i> Delete
+                              <Trash2 className="w-3.5 h-3.5 mr-1" /> Delete
                             </button>
                           </td>
                         </tr>
@@ -567,8 +568,8 @@ export default function AdminDashboard() {
           <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl overflow-hidden my-8">
             <div className="bg-gray-900 text-white p-6 flex justify-between items-center">
               <h2 className="text-xl font-bold font-display">{editingProduct ? 'Edit Catalog Product' : 'Add New Product'}</h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-white text-lg">
-                <i className="fas fa-times"></i>
+              <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-white flex items-center justify-center">
+                <X className="w-5 h-5" />
               </button>
             </div>
             <form onSubmit={handleProductSubmit} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
@@ -676,17 +677,17 @@ export default function AdminDashboard() {
                           ...prev,
                           images: prev.images.filter((_, i) => i !== idx)
                         }))}
-                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
                         aria-label="Remove image"
                       >
-                        <i className="fas fa-trash-alt"></i>
+                        <Trash2 className="w-3 h-3" />
                       </button>
                     </div>
                   ))}
                 </div>
                 <div className="flex items-center gap-3">
                   <label className={`cursor-pointer inline-flex items-center px-4 py-2 bg-gray-100 border border-gray-300 rounded text-sm font-medium text-gray-700 hover:bg-gray-200 transition-colors ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    <i className="fas fa-upload mr-2"></i> {uploading ? 'Uploading...' : 'Upload Image'}
+                    <Upload className="w-4 h-4 mr-2" /> {uploading ? 'Uploading...' : 'Upload Image'}
                     <input
                       type="file"
                       accept="image/*"

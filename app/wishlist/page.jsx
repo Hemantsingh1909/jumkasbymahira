@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import Link from 'next/link';
 import ProductCard from '@/src/components/ProductCard';
 import { addToCart } from '@/src/store/cartSlice';
+import { Trash2, Heart } from 'lucide-react';
 
 export default function Wishlist() {
   const [wishlistItems, setWishlistItems] = useState([]);
@@ -77,7 +78,7 @@ export default function Wishlist() {
                       className="px-4 py-2 bg-red-50 text-red-600 rounded text-sm hover:bg-red-100 transition-colors"
                       title="Remove from wishlist"
                     >
-                      <i className="fas fa-trash-alt"></i>
+                      <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
                 </div>
@@ -86,7 +87,7 @@ export default function Wishlist() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <i className="fas fa-heart text-6xl text-gray-300 mb-4"></i>
+            <Heart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <p className="text-xl text-gray-600 mb-6">Your wishlist is empty</p>
             <Link
               href="/products"

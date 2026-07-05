@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import { Search, Heart, ShoppingBag, X, Menu, Home, Tags, Gem, Mail, Palette, Moon, Crown, Star } from 'lucide-react';
 
 const Navbar = () => {
   const cartItems = useSelector((state) => state.cart.items || []);
@@ -106,7 +106,7 @@ const Navbar = () => {
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-jewelry-600 hover:text-jewelry-800"
                 aria-label="Search"
               >
-                <i className="fas fa-search"></i>
+                <Search className="w-5 h-5" />
               </button>
             </form>
           </div>
@@ -118,7 +118,7 @@ const Navbar = () => {
               className="mr-4 text-jewelry-800 relative"
               aria-label="Wishlist"
             >
-              <i className="fas fa-heart text-xl"></i>
+              <Heart className="w-5 h-5" />
               {wishlistCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {wishlistCount}
@@ -130,7 +130,7 @@ const Navbar = () => {
               className="mr-4 text-jewelry-800 relative"
               aria-label="Shopping cart"
             >
-              <i className="fas fa-shopping-bag text-xl"></i>
+              <ShoppingBag className="w-5 h-5" />
               {totalCartItems > 0 && (
                 <span className="absolute -top-2 -right-2 bg-jewelry-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {totalCartItems}
@@ -138,15 +138,15 @@ const Navbar = () => {
               )}
             </Link>
             <button
-              className="text-jewelry-800 focus:outline-none"
+              className="text-jewelry-800 focus:outline-none flex items-center justify-center"
               onClick={toggleMenu}
               aria-label="Toggle menu"
             >
-              <i
-                className={`fas ${
-                  isMenuOpen ? "fa-times" : "fa-bars"
-                } text-2xl`}
-              ></i>
+              {isMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </button>
           </div>
 
@@ -179,10 +179,10 @@ const Navbar = () => {
             </Link>
             <Link
               href="/wishlist"
-              className="text-jewelry-800 hover:text-jewelry-600 transition-colors relative"
+              className="text-jewelry-800 hover:text-jewelry-600 transition-colors relative flex items-center justify-center"
               aria-label="Wishlist"
             >
-              <i className="fas fa-heart text-lg"></i>
+              <Heart className="w-[18px] h-[18px]" />
               {wishlistCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {wishlistCount}
@@ -191,10 +191,10 @@ const Navbar = () => {
             </Link>
             <Link
               href="/cart"
-              className="text-jewelry-800 hover:text-jewelry-600 transition-colors relative"
+              className="text-jewelry-800 hover:text-jewelry-600 transition-colors relative flex items-center justify-center"
               aria-label="Shopping cart"
             >
-              <i className="fas fa-shopping-bag text-lg"></i>
+              <ShoppingBag className="w-[18px] h-[18px]" />
               {totalCartItems > 0 && (
                 <span className="absolute -top-2 -right-2 bg-jewelry-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {totalCartItems}
@@ -224,7 +224,7 @@ const Navbar = () => {
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-jewelry-600 hover:text-jewelry-800"
                 aria-label="Search"
               >
-                <i className="fas fa-search"></i>
+                <Search className="w-5 h-5" />
               </button>
             </form>
           </div>
@@ -238,7 +238,7 @@ const Navbar = () => {
               }
               onClick={() => setIsMenuOpen(false)}
             >
-              <i className={`fas fa-home mr-3 w-5 text-center text-base ${pathname === '/' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
+              <Home className={`mr-3 w-5 h-5 ${pathname === '/' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`} />
               <span>Home</span>
             </Link>
             <Link
@@ -249,7 +249,7 @@ const Navbar = () => {
               }
               onClick={() => setIsMenuOpen(false)}
             >
-              <i className={`fas fa-tags mr-3 w-5 text-center text-base ${pathname === '/collections' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
+              <Tags className={`mr-3 w-5 h-5 ${pathname === '/collections' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`} />
               <span>Collections</span>
             </Link>
             <Link
@@ -260,7 +260,7 @@ const Navbar = () => {
               }
               onClick={() => setIsMenuOpen(false)}
             >
-              <i className={`fas fa-gem mr-3 w-5 text-center text-base ${pathname === '/products' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
+              <Gem className={`mr-3 w-5 h-5 ${pathname === '/products' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`} />
               <span>All Products</span>
             </Link>
             <Link
@@ -271,7 +271,7 @@ const Navbar = () => {
               }
               onClick={() => setIsMenuOpen(false)}
             >
-              <i className={`fas fa-heart mr-3 w-5 text-center text-base ${pathname === '/wishlist' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
+              <Heart className={`mr-3 w-5 h-5 ${pathname === '/wishlist' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`} />
               <span>Wishlist</span>
             </Link>
             <Link
@@ -282,7 +282,7 @@ const Navbar = () => {
               }
               onClick={() => setIsMenuOpen(false)}
             >
-              <i className={`fas fa-envelope mr-3 w-5 text-center text-base ${pathname === '/contact' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
+              <Mail className={`mr-3 w-5 h-5 ${pathname === '/contact' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`} />
               <span>Contact</span>
             </Link>
 
@@ -295,35 +295,35 @@ const Navbar = () => {
                   className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <i className="fas fa-gem text-xs mr-2 text-jewelry-500/80"></i> Jhumkas
+                  <Gem className="w-3.5 h-3.5 mr-2 text-jewelry-500/80" /> Jhumkas
                 </Link>
                 <Link
                   href="/products?category=meenakari"
                   className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <i className="fas fa-palette text-xs mr-2 text-jewelry-500/80"></i> Meenakari
+                  <Palette className="w-3.5 h-3.5 mr-2 text-jewelry-500/80" /> Meenakari
                 </Link>
                 <Link
                   href="/products?category=chandbali"
                   className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <i className="fas fa-moon text-xs mr-2 text-jewelry-500/80"></i> Chandbali
+                  <Moon className="w-3.5 h-3.5 mr-2 text-jewelry-500/80" /> Chandbali
                 </Link>
                 <Link
                   href="/products?category=bridal sets"
                   className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <i className="fas fa-crown text-xs mr-2 text-jewelry-500/80"></i> Bridal Sets
+                  <Crown className="w-3.5 h-3.5 mr-2 text-jewelry-500/80" /> Bridal Sets
                 </Link>
                 <Link
                   href="/products?category=everyday"
                   className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <i className="fas fa-star text-xs mr-2 text-jewelry-500/80"></i> Everyday
+                  <Star className="w-3.5 h-3.5 mr-2 text-jewelry-500/80" /> Everyday
                 </Link>
               </div>
             </div>

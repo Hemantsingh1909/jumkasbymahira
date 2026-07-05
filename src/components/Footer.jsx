@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Phone, Mail } from 'lucide-react';
 import {
   FaInstagram,
   FaPinterest,
@@ -133,11 +134,11 @@ const Footer = () => {
             </h4>
             <ul className="space-y-2 text-gray-400">
               <li className="flex items-center">
-                <i className="fas fa-phone mr-2 text-jewelry-400"></i>
+                <Phone className="w-4 h-4 mr-2 text-jewelry-400" />
                 <span>+91 8238672255</span>
               </li>
               <li className="flex items-center">
-                <i className="fas fa-envelope mr-2 text-jewelry-400"></i>
+                <Mail className="w-4 h-4 mr-2 text-jewelry-400" />
                 <a href="mailto:sshreecollection593@gmail.com" className="hover:text-jewelry-300 transition-colors break-all">
                   sshreecollection593@gmail.com
                 </a>

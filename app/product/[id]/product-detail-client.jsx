@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import { addToCart } from '@/src/store/cartSlice';
 import ProductCard from '@/src/components/ProductCard';
+import { Star, Minus, Plus, ShoppingBag, Heart, Truck, History } from 'lucide-react';
 
 export default function ProductDetailClient({ product, relatedProducts }) {
   const dispatch = useDispatch();
@@ -147,9 +148,9 @@ export default function ProductDetailClient({ product, relatedProducts }) {
               </h1>
 
               <div className="flex items-center gap-4 mb-6">
-                <div className="flex text-yellow-400">
+                <div className="flex text-yellow-400 gap-0.5">
                   {[...Array(5)].map((_, i) => (
-                    <i key={i} className="fas fa-star text-sm"></i>
+                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                   ))}
                 </div>
                 <span className="text-xs text-gray-500">(15 verified reviews)</span>
@@ -190,18 +191,18 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                   <div className="flex items-center border border-gray-300 rounded-lg w-fit">
                     <button
                       onClick={() => handleQuantityChange(quantity - 1)}
-                      className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors"
+                      className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors flex items-center justify-center"
                       disabled={quantity <= 1}
                     >
-                      <i className="fas fa-minus text-xs"></i>
+                      <Minus className="w-3.5 h-3.5" />
                     </button>
                     <span className="px-6 py-2 font-semibold text-gray-800">{quantity}</span>
                     <button
                       onClick={() => handleQuantityChange(quantity + 1)}
-                      className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors"
+                      className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors flex items-center justify-center"
                       disabled={quantity >= 10}
                     >
-                      <i className="fas fa-plus text-xs"></i>
+                      <Plus className="w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
@@ -220,7 +221,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                       : 'bg-jewelry-600 hover:bg-jewelry-700 hover:shadow-lg transform active:scale-95'
                   }`}
                 >
-                  <i className="fas fa-shopping-bag"></i>
+                  <ShoppingBag className="w-5 h-5" />
                   {product.stockStatus === 'Out of Stock' ? 'Sold Out' : 'Add to Cart'}
                 </button>
 
@@ -232,7 +233,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                       : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
                   }`}
                 >
-                  <i className={`fas fa-heart ${isInWishlist ? 'text-red-500' : 'text-gray-400'}`}></i>
+                  <Heart className={`w-5 h-5 ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
                   {isInWishlist ? 'In Wishlist' : 'Add to Wishlist'}
                 </button>
               </div>
@@ -240,11 +241,11 @@ export default function ProductDetailClient({ product, relatedProducts }) {
               {/* Delivery Details */}
               <div className="bg-jewelry-50/50 p-4 rounded-xl border border-jewelry-100/50 space-y-2">
                 <p className="text-xs text-gray-600 flex items-center gap-2">
-                  <i className="fas fa-truck text-jewelry-600 text-sm"></i>
+                  <Truck className="w-4 h-4 text-jewelry-600 shrink-0" />
                   <span><strong>Free Delivery</strong> on orders over ₹5,000 (standard shipping: ₹99)</span>
                 </p>
                 <p className="text-xs text-gray-600 flex items-center gap-2">
-                  <i className="fas fa-history text-jewelry-600 text-sm"></i>
+                  <History className="w-4 h-4 text-jewelry-600 shrink-0" />
                   <span><strong>7-Day Hassle-Free Returns</strong> if not satisfied</span>
                 </p>
               </div>

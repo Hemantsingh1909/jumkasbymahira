@@ -6,6 +6,7 @@ import { addToCart } from "../store/cartSlice";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { getProductUrl } from "../lib/slug";
+import { Heart, Star, StarHalf } from "lucide-react";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -81,11 +82,11 @@ const ProductCard = ({ product }) => {
             isInWishlist ? "Remove from wishlist" : "Add to wishlist"
           }
         >
-          <i
-            className={`fas fa-heart ${
-              isInWishlist ? "text-red-500" : "text-gray-400"
+          <Heart
+            className={`w-5 h-5 ${
+              isInWishlist ? "fill-red-500 text-red-500" : "text-gray-400"
             }`}
-          ></i>
+          />
         </button>
 
         {/* Added to Cart Message */}
@@ -112,12 +113,12 @@ const ProductCard = ({ product }) => {
             ₹{product.price.toFixed(2)}
           </p>
           <div className="flex items-center">
-            <div className="flex text-yellow-400">
-              <i className="fas fa-star text-sm"></i>
-              <i className="fas fa-star text-sm"></i>
-              <i className="fas fa-star text-sm"></i>
-              <i className="fas fa-star text-sm"></i>
-              <i className="fas fa-star-half-alt text-sm"></i>
+            <div className="flex text-yellow-400 gap-0.5">
+              <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+              <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+              <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+              <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+              <StarHalf className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
             </div>
             <span className="text-xs text-gray-500 ml-1">(4.5)</span>
           </div>
