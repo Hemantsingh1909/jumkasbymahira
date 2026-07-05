@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Phone, Mail, Instagram } from 'lucide-react';
+import { Phone, Mail } from 'lucide-react';
 import logo from '../assets/Logo.png'; // Import the logo with correct capitalization
 
 const Footer = () => {
@@ -55,10 +55,23 @@ const Footer = () => {
                 href="https://www.instagram.com/jhumkas_by_malti/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-jewelry-400 transition-colors"
+                className="text-gray-400 hover:text-jewelry-400 transition-colors flex items-center justify-center"
                 aria-label="Visit our Instagram page"
               >
-                <Instagram className="w-[18px] h-[18px]" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-[18px] h-[18px]"
+                >
+                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                </svg>
               </a>
               <a
                 href="https://pin.it/4RhiTEUIl"
