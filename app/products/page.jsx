@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import { unstable_cache } from 'next/cache';
 import { supabasePublic, getSiteUrl } from '@/src/lib/supabase';
 import ProductsContent from './products-content';
 
@@ -8,6 +9,18 @@ function mapStockStatusToFrontend(status) {
   if (status === 'out_of_stock') return 'Out of Stock';
   return status || 'In Stock';
 }
+
+const getCachedProducts = unstable_cache(
+  async () => {
+    const { data } = await supabasePublic
+      .from('products')
+      .select('*')
+      .order('id', { ascending: true });
+    return data || [];
+  },
+  ['products-list'],
+  { revalidate: 60, tags: ['products'] }
+);
 
 export async function generateMetadata() {
   const siteUrl = getSiteUrl();
@@ -39,12 +52,9 @@ export async function generateMetadata() {
 }
 
 export default async function ProductsPage({ searchParams }) {
-  const { data } = await supabasePublic
-    .from('products')
-    .select('*')
-    .order('id', { ascending: true });
+  const data = await getCachedProducts();
 
-  const products = (data || []).map((p) => ({
+  const products = data.map((p) => ({
     ...p,
     stockStatus: mapStockStatusToFrontend(p.stock_status),
     images: p.images || [],
@@ -56,3 +66,4 @@ export default async function ProductsPage({ searchParams }) {
     <ProductsContent initialProducts={products} searchParams={searchParams} />
   );
 }
+

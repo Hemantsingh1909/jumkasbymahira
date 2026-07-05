@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { unstable_cache } from 'next/cache';
 import { supabasePublic, getSiteUrl } from '@/src/lib/supabase';
 import ProductDetailClient from './product-detail-client';
 import { parseProductId } from '@/src/lib/slug';
@@ -10,14 +11,49 @@ function mapStockStatusToFrontend(status) {
   return status || 'In Stock';
 }
 
+const getCachedProduct = (id) => unstable_cache(
+  async () => {
+    const { data } = await supabasePublic
+      .from('products')
+      .select('*')
+      .eq('id', id)
+      .single();
+    return data;
+  },
+  [`product-detail-${id}`],
+  { revalidate: 60, tags: [`product-${id}`] }
+)();
+
+const getCachedRelatedProducts = (id, category) => unstable_cache(
+  async () => {
+    let related = [];
+    if (category) {
+      const { data: catProducts } = await supabasePublic
+        .from('products')
+        .select('*')
+        .neq('id', id)
+        .eq('category', category)
+        .limit(4);
+      related = catProducts || [];
+    }
+
+    if (related.length < 4) {
+      const { data: fillProducts } = await supabasePublic
+        .from('products')
+        .select('*')
+        .neq('id', id)
+        .limit(4 - related.length);
+      related = [...related, ...(fillProducts || [])];
+    }
+    return related;
+  },
+  [`product-related-${id}`],
+  { revalidate: 60, tags: [`product-related-${id}`] }
+)();
+
 export async function generateMetadata({ params }) {
   const id = parseProductId(params.id);
-  
-  const { data: product } = await supabasePublic
-    .from('products')
-    .select('*')
-    .eq('id', id)
-    .single();
+  const product = await getCachedProduct(id);
 
   if (!product) {
     return {
@@ -59,36 +95,22 @@ export async function generateMetadata({ params }) {
 
 export default async function ProductDetailPage({ params }) {
   const id = parseProductId(params.id);
-  
-  const { data: product } = await supabasePublic
-    .from('products')
-    .select('*')
-    .eq('id', id)
-    .single();
+  const product = await getCachedProduct(id);
 
   if (!product) {
     notFound();
   }
 
-  // Get similar products based on category or price similarity
-  const { data: allProducts } = await supabasePublic
-    .from('products')
-    .select('*');
+  // Get cached similar products
+  const relatedProducts = await getCachedRelatedProducts(product.id, product.category);
 
-  const similar = (allProducts || [])
-    .filter(
-      (p) =>
-        p.id !== product.id &&
-        (p.category === product.category || Math.abs(p.price - product.price) < 4000)
-    )
-    .slice(0, 4)
-    .map(p => ({
-      ...p,
-      stockStatus: mapStockStatusToFrontend(p.stock_status),
-      images: p.images || [],
-      tags: p.tags || [],
-      image: p.images?.[0] || '/images/products/one.jpeg'
-    }));
+  const similar = relatedProducts.map(p => ({
+    ...p,
+    stockStatus: mapStockStatusToFrontend(p.stock_status),
+    images: p.images || [],
+    tags: p.tags || [],
+    image: p.images?.[0] || '/images/products/one.jpeg'
+  }));
 
   const normalizedProduct = {
     ...product,
@@ -105,3 +127,5 @@ export default async function ProductDetailPage({ params }) {
     />
   );
 }
+
+
