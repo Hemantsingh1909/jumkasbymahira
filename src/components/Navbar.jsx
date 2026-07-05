@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
-import { Search, Heart, ShoppingBag, X, Menu, Home, Tags, Gem, Mail, Palette, Moon, Crown, Star } from 'lucide-react';
 
 const Navbar = () => {
   const cartItems = useSelector((state) => state.cart.items || []);
@@ -106,7 +105,7 @@ const Navbar = () => {
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-jewelry-600 hover:text-jewelry-800"
                 aria-label="Search"
               >
-                <Search className="w-5 h-5" />
+                <i className="fas fa-search"></i>
               </button>
             </form>
           </div>
@@ -118,7 +117,7 @@ const Navbar = () => {
               className="mr-4 text-jewelry-800 relative"
               aria-label="Wishlist"
             >
-              <Heart className="w-5 h-5" />
+              <i className="far fa-heart text-lg"></i>
               {wishlistCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {wishlistCount}
@@ -130,7 +129,7 @@ const Navbar = () => {
               className="mr-4 text-jewelry-800 relative"
               aria-label="Shopping cart"
             >
-              <ShoppingBag className="w-5 h-5" />
+              <i className="fas fa-shopping-bag text-lg"></i>
               {totalCartItems > 0 && (
                 <span className="absolute -top-2 -right-2 bg-jewelry-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {totalCartItems}
@@ -143,9 +142,9 @@ const Navbar = () => {
               aria-label="Toggle menu"
             >
               {isMenuOpen ? (
-                <X className="w-6 h-6" />
+                <i className="fas fa-times text-xl"></i>
               ) : (
-                <Menu className="w-6 h-6" />
+                <i className="fas fa-bars text-xl"></i>
               )}
             </button>
           </div>
@@ -182,7 +181,7 @@ const Navbar = () => {
               className="text-jewelry-800 hover:text-jewelry-600 transition-colors relative flex items-center justify-center"
               aria-label="Wishlist"
             >
-              <Heart className="w-[18px] h-[18px]" />
+              <i className="far fa-heart text-[17px]"></i>
               {wishlistCount > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {wishlistCount}
@@ -194,7 +193,7 @@ const Navbar = () => {
               className="text-jewelry-800 hover:text-jewelry-600 transition-colors relative flex items-center justify-center"
               aria-label="Shopping cart"
             >
-              <ShoppingBag className="w-[18px] h-[18px]" />
+              <i className="fas fa-shopping-bag text-[17px]"></i>
               {totalCartItems > 0 && (
                 <span className="absolute -top-2 -right-2 bg-jewelry-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {totalCartItems}
@@ -224,7 +223,7 @@ const Navbar = () => {
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-jewelry-600 hover:text-jewelry-800"
                 aria-label="Search"
               >
-                <Search className="w-5 h-5" />
+                <i className="fas fa-search"></i>
               </button>
             </form>
           </div>
@@ -238,7 +237,7 @@ const Navbar = () => {
               }
               onClick={() => setIsMenuOpen(false)}
             >
-              <Home className={`mr-3 w-5 h-5 ${pathname === '/' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`} />
+              <i className={`fas fa-home mr-3 text-lg ${pathname === '/' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
               <span>Home</span>
             </Link>
             <Link
@@ -249,7 +248,7 @@ const Navbar = () => {
               }
               onClick={() => setIsMenuOpen(false)}
             >
-              <Tags className={`mr-3 w-5 h-5 ${pathname === '/collections' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`} />
+              <i className={`fas fa-tags mr-3 text-lg ${pathname === '/collections' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
               <span>Collections</span>
             </Link>
             <Link
@@ -260,7 +259,7 @@ const Navbar = () => {
               }
               onClick={() => setIsMenuOpen(false)}
             >
-              <Gem className={`mr-3 w-5 h-5 ${pathname === '/products' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`} />
+              <i className={`fas fa-gem mr-3 text-lg ${pathname === '/products' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
               <span>All Products</span>
             </Link>
             <Link
@@ -271,7 +270,7 @@ const Navbar = () => {
               }
               onClick={() => setIsMenuOpen(false)}
             >
-              <Heart className={`mr-3 w-5 h-5 ${pathname === '/wishlist' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`} />
+              <i className={`far fa-heart mr-3 text-lg ${pathname === '/wishlist' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
               <span>Wishlist</span>
             </Link>
             <Link
@@ -282,7 +281,7 @@ const Navbar = () => {
               }
               onClick={() => setIsMenuOpen(false)}
             >
-              <Mail className={`mr-3 w-5 h-5 ${pathname === '/contact' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`} />
+              <i className={`fas fa-envelope mr-3 text-lg ${pathname === '/contact' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
               <span>Contact</span>
             </Link>
 
@@ -295,35 +294,35 @@ const Navbar = () => {
                   className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Gem className="w-3.5 h-3.5 mr-2 text-jewelry-500/80" /> Jhumkas
+                  <i className="fas fa-gem mr-2 text-xs text-jewelry-500/80"></i> Jhumkas
                 </Link>
                 <Link
                   href="/products?category=meenakari"
                   className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Palette className="w-3.5 h-3.5 mr-2 text-jewelry-500/80" /> Meenakari
+                  <i className="fas fa-palette mr-2 text-xs text-jewelry-500/80"></i> Meenakari
                 </Link>
                 <Link
                   href="/products?category=chandbali"
                   className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Moon className="w-3.5 h-3.5 mr-2 text-jewelry-500/80" /> Chandbali
+                  <i className="fas fa-moon mr-2 text-xs text-jewelry-500/80"></i> Chandbali
                 </Link>
                 <Link
                   href="/products?category=bridal-sets"
                   className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Crown className="w-3.5 h-3.5 mr-2 text-jewelry-500/80" /> Bridal Sets
+                  <i className="fas fa-crown mr-2 text-xs text-jewelry-500/80"></i> Bridal Sets
                 </Link>
                 <Link
                   href="/products?category=everyday"
                   className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <Star className="w-3.5 h-3.5 mr-2 text-jewelry-500/80" /> Everyday
+                  <i className="fas fa-star mr-2 text-xs text-jewelry-500/80"></i> Everyday
                 </Link>
               </div>
             </div>

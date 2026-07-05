@@ -4,7 +4,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Phone, Mail } from 'lucide-react';
 import logo from '../assets/Logo.png'; // Import the logo with correct capitalization
 
 const Footer = () => {
@@ -150,11 +149,11 @@ const Footer = () => {
             </h4>
             <ul className="space-y-2 text-gray-400">
               <li className="flex items-center">
-                <Phone className="w-4 h-4 mr-2 text-jewelry-400" />
+                <i className="fas fa-phone mr-2 text-jewelry-400 text-sm"></i>
                 <span>+91 8238672255</span>
               </li>
               <li className="flex items-center">
-                <Mail className="w-4 h-4 mr-2 text-jewelry-400" />
+                <i className="fas fa-envelope mr-2 text-jewelry-400 text-sm"></i>
                 <a href="mailto:sshreecollection593@gmail.com" className="hover:text-jewelry-300 transition-colors break-all">
                   sshreecollection593@gmail.com
                 </a>
