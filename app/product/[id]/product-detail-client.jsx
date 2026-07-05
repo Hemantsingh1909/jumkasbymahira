@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
+import Image from 'next/image';
 import { addToCart } from '@/src/store/cartSlice';
 import ProductCard from '@/src/components/ProductCard';
 import { Star, Minus, Plus, ShoppingBag, Heart, Truck, History } from 'lucide-react';
@@ -102,10 +103,13 @@ export default function ProductDetailClient({ product, relatedProducts }) {
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
             >
-              <img
+              <Image
                 src={activeImage}
                 alt={product.name}
-                className="w-full h-full object-contain p-4"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-contain p-4"
               />
               
               {/* Zoom overlay window */}
@@ -122,11 +126,11 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                   <button
                     key={index}
                     onClick={() => setActiveImage(imgUrl)}
-                    className={`w-20 h-20 border rounded-md p-1 overflow-hidden bg-white transition-all flex-shrink-0 ${
+                    className={`relative w-20 h-20 border rounded-md p-1 overflow-hidden bg-white transition-all flex-shrink-0 ${
                       activeImage === imgUrl ? 'border-jewelry-600 ring-2 ring-jewelry-100' : 'border-gray-200 hover:border-jewelry-300'
                     }`}
                   >
-                    <img src={imgUrl} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover" />
+                    <Image src={imgUrl} alt={`Thumbnail ${index + 1}`} fill sizes="80px" className="object-cover p-1" />
                   </button>
                 ))}
               </div>

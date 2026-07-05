@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../store/cartSlice";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { getProductUrl } from "../lib/slug";
 import { Heart, Star, StarHalf } from "lucide-react";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, priority = false }) => {
   const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
   const [isInWishlist, setIsInWishlist] = useState(false);
@@ -66,11 +67,14 @@ const ProductCard = ({ product }) => {
     >
       {/* Product Image */}
       <div className="relative h-64 overflow-hidden bg-gray-50">
-        <Link href={getProductUrl(product)} className="block w-full h-full">
-          <img
+        <Link href={getProductUrl(product)} className="relative block w-full h-full">
+          <Image
             src={product.image}
             alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 33vw, 25vw"
+            priority={priority}
+            className="object-cover transition-transform duration-500 group-hover:scale-110"
           />
         </Link>
 
