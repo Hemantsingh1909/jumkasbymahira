@@ -76,7 +76,7 @@ export default function CartClient() {
                             {item.name}
                           </Link>
                           <p className="text-sm text-gray-500 mt-1">
-                            Unit Price: ₹{Number(product.price || 0).toFixed(2)}
+                            Unit Price: ₹{Number(item.price || 0).toFixed(2)}
                           </p>
                           <div className="flex items-center mt-3">
                             <div className="flex items-center border border-gray-300 rounded-md">
