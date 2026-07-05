@@ -83,19 +83,17 @@ const ProductCard = ({ product }) => {
           }
         >
           <Heart
-            className={`w-5 h-5 ${
-              isInWishlist ? "fill-red-500 text-red-500" : "text-gray-400"
-            }`}
+            className={`w-5 h-5 ${isInWishlist ? "fill-red-500 text-red-500" : "text-gray-400"
+              }`}
           />
         </button>
 
         {/* Added to Cart Message */}
         <div
-          className={`absolute bottom-0 left-0 right-0 bg-jewelry-600 text-white text-center py-2 transition-transform duration-300 ${
-            showAddedMessage
+          className={`absolute bottom-0 left-0 right-0 bg-jewelry-600 text-white text-center py-2 transition-transform duration-300 ${showAddedMessage
               ? "transform translate-y-0"
               : "transform translate-y-full"
-          }`}
+            }`}
         >
           Added to cart!
         </div>
@@ -110,7 +108,7 @@ const ProductCard = ({ product }) => {
         </Link>
         <div className="flex justify-between items-center mb-3">
           <p className="text-jewelry-600 font-bold">
-            ₹{product.price.toFixed(2)}
+            ₹{Number(product.price || 0).toFixed(2)}
           </p>
           <div className="flex items-center">
             <div className="flex text-yellow-400 gap-0.5">
@@ -127,11 +125,10 @@ const ProductCard = ({ product }) => {
         <button
           onClick={handleAddToCart}
           disabled={isInCart}
-          className={`py-2 px-4 rounded-md transition-colors w-full font-medium ${
-            isInCart
+          className={`py-2 px-4 rounded-md transition-colors w-full font-medium ${isInCart
               ? "bg-gray-100 text-gray-500 cursor-not-allowed"
               : "bg-jewelry-500 text-white hover:bg-jewelry-600"
-          }`}
+            }`}
         >
           {isInCart ? "Added to Cart" : "Add to Cart"}
         </button>
