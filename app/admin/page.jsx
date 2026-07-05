@@ -118,8 +118,10 @@ export default function AdminDashboard() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (session) {
+      fetchData();
+    }
+  }, [session]);
 
   // Update order status
   const handleStatusChange = async (orderId, newStatus) => {
