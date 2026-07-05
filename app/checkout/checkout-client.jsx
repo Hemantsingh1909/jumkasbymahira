@@ -143,10 +143,10 @@ export default function CheckoutClient() {
     if (!placedOrder) return '#';
     const customerName = `${placedOrder.customer.firstName} ${placedOrder.customer.lastName}`;
     const itemsText = placedOrder.items
-      .map((item) => `- ${item.name} x ${item.quantity} (₹${item.price.toFixed(2)})`)
+      .map((item) => `- ${item.name} x ${item.quantity} (₹${Number(item.price || 0).toFixed(2)})`)
       .join('\n');
     const shippingText = placedOrder.shipping === 0 ? 'Free' : `₹${placedOrder.shipping.toFixed(2)}`;
-    
+
     const message = `Hello Jhumkas by Malti,
 
 I've just placed a new order! Here are the details:
