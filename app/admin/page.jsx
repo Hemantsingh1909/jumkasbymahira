@@ -731,7 +731,14 @@ export default function AdminDashboard() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="relative">
-                  <label className="block text-gray-700 text-sm font-medium mb-1">Material</label>
+                  <label className="block text-gray-700 text-sm font-medium mb-1">Material *</label>
+                  <input
+                    type="text"
+                    required
+                    value={productForm.material}
+                    onChange={() => {}}
+                    className="sr-only"
+                  />
                   <button
                     type="button"
                     onClick={() => { setIsMatOpen(!isMatOpen); setIsOccOpen(false); }}
@@ -777,7 +784,14 @@ export default function AdminDashboard() {
                   />
                 </div>
                 <div className="relative">
-                  <label className="block text-gray-700 text-sm font-medium mb-1">Occasion</label>
+                  <label className="block text-gray-700 text-sm font-medium mb-1">Occasion *</label>
+                  <input
+                    type="text"
+                    required
+                    value={productForm.occasion}
+                    onChange={() => {}}
+                    className="sr-only"
+                  />
                   <button
                     type="button"
                     onClick={() => { setIsOccOpen(!isOccOpen); setIsMatOpen(false); }}
