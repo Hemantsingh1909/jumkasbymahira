@@ -92,7 +92,10 @@ export async function POST(request) {
         const customerAddress = `${customer.address}, ${customer.city}, ${customer.state} - ${customer.pincode}`;
         const itemsListHtml = (items || []).map(item => `
           <tr>
-            <td style="padding: 12px 10px; border-bottom: 1px solid #f1f1f1; color: #333333; font-size: 14px;">${item.name}</td>
+            <td style="padding: 12px 10px; border-bottom: 1px solid #f1f1f1; color: #333333; font-size: 14px;">
+              ${item.name}
+              ${item.selectedSize ? `<br/><span style="font-size: 12px; color: #6d1b36; font-weight: bold;">Size: ${item.selectedSize}</span>` : ''}
+            </td>
             <td style="padding: 12px 10px; border-bottom: 1px solid #f1f1f1; color: #666666; font-size: 14px; text-align: center;">${item.quantity}</td>
             <td style="padding: 12px 10px; border-bottom: 1px solid #f1f1f1; color: #333333; font-size: 14px; text-align: right;">₹${(item.price * item.quantity).toFixed(2)}</td>
           </tr>

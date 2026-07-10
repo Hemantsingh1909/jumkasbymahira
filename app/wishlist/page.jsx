@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import Link from 'next/link';
 import ProductCard from '@/src/components/ProductCard';
 import { addToCart } from '@/src/store/cartSlice';
+import { getProductUrl } from '@/src/lib/slug';
 import { Trash2, Heart } from 'lucide-react';
 
 export default function Wishlist() {
@@ -68,12 +69,21 @@ export default function Wishlist() {
                 <div key={product.id} className="relative">
                   <ProductCard product={product} />
                   <div className="mt-3 flex gap-2">
-                    <button
-                      onClick={() => addToCartAndRemove(product)}
-                      className="flex-1 bg-jewelry-600 text-white py-2 px-4 rounded text-sm hover:bg-jewelry-700 transition-colors"
-                    >
-                      Add to Cart
-                    </button>
+                    {product.category?.toLowerCase() === 'bangles' ? (
+                      <Link
+                        href={getProductUrl(product)}
+                        className="flex-1 bg-jewelry-600 text-white py-2 px-4 rounded text-sm hover:bg-jewelry-700 transition-colors text-center block font-medium"
+                      >
+                        Select Size
+                      </Link>
+                    ) : (
+                      <button
+                        onClick={() => addToCartAndRemove(product)}
+                        className="flex-1 bg-jewelry-600 text-white py-2 px-4 rounded text-sm hover:bg-jewelry-700 transition-colors font-medium"
+                      >
+                        Add to Cart
+                      </button>
+                    )}
                     <button
                       onClick={() => removeFromWishlist(product.id)}
                       className="px-4 py-2 bg-red-50 text-red-600 rounded text-sm hover:bg-red-100 transition-colors"

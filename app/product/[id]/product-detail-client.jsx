@@ -22,6 +22,8 @@ export default function ProductDetailClient({ product, relatedProducts }) {
   const [activeTab, setActiveTab] = useState('description');
   const [zoomStyle, setZoomStyle] = useState({ display: 'none' });
   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0 });
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [sizeError, setSizeError] = useState(null);
 
   const handleQuantityChange = (newQty) => {
     if (newQty >= 1 && newQty <= 10) {
@@ -30,8 +32,12 @@ export default function ProductDetailClient({ product, relatedProducts }) {
   };
 
   const handleAddToCart = () => {
+    if (product.category?.toLowerCase() === 'bangles' && !selectedSize) {
+      setSizeError('Please select a size before adding to cart.');
+      return;
+    }
     for (let i = 0; i < quantity; i++) {
-      dispatch(addToCart(product));
+      dispatch(addToCart({ ...product, selectedSize }));
     }
   };
 
@@ -183,6 +189,40 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                   </span>
                 </div>
               </div>
+              
+              {/* Size Selector for Bangles */}
+              {product.stockStatus !== 'Out of Stock' && product.category?.toLowerCase() === 'bangles' && (
+                <div className="mb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-sm font-semibold text-gray-700">
+                      Select Size <span className="text-red-500">*</span>
+                    </label>
+                    <span className="text-xs text-gray-400 font-medium">(Required)</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2.5">
+                    {['2.4', '2.6', '2.8', '2.10'].map((size) => (
+                      <button
+                        key={size}
+                        type="button"
+                        onClick={() => {
+                          setSelectedSize(size);
+                          setSizeError(null);
+                        }}
+                        className={`min-w-[3.5rem] h-10 px-3 rounded-lg border text-sm font-bold transition-all flex items-center justify-center ${
+                          selectedSize === size
+                            ? 'border-jewelry-600 bg-jewelry-50 text-jewelry-800 ring-2 ring-jewelry-100'
+                            : 'border-gray-200 text-gray-700 hover:border-jewelry-300 hover:bg-gray-50'
+                        }`}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                  {sizeError && (
+                    <p className="text-red-600 text-xs font-semibold mt-2">{sizeError}</p>
+                  )}
+                </div>
+              )}
 
               {/* Quantity Selector */}
               {product.stockStatus !== 'Out of Stock' && (
@@ -301,6 +341,12 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                     <td className="py-2.5 font-semibold text-gray-500">Occasion</td>
                     <td className="py-2.5 text-gray-700">{product.occasion}</td>
                   </tr>
+                   {product.category?.toLowerCase() === 'bangles' && (
+                    <tr className="border-b border-gray-100">
+                      <td className="py-2.5 font-semibold text-gray-500">Available Sizes</td>
+                      <td className="py-2.5 text-gray-700">2.4, 2.6, 2.8, 2.10</td>
+                    </tr>
+                  )}
                   <tr>
                     <td className="py-2.5 font-semibold text-gray-500">Tags</td>
                     <td className="py-2.5 text-gray-700 capitalize">{product.tags?.join(', ') || 'Traditional, Elegant'}</td>

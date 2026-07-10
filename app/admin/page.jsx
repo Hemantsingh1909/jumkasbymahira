@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { supabasePublic } from '@/src/lib/supabase';
-import { Plus, Edit, Trash2, X, Upload } from 'lucide-react';
+import { Plus, Edit, Trash2, X, Upload, ChevronDown } from 'lucide-react';
 
 export default function AdminDashboard() {
   const [session, setSession] = useState(null);
@@ -72,6 +72,28 @@ export default function AdminDashboard() {
   // Form states for product CRUD
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [isMatOpen, setIsMatOpen] = useState(false);
+  const [isOccOpen, setIsOccOpen] = useState(false);
+
+  const handleMaterialToggle = (mat) => {
+    const currentList = productForm.material
+      ? productForm.material.split(',').map(m => m.trim()).filter(Boolean)
+      : [];
+    const newList = currentList.includes(mat)
+      ? currentList.filter(m => m !== mat)
+      : [...currentList, mat];
+    setProductForm({ ...productForm, material: newList.join(', ') });
+  };
+
+  const handleOccasionToggle = (occ) => {
+    const currentList = productForm.occasion
+      ? productForm.occasion.split(',').map(o => o.trim()).filter(Boolean)
+      : [];
+    const newList = currentList.includes(occ)
+      ? currentList.filter(o => o !== occ)
+      : [...currentList, occ];
+    setProductForm({ ...productForm, occasion: newList.join(', ') });
+  };
   const [productForm, setProductForm] = useState({
     name: '',
     sku: '',
@@ -177,6 +199,8 @@ export default function AdminDashboard() {
 
   // Open modal for add or edit
   const openModal = (product = null) => {
+    setIsMatOpen(false);
+    setIsOccOpen(false);
     if (product) {
       setEditingProduct(product);
       setProductForm({
@@ -622,19 +646,48 @@ export default function AdminDashboard() {
                     <option value="chandbali">Chandbali</option>
                     <option value="bridal sets">Bridal Sets</option>
                     <option value="everyday">Everyday Wear</option>
+                    <option value="bangles">Bangles</option>
                   </select>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
+                <div className="relative">
                   <label className="block text-gray-700 text-sm font-medium mb-1">Material</label>
-                  <input
-                    type="text"
-                    value={productForm.material}
-                    onChange={(e) => setProductForm({ ...productForm, material: e.target.value })}
-                    className="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-jewelry-500"
-                  />
+                  <button
+                    type="button"
+                    onClick={() => { setIsMatOpen(!isMatOpen); setIsOccOpen(false); }}
+                    className="w-full p-2 border border-gray-300 rounded text-sm bg-white text-left flex justify-between items-center focus:outline-none focus:ring-1 focus:ring-jewelry-500 h-[38px]"
+                  >
+                    <span className="truncate">
+                      {productForm.material || 'Select Materials'}
+                    </span>
+                    <ChevronDown className="w-4 h-4 text-gray-500 ml-1 shrink-0" />
+                  </button>
+                  {isMatOpen && (
+                    <>
+                      <div className="fixed inset-0 z-10" onClick={() => setIsMatOpen(false)} />
+                      <div className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded shadow-lg p-2 space-y-1 max-h-60 overflow-y-auto">
+                        {['Gold Plated', 'Silver', 'Brass'].map((mat) => {
+                          const isChecked = productForm.material
+                            ?.split(',')
+                            .map(m => m.trim())
+                            .includes(mat);
+                          return (
+                            <label key={mat} className="flex items-center gap-2 p-1.5 hover:bg-gray-50 rounded text-sm cursor-pointer font-medium text-gray-700">
+                              <input
+                                type="checkbox"
+                                checked={isChecked || false}
+                                onChange={() => handleMaterialToggle(mat)}
+                                className="rounded border-gray-300 text-jewelry-600 focus:ring-jewelry-500"
+                              />
+                              <span>{mat}</span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
                 </div>
                 <div>
                   <label className="block text-gray-700 text-sm font-medium mb-1">Color</label>
@@ -645,14 +698,42 @@ export default function AdminDashboard() {
                     className="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-jewelry-500"
                   />
                 </div>
-                <div>
+                <div className="relative">
                   <label className="block text-gray-700 text-sm font-medium mb-1">Occasion</label>
-                  <input
-                    type="text"
-                    value={productForm.occasion}
-                    onChange={(e) => setProductForm({ ...productForm, occasion: e.target.value })}
-                    className="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-jewelry-500"
-                  />
+                  <button
+                    type="button"
+                    onClick={() => { setIsOccOpen(!isOccOpen); setIsMatOpen(false); }}
+                    className="w-full p-2 border border-gray-300 rounded text-sm bg-white text-left flex justify-between items-center focus:outline-none focus:ring-1 focus:ring-jewelry-500 h-[38px]"
+                  >
+                    <span className="truncate">
+                      {productForm.occasion || 'Select Occasions'}
+                    </span>
+                    <ChevronDown className="w-4 h-4 text-gray-500 ml-1 shrink-0" />
+                  </button>
+                  {isOccOpen && (
+                    <>
+                      <div className="fixed inset-0 z-10" onClick={() => setIsOccOpen(false)} />
+                      <div className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded shadow-lg p-2 space-y-1 max-h-60 overflow-y-auto">
+                        {['Bridal / Wedding', 'Festive / Traditional', 'Everyday Wear'].map((occ) => {
+                          const isChecked = productForm.occasion
+                            ?.split(',')
+                            .map(o => o.trim())
+                            .includes(occ);
+                          return (
+                            <label key={occ} className="flex items-center gap-2 p-1.5 hover:bg-gray-50 rounded text-sm cursor-pointer font-medium text-gray-700">
+                              <input
+                                type="checkbox"
+                                checked={isChecked || false}
+                                onChange={() => handleOccasionToggle(occ)}
+                                className="rounded border-gray-300 text-jewelry-600 focus:ring-jewelry-500"
+                              />
+                              <span>{occ}</span>
+                            </label>
+                          );
+                        })}
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 

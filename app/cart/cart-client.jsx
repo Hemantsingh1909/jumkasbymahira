@@ -56,7 +56,7 @@ export default function CartClient() {
 
                 {cartItems.map((item) => (
                   <div
-                    key={item.id}
+                    key={`${item.id}-${item.selectedSize || ''}`}
                     className="p-6 border-b border-gray-100 hover:bg-gray-50 transition-colors"
                   >
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -75,13 +75,18 @@ export default function CartClient() {
                           >
                             {item.name}
                           </Link>
+                          {item.selectedSize && (
+                            <p className="text-xs font-semibold text-jewelry-650 mt-1 bg-jewelry-50 px-2 py-0.5 rounded-full w-fit">
+                              Size: {item.selectedSize}
+                            </p>
+                          )}
                           <p className="text-sm text-gray-500 mt-1">
                             Unit Price: ₹{Number(item.price || 0).toFixed(2)}
                           </p>
                           <div className="flex items-center mt-3">
                             <div className="flex items-center border border-gray-300 rounded-md">
                               <button
-                                onClick={() => dispatch(decrementItem(item.id))}
+                                onClick={() => dispatch(decrementItem(item))}
                                 className="bg-gray-100 text-gray-600 px-3 py-1 rounded-l-md hover:bg-gray-200 transition-colors"
                               >
                                 <Minus className="w-3 h-3 mx-auto" />
@@ -90,14 +95,14 @@ export default function CartClient() {
                                 {item.quantity}
                               </span>
                               <button
-                                onClick={() => dispatch(incrementItem(item.id))}
+                                onClick={() => dispatch(incrementItem(item))}
                                 className="bg-gray-100 text-gray-600 px-3 py-1 rounded-r-md hover:bg-gray-200 transition-colors"
                               >
                                 <Plus className="w-3 h-3 mx-auto" />
                               </button>
                             </div>
                             <button
-                              onClick={() => dispatch(removeItem(item.id))}
+                              onClick={() => dispatch(removeItem(item))}
                               className="ml-4 text-red-500 text-sm hover:text-red-700 transition-colors flex items-center"
                             >
                               <Trash2 className="w-3.5 h-3.5 mr-1" /> Remove

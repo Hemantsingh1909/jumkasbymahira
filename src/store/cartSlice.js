@@ -32,7 +32,9 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action) => {
       const existingItem = state.items.find(
-        (item) => item.id === action.payload.id
+        (item) =>
+          item.id === action.payload.id &&
+          item.selectedSize === action.payload.selectedSize
       );
       if (existingItem) {
         existingItem.quantity += 1;
@@ -42,21 +44,39 @@ const cartSlice = createSlice({
       saveCartToStorage(state);
     },
     incrementItem: (state, action) => {
-      const item = state.items.find((item) => item.id === action.payload);
+      const target = action.payload;
+      const isObj = target && typeof target === 'object';
+      const id = isObj ? target.id : target;
+      const size = isObj ? target.selectedSize : undefined;
+      const item = state.items.find(
+        (item) => item.id === id && item.selectedSize === size
+      );
       if (item) {
         item.quantity += 1;
       }
       saveCartToStorage(state);
     },
     decrementItem: (state, action) => {
-      const item = state.items.find((item) => item.id === action.payload);
+      const target = action.payload;
+      const isObj = target && typeof target === 'object';
+      const id = isObj ? target.id : target;
+      const size = isObj ? target.selectedSize : undefined;
+      const item = state.items.find(
+        (item) => item.id === id && item.selectedSize === size
+      );
       if (item && item.quantity > 1) {
         item.quantity -= 1;
       }
       saveCartToStorage(state);
     },
     removeItem: (state, action) => {
-      state.items = state.items.filter((item) => item.id !== action.payload);
+      const target = action.payload;
+      const isObj = target && typeof target === 'object';
+      const id = isObj ? target.id : target;
+      const size = isObj ? target.selectedSize : undefined;
+      state.items = state.items.filter(
+        (item) => !(item.id === id && item.selectedSize === size)
+      );
       saveCartToStorage(state);
     },
     clearCart: (state) => {

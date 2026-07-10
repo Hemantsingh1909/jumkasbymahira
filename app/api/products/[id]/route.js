@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabasePublic, supabaseAdmin, verifyAdminSession } from '@/src/lib/supabase';
+import { revalidateTag } from 'next/cache';
 
 function mapStockStatusToFrontend(status) {
   if (status === 'in_stock') return 'In Stock';
@@ -85,6 +86,10 @@ export async function PUT(request, { params }) {
 
     if (error) throw error;
 
+    revalidateTag('products');
+    revalidateTag(`product-${id}`);
+    revalidateTag(`product-related-${id}`);
+
     return NextResponse.json({
       ...data,
       stockStatus: mapStockStatusToFrontend(data.stock_status),
@@ -112,6 +117,10 @@ export async function DELETE(request, { params }) {
       .eq('id', id);
 
     if (error) throw error;
+
+    revalidateTag('products');
+    revalidateTag(`product-${id}`);
+    revalidateTag(`product-related-${id}`);
 
     return NextResponse.json({ success: true });
   } catch (error) {

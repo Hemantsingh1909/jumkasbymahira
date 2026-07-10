@@ -125,16 +125,25 @@ const ProductCard = ({ product, priority = false }) => {
           </div>
         </div>
 
-        <button
-          onClick={handleAddToCart}
-          disabled={isInCart}
-          className={`py-2 px-4 rounded-md transition-colors w-full font-medium ${isInCart
-            ? "bg-gray-100 text-gray-500 cursor-not-allowed"
-            : "bg-jewelry-500 text-white hover:bg-jewelry-600"
-            }`}
-        >
-          {isInCart ? "Added to Cart" : "Add to Cart"}
-        </button>
+        {product.category?.toLowerCase() === 'bangles' ? (
+          <Link
+            href={getProductUrl(product)}
+            className="py-2 px-4 rounded-md transition-colors w-full font-medium bg-jewelry-500 text-white hover:bg-jewelry-600 block text-center shadow-sm hover:shadow"
+          >
+            Select Size
+          </Link>
+        ) : (
+          <button
+            onClick={handleAddToCart}
+            disabled={isInCart}
+            className={`py-2 px-4 rounded-md transition-colors w-full font-medium ${isInCart
+              ? "bg-gray-100 text-gray-500 cursor-not-allowed"
+              : "bg-jewelry-500 text-white hover:bg-jewelry-600"
+              }`}
+          >
+            {isInCart ? "Added to Cart" : "Add to Cart"}
+          </button>
+        )}
       </div>
     </div>
   );

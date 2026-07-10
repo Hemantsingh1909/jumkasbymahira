@@ -324,6 +324,13 @@ const Navbar = () => {
                 >
                   <i className="fas fa-star mr-2 text-xs text-jewelry-500/80"></i> Everyday
                 </Link>
+                <Link
+                  href="/products?category=bangles"
+                  className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <i className="fas fa-circle-notch mr-2 text-xs text-jewelry-500/80"></i> Bangles
+                </Link>
               </div>
             </div>
           </div>

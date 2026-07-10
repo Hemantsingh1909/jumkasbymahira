@@ -111,7 +111,8 @@ export default function CheckoutClient() {
                 id: item.id,
                 name: item.name,
                 price: item.price,
-                quantity: item.quantity
+                quantity: item.quantity,
+                selectedSize: item.selectedSize
               })),
               customer: formData,
               subtotal,
@@ -143,7 +144,7 @@ export default function CheckoutClient() {
     if (!placedOrder) return '#';
     const customerName = `${placedOrder.customer.firstName} ${placedOrder.customer.lastName}`;
     const itemsText = placedOrder.items
-      .map((item) => `- ${item.name} x ${item.quantity} (₹${Number(item.price || 0).toFixed(2)})`)
+      .map((item) => `- ${item.name}${item.selectedSize ? ` (Size: ${item.selectedSize})` : ''} x ${item.quantity} (₹${Number(item.price || 0).toFixed(2)})`)
       .join('\n');
     const shippingText = placedOrder.shipping === 0 ? 'Free' : `₹${placedOrder.shipping.toFixed(2)}`;
 
@@ -214,7 +215,7 @@ Please confirm my order. Thank you!`;
                 {placedOrder.items.map((item, index) => (
                   <div key={index} className="flex justify-between items-center text-sm">
                     <span className="text-gray-700 font-medium">
-                      {item.name} <span className="text-gray-400 font-normal">x {item.quantity}</span>
+                      {item.name} {item.selectedSize && <span className="text-xs text-jewelry-600 font-bold bg-jewelry-50 px-1.5 py-0.5 rounded">(Size: {item.selectedSize})</span>} <span className="text-gray-400 font-normal">x {item.quantity}</span>
                     </span>
                     <span className="text-gray-800 font-semibold">₹{(item.price * item.quantity).toFixed(2)}</span>
                   </div>
@@ -480,9 +481,9 @@ Please confirm my order. Thank you!`;
             </h3>
             <div className="space-y-4 mb-6 max-h-60 overflow-y-auto">
               {cartItems.map((item) => (
-                <div key={item.id} className="flex justify-between text-sm gap-2">
+                <div key={`${item.id}-${item.selectedSize || ''}`} className="flex justify-between text-sm gap-2">
                   <span className="text-gray-600 font-medium line-clamp-1">
-                    {item.name} <span className="text-gray-400 text-xs">x {item.quantity}</span>
+                    {item.name} {item.selectedSize && <span className="text-xs text-jewelry-600 font-semibold">(Size: {item.selectedSize})</span>} <span className="text-gray-400 text-xs">x {item.quantity}</span>
                   </span>
                   <span className="font-semibold text-gray-800">₹{(item.price * item.quantity).toFixed(2)}</span>
                 </div>

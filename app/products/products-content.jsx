@@ -30,20 +30,34 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
     { id: 'chandbali', name: 'Chandbali' },
     { id: 'bridal-sets', name: 'Bridal Sets' },
     { id: 'everyday', name: 'Everyday Wear' },
+    { id: 'bangles', name: 'Bangles' },
   ];
 
-  const materials = [
-    { id: 'Gold Plated', name: 'Gold Plated' },
-    { id: 'Silver', name: 'Silver' },
-    { id: 'Brass', name: 'Brass' },
-    { id: 'Kundan', name: 'Kundan' },
-  ];
+  const materials = useMemo(() => {
+    const allMats = new Set();
+    products.forEach((p) => {
+      if (p.material) {
+        p.material.split(',').forEach((m) => {
+          const trimmed = m.trim();
+          if (trimmed) allMats.add(trimmed);
+        });
+      }
+    });
+    return Array.from(allMats).sort().map((m) => ({ id: m, name: m }));
+  }, [products]);
 
-  const occasions = [
-    { id: 'Bridal', name: 'Bridal / Wedding' },
-    { id: 'Festive', name: 'Festive / Traditional' },
-    { id: 'Everyday', name: 'Everyday Wear' },
-  ];
+  const occasions = useMemo(() => {
+    const allOccs = new Set();
+    products.forEach((p) => {
+      if (p.occasion) {
+        p.occasion.split(',').forEach((o) => {
+          const trimmed = o.trim();
+          if (trimmed) allOccs.add(trimmed);
+        });
+      }
+    });
+    return Array.from(allOccs).sort().map((o) => ({ id: o, name: o }));
+  }, [products]);
 
   const colors = [
     { id: 'Gold', name: 'Gold' },
@@ -122,11 +136,19 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
     }
 
     if (selectedMaterials.length > 0) {
-      result = result.filter((product) => selectedMaterials.includes(product.material));
+      result = result.filter((product) => {
+        if (!product.material) return false;
+        const productMats = product.material.split(',').map(m => m.trim().toLowerCase());
+        return selectedMaterials.some(selMat => productMats.includes(selMat.toLowerCase()));
+      });
     }
 
     if (selectedOccasions.length > 0) {
-      result = result.filter((product) => selectedOccasions.includes(product.occasion));
+      result = result.filter((product) => {
+        if (!product.occasion) return false;
+        const productOccs = product.occasion.split(',').map(o => o.trim().toLowerCase());
+        return selectedOccasions.some(selOcc => productOccs.includes(selOcc.toLowerCase()));
+      });
     }
 
     if (selectedColors.length > 0) {

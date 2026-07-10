@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabasePublic, supabaseAdmin, verifyAdminSession } from '@/src/lib/supabase';
+import { revalidateTag } from 'next/cache';
 
 function mapStockStatusToFrontend(status) {
   if (status === 'in_stock') return 'In Stock';
@@ -83,6 +84,8 @@ export async function POST(request) {
       .single();
 
     if (error) throw error;
+
+    revalidateTag('products');
 
     return NextResponse.json({
       ...data,
