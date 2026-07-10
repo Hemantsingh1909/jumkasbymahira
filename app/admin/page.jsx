@@ -108,9 +108,12 @@ export default function AdminDashboard() {
     color: 'Gold'
   });
 
+  const [fetchError, setFetchError] = useState('');
+
   // Fetch all admin data
   const fetchData = async () => {
     setLoading(true);
+    setFetchError('');
     try {
       const { data: { session } } = await supabasePublic.auth.getSession();
       const token = session?.access_token;
@@ -123,6 +126,22 @@ export default function AdminDashboard() {
         }),
         fetch('/api/products')
       ]);
+
+      if (!ordersRes.ok) {
+        const errData = await ordersRes.json().catch(() => ({}));
+        console.error('Failed to fetch orders:', ordersRes.status, errData);
+        if (ordersRes.status === 401) {
+          setFetchError('Access Denied: Server session verification failed. Please confirm that your NEXT_PUBLIC_ADMIN_EMAIL and ADMIN_EMAIL environment variables match your authenticated credentials.');
+        } else {
+          setFetchError(errData.error || `Failed to fetch orders (HTTP ${ordersRes.status})`);
+        }
+      }
+
+      if (!productsRes.ok) {
+        const errData = await productsRes.json().catch(() => ({}));
+        console.error('Failed to fetch products:', productsRes.status, errData);
+        setFetchError(prev => prev || errData.error || `Failed to fetch catalog (HTTP ${productsRes.status})`);
+      }
 
       if (ordersRes.ok && productsRes.ok) {
         const [ordersData, productsData] = await Promise.all([
@@ -398,6 +417,15 @@ export default function AdminDashboard() {
       </div>
 
       <div className="container-custom mt-8">
+        {fetchError && (
+          <div className="bg-red-50 border border-red-200 text-red-800 px-5 py-4 rounded-xl mb-8 text-sm font-semibold flex items-start justify-between shadow-sm">
+            <div className="flex gap-2">
+              <span className="text-red-500 mt-0.5 font-bold">⚠️</span>
+              <span>{fetchError}</span>
+            </div>
+            <button onClick={() => setFetchError('')} className="text-red-500 hover:text-red-700 font-bold ml-4 text-xs shrink-0 select-none">✕</button>
+          </div>
+        )}
         {/* Navigation Tabs */}
         <div className="flex border-b border-gray-200 mb-8 bg-white rounded-lg shadow-sm p-1">
           {[

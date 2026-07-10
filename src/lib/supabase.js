@@ -16,12 +16,29 @@ export async function verifyAdminSession(request) {
   try {
     const authHeader = request.headers.get('Authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.error('Admin verification failed: Missing or invalid Authorization header');
       return false;
     }
     const token = authHeader.split(' ')[1];
     const { data: { user }, error } = await supabasePublic.auth.getUser(token);
-    if (error || !user) return false;
-    return user.email === process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+    if (error) {
+      console.error('Admin verification failed: Supabase getUser error', error);
+      return false;
+    }
+    if (!user) {
+      console.error('Admin verification failed: No user found for token');
+      return false;
+    }
+    const adminEmail = process.env.ADMIN_EMAIL || process.env.NEXT_PUBLIC_ADMIN_EMAIL;
+    if (!adminEmail) {
+      console.error('Admin verification failed: Admin email environment variable is not set on the server');
+      return false;
+    }
+    const isMatched = user.email?.toLowerCase() === adminEmail.toLowerCase();
+    if (!isMatched) {
+      console.error(`Admin verification failed: Authenticated email (${user.email}) does not match admin email (${adminEmail})`);
+    }
+    return isMatched;
   } catch (error) {
     console.error('Admin verification error:', error);
     return false;
