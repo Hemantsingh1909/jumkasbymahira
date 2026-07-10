@@ -35,6 +35,7 @@ export async function GET(request) {
     const { data, error } = await supabaseAdmin
       .from('orders')
       .select('*')
+      .order('created_at', { ascending: false })
       .order('id', { ascending: false });
 
     if (error) throw error;

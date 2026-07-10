@@ -1,9 +1,37 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import Link from 'next/link';
 import { supabasePublic } from '@/src/lib/supabase';
 import { Plus, Edit, Trash2, X, Upload, ChevronDown } from 'lucide-react';
+
+const formatDateHeader = (dateString) => {
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'Unknown Date';
+    return date.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  } catch (e) {
+    return 'Unknown Date';
+  }
+};
+
+const formatOrderTime = (dateString) => {
+  try {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '';
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
+  } catch (e) {
+    return '';
+  }
+};
 
 export default function AdminDashboard() {
   const [session, setSession] = useState(null);
@@ -148,7 +176,7 @@ export default function AdminDashboard() {
           ordersRes.json(),
           productsRes.json()
         ]);
-        setOrders(ordersData.reverse()); // Show newest orders first
+        setOrders(ordersData);
         setProducts(productsData);
       }
     } catch (error) {
@@ -340,6 +368,18 @@ export default function AdminDashboard() {
   const averageOrder = orders.length > 0 ? (totalRevenue / orders.length).toFixed(2) : 0;
   const lowStockProducts = products.filter(p => p.stockStatus === 'Low Stock' || p.stockStatus === 'Out of Stock').length;
 
+  // Group orders by calendar date (Newest to Oldest)
+  const groupedOrders = [];
+  orders.forEach(order => {
+    const dateHeader = formatDateHeader(order.created_at || order.createdAt);
+    let group = groupedOrders.find(g => g.date === dateHeader);
+    if (!group) {
+      group = { date: dateHeader, items: [] };
+      groupedOrders.push(group);
+    }
+    group.items.push(order);
+  });
+
   if (authLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -478,35 +518,45 @@ export default function AdminDashboard() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100 text-gray-700">
-                      {orders.length > 0 ? (
-                        orders.map(order => (
-                          <tr key={order.id} className="hover:bg-gray-50/50 transition-colors">
-                            <td className="p-4 font-mono font-bold text-jewelry-700">{order.invoiceNo}</td>
-                            <td className="p-4 text-xs text-gray-400">{new Date(order.date).toLocaleDateString()}</td>
-                            <td className="p-4 font-medium">{order.customer.firstName} {order.customer.lastName}</td>
-                            <td className="p-4 text-xs font-mono">{order.customer.phone}</td>
-                            <td className="p-4 text-xs max-w-xs truncate" title={`${order.customer.address}, ${order.customer.city}`}>
-                              {order.customer.address}, {order.customer.city}
-                            </td>
-                            <td className="p-4 font-semibold text-gray-900">₹{order.total.toFixed(2)}</td>
-                            <td className="p-4">
-                              <select
-                                value={order.status}
-                                onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                                className={`text-xs px-2.5 py-1.5 rounded-full font-bold border transition-colors ${
-                                  order.status === 'New' ? 'bg-blue-50 border-blue-200 text-blue-700' :
-                                  order.status === 'Processing' ? 'bg-amber-50 border-amber-200 text-amber-700' :
-                                  order.status === 'Shipped' ? 'bg-indigo-50 border-indigo-200 text-indigo-700' :
-                                  'bg-green-50 border-green-200 text-green-700'
-                                }`}
-                              >
-                                <option value="New">New</option>
-                                <option value="Processing">Processing</option>
-                                <option value="Shipped">Shipped</option>
-                                <option value="Delivered">Delivered</option>
-                              </select>
-                            </td>
-                          </tr>
+                      {groupedOrders.length > 0 ? (
+                        groupedOrders.map(group => (
+                          <Fragment key={group.date}>
+                            {/* Group Date Header Row */}
+                            <tr className="bg-gray-100/70 font-bold text-jewelry-900 border-t border-b border-gray-200">
+                              <td colSpan="7" className="p-3 pl-4 font-display font-bold text-xs uppercase tracking-wider text-jewelry-800">
+                                {group.date}
+                              </td>
+                            </tr>
+                            {group.items.map(order => (
+                              <tr key={order.id} className="hover:bg-gray-50/50 transition-colors">
+                                <td className="p-4 font-mono font-bold text-jewelry-700">{order.invoiceNo}</td>
+                                <td className="p-4 text-xs text-gray-500 font-medium">{formatOrderTime(order.created_at || order.createdAt)}</td>
+                                <td className="p-4 font-medium">{order.customer.firstName} {order.customer.lastName}</td>
+                                <td className="p-4 text-xs font-mono">{order.customer.phone}</td>
+                                <td className="p-4 text-xs max-w-xs truncate" title={`${order.customer.address}, ${order.customer.city}`}>
+                                  {order.customer.address}, {order.customer.city}
+                                </td>
+                                <td className="p-4 font-semibold text-gray-900">₹{order.total.toFixed(2)}</td>
+                                <td className="p-4">
+                                  <select
+                                    value={order.status}
+                                    onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                                    className={`text-xs px-2.5 py-1.5 rounded-full font-bold border transition-colors ${
+                                      order.status === 'New' ? 'bg-blue-50 border-blue-200 text-blue-700' :
+                                      order.status === 'Processing' ? 'bg-amber-50 border-amber-200 text-amber-700' :
+                                      order.status === 'Shipped' ? 'bg-indigo-50 border-indigo-200 text-indigo-700' :
+                                      'bg-green-50 border-green-200 text-green-700'
+                                    }`}
+                                  >
+                                    <option value="New">New</option>
+                                    <option value="Processing">Processing</option>
+                                    <option value="Shipped">Shipped</option>
+                                    <option value="Delivered">Delivered</option>
+                                  </select>
+                                </td>
+                              </tr>
+                            ))}
+                          </Fragment>
                         ))
                       ) : (
                         <tr>
