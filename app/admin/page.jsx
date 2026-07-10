@@ -131,8 +131,8 @@ export default function AdminDashboard() {
     description: '',
     stockStatus: 'In Stock',
     tags: '',
-    material: 'Gold Plated',
-    occasion: 'Everyday',
+    material: '',
+    occasion: '',
     color: 'Gold'
   });
 
@@ -259,8 +259,14 @@ export default function AdminDashboard() {
         description: product.description || '',
         stockStatus: product.stockStatus || 'In Stock',
         tags: product.tags ? product.tags.join(', ') : '',
-        material: product.material || 'Gold Plated',
-        occasion: product.occasion || 'Everyday',
+        material: product.material || '',
+        occasion: (product.occasion || '')
+          .split(',')
+          .map(o => {
+            const trimmed = o.trim();
+            return trimmed.toLowerCase() === 'everyday' ? 'Everyday Wear' : trimmed;
+          })
+          .join(', '),
         color: product.color || 'Gold'
       });
     } else {
@@ -274,8 +280,8 @@ export default function AdminDashboard() {
         description: '',
         stockStatus: 'In Stock',
         tags: '',
-        material: 'Gold Plated',
-        occasion: 'Everyday',
+        material: '',
+        occasion: '',
         color: 'Gold'
       });
     }
@@ -745,7 +751,7 @@ export default function AdminDashboard() {
                     className="w-full p-2 border border-gray-300 rounded text-sm bg-white text-left flex justify-between items-center focus:outline-none focus:ring-1 focus:ring-jewelry-500 h-[38px]"
                   >
                     <span className="truncate">
-                      {productForm.material || 'Select Materials'}
+                      {productForm.material || 'Select Material'}
                     </span>
                     <ChevronDown className="w-4 h-4 text-gray-500 ml-1 shrink-0" />
                   </button>
@@ -798,7 +804,7 @@ export default function AdminDashboard() {
                     className="w-full p-2 border border-gray-300 rounded text-sm bg-white text-left flex justify-between items-center focus:outline-none focus:ring-1 focus:ring-jewelry-500 h-[38px]"
                   >
                     <span className="truncate">
-                      {productForm.occasion || 'Select Occasions'}
+                      {productForm.occasion || 'Select Occasion'}
                     </span>
                     <ChevronDown className="w-4 h-4 text-gray-500 ml-1 shrink-0" />
                   </button>
