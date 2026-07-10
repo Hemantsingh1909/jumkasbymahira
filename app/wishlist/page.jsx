@@ -8,15 +8,14 @@ import { addToCart } from '@/src/store/cartSlice';
 import { Trash2, Heart } from 'lucide-react';
 
 export default function Wishlist() {
-  const [wishlistItems, setWishlistItems] = useState([]);
-  const dispatch = useDispatch();
+  const [wishlistItems, setWishlistItems] = useState(() => {
+    if (typeof window === 'undefined') return [];
+    return JSON.parse(localStorage.getItem('wishlist') || '[]');
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    setWishlistItems(wishlist);
 
-    // Listen for wishlist updates
     const handleWishlistUpdate = () => {
       const updated = JSON.parse(localStorage.getItem('wishlist') || '[]');
       setWishlistItems(updated);
@@ -27,6 +26,8 @@ export default function Wishlist() {
       window.removeEventListener('wishlistUpdated', handleWishlistUpdate);
     };
   }, []);
+
+  const dispatch = useDispatch();
 
   const removeFromWishlist = (productId) => {
     const updatedWishlist = wishlistItems.filter((item) => item.id !== productId);

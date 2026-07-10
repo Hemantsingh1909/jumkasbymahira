@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -13,17 +13,15 @@ export default function ProductDetailClient({ product, relatedProducts }) {
   const cartItems = useSelector((state) => state.cart.items);
   const [activeImage, setActiveImage] = useState(product.images?.[0] || product.image);
   const [quantity, setQuantity] = useState(1);
-  const [isInWishlist, setIsInWishlist] = useState(false);
+  const [isInWishlist, setIsInWishlist] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    return wishlist.some((item) => item.id === product.id);
+  });
+
   const [activeTab, setActiveTab] = useState('description');
   const [zoomStyle, setZoomStyle] = useState({ display: 'none' });
   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0 });
-
-  // Load wishlist status
-  useEffect(() => {
-    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    setIsInWishlist(wishlist.some((item) => item.id === product.id));
-    setActiveImage(product.images?.[0] || product.image);
-  }, [product]);
 
   const handleQuantityChange = (newQty) => {
     if (newQty >= 1 && newQty <= 10) {
@@ -70,8 +68,8 @@ export default function ProductDetailClient({ product, relatedProducts }) {
     setZoomStyle({ display: 'none' });
   };
 
-  const productImages = product.images && product.images.length > 0 
-    ? product.images 
+  const productImages = product.images && product.images.length > 0
+    ? product.images
     : [product.image];
 
   return (
@@ -94,11 +92,11 @@ export default function ProductDetailClient({ product, relatedProducts }) {
       {/* Product Information Grid */}
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white rounded-xl shadow-sm p-6 md:p-8">
-          
+
           {/* Images Section */}
           <div className="space-y-4">
             {/* Main Zoomable Image */}
-            <div 
+            <div
               className="relative h-96 md:h-[480px] bg-gray-50 border border-gray-100 rounded-lg overflow-hidden cursor-zoom-in"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
@@ -111,9 +109,9 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-contain p-4"
               />
-              
+
               {/* Zoom overlay window */}
-              <div 
+              <div
                 className="absolute inset-0 pointer-events-none transition-opacity duration-200 border border-gray-200 shadow-inner rounded-lg"
                 style={zoomStyle}
               />
@@ -126,9 +124,8 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                   <button
                     key={index}
                     onClick={() => setActiveImage(imgUrl)}
-                    className={`relative w-20 h-20 border rounded-md p-1 overflow-hidden bg-white transition-all flex-shrink-0 ${
-                      activeImage === imgUrl ? 'border-jewelry-600 ring-2 ring-jewelry-100' : 'border-gray-200 hover:border-jewelry-300'
-                    }`}
+                    className={`relative w-20 h-20 border rounded-md p-1 overflow-hidden bg-white transition-all flex-shrink-0 ${activeImage === imgUrl ? 'border-jewelry-600 ring-2 ring-jewelry-100' : 'border-gray-200 hover:border-jewelry-300'
+                      }`}
                   >
                     <Image src={imgUrl} alt={`Thumbnail ${index + 1}`} fill sizes="80px" className="object-cover p-1" />
                   </button>
@@ -179,10 +176,9 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                 </div>
                 <div>
                   <span className="text-gray-400">Stock Availability:</span>{' '}
-                  <span className={`font-semibold ${
-                    product.stockStatus === 'In Stock' ? 'text-green-600' :
-                    product.stockStatus === 'Low Stock' ? 'text-amber-500' : 'text-red-500'
-                  }`}>
+                  <span className={`font-semibold ${product.stockStatus === 'In Stock' ? 'text-green-600' :
+                      product.stockStatus === 'Low Stock' ? 'text-amber-500' : 'text-red-500'
+                    }`}>
                     {product.stockStatus}
                   </span>
                 </div>
@@ -219,11 +215,10 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                 <button
                   onClick={handleAddToCart}
                   disabled={product.stockStatus === 'Out of Stock'}
-                  className={`flex-1 py-3.5 rounded-lg font-semibold text-white shadow-md transition-all flex items-center justify-center gap-2 ${
-                    product.stockStatus === 'Out of Stock'
+                  className={`flex-1 py-3.5 rounded-lg font-semibold text-white shadow-md transition-all flex items-center justify-center gap-2 ${product.stockStatus === 'Out of Stock'
                       ? 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none'
                       : 'bg-jewelry-600 hover:bg-jewelry-700 hover:shadow-lg transform active:scale-95'
-                  }`}
+                    }`}
                 >
                   <ShoppingBag className="w-5 h-5" />
                   {product.stockStatus === 'Out of Stock' ? 'Sold Out' : 'Add to Cart'}
@@ -231,11 +226,10 @@ export default function ProductDetailClient({ product, relatedProducts }) {
 
                 <button
                   onClick={toggleWishlist}
-                  className={`px-6 py-3.5 rounded-lg border-2 font-semibold transition-all flex items-center justify-center gap-2 ${
-                    isInWishlist
+                  className={`px-6 py-3.5 rounded-lg border-2 font-semibold transition-all flex items-center justify-center gap-2 ${isInWishlist
                       ? 'border-red-200 text-red-500 bg-red-50/50 hover:bg-red-50'
                       : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
-                  }`}
+                    }`}
                 >
                   <Heart className={`w-5 h-5 ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
                   {isInWishlist ? 'In Wishlist' : 'Add to Wishlist'}
@@ -269,11 +263,10 @@ export default function ProductDetailClient({ product, relatedProducts }) {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-6 py-4 font-semibold text-sm transition-all relative ${
-                  activeTab === tab.id
+                className={`px-6 py-4 font-semibold text-sm transition-all relative ${activeTab === tab.id
                     ? 'text-jewelry-600 border-b-2 border-jewelry-600'
                     : 'text-gray-500 hover:text-jewelry-500'
-                }`}
+                  }`}
               >
                 {tab.label}
               </button>

@@ -16,7 +16,7 @@ function mapStockStatusToDb(status) {
 }
 
 export async function GET(request, { params }) {
-  const { id } = params;
+  const { id } = await params;   // ✅ add await
   try {
     const { data, error } = await supabasePublic
       .from('products')
@@ -42,7 +42,7 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-  const { id } = params;
+  const { id } = await params;   // ✅ add await
   const isAdmin = await verifyAdminSession(request);
   if (!isAdmin) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -99,7 +99,7 @@ export async function PUT(request, { params }) {
 }
 
 export async function DELETE(request, { params }) {
-  const { id } = params;
+  const { id } = await params;   // ✅ add await
   const isAdmin = await verifyAdminSession(request);
   if (!isAdmin) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

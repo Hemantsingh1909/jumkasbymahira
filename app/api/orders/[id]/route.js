@@ -24,7 +24,7 @@ function formatInvoiceNo(orderId, dateString) {
 }
 
 export async function PUT(request, { params }) {
-  const { id } = params;
+  const { id } = await params;   // ✅ add await
   const isAdmin = await verifyAdminSession(request);
   if (!isAdmin) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

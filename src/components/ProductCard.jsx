@@ -3,7 +3,7 @@
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../store/cartSlice";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { getProductUrl } from "../lib/slug";
@@ -12,18 +12,17 @@ import { Heart, Star, StarHalf } from "lucide-react";
 const ProductCard = ({ product, priority = false }) => {
   const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
-  const [isInWishlist, setIsInWishlist] = useState(false);
+  const [isInWishlist, setIsInWishlist] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+    return wishlist.some((item) => item.id === product.id);
+  });
+
   const [showAddedMessage, setShowAddedMessage] = useState(false);
   const cartItems = useSelector((state) => state.cart.items);
 
   // Check if product is already in cart
   const isInCart = cartItems.some((item) => item.id === product.id);
-
-  // Load wishlist from localStorage
-  useEffect(() => {
-    const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
-    setIsInWishlist(wishlist.some((item) => item.id === product.id));
-  }, [product.id]);
 
   const handleAddToCart = () => {
     dispatch(addToCart(product));
@@ -95,8 +94,8 @@ const ProductCard = ({ product, priority = false }) => {
         {/* Added to Cart Message */}
         <div
           className={`absolute bottom-0 left-0 right-0 bg-jewelry-600 text-white text-center py-2 transition-transform duration-300 ${showAddedMessage
-              ? "transform translate-y-0"
-              : "transform translate-y-full"
+            ? "transform translate-y-0"
+            : "transform translate-y-full"
             }`}
         >
           Added to cart!
@@ -130,8 +129,8 @@ const ProductCard = ({ product, priority = false }) => {
           onClick={handleAddToCart}
           disabled={isInCart}
           className={`py-2 px-4 rounded-md transition-colors w-full font-medium ${isInCart
-              ? "bg-gray-100 text-gray-500 cursor-not-allowed"
-              : "bg-jewelry-500 text-white hover:bg-jewelry-600"
+            ? "bg-gray-100 text-gray-500 cursor-not-allowed"
+            : "bg-jewelry-500 text-white hover:bg-jewelry-600"
             }`}
         >
           {isInCart ? "Added to Cart" : "Add to Cart"}

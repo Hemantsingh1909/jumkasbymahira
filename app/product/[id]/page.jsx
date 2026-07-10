@@ -52,7 +52,8 @@ const getCachedRelatedProducts = (id, category) => unstable_cache(
 )();
 
 export async function generateMetadata({ params }) {
-  const id = parseProductId(params.id);
+  const { id: rawId } = await params;   // ✅ awaited
+  const id = parseProductId(rawId);
   const product = await getCachedProduct(id);
 
   if (!product) {
@@ -94,8 +95,9 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ProductDetailPage({ params }) {
-  const id = parseProductId(params.id);
-  const product = await getCachedProduct(id);
+  const { id: rawId } = await params;   // ✅ awaited
+  const id = parseProductId(rawId);
+  const product = await getCachedProduct(id);   // ← add this back
 
   if (!product) {
     notFound();
@@ -121,9 +123,9 @@ export default async function ProductDetailPage({ params }) {
   };
 
   return (
-    <ProductDetailClient 
-      product={normalizedProduct} 
-      relatedProducts={similar} 
+    <ProductDetailClient
+      product={normalizedProduct}
+      relatedProducts={similar}
     />
   );
 }

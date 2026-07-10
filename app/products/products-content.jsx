@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setProducts } from '@/src/store/productSlice';
 import ProductCard from '@/src/components/ProductCard';
@@ -9,7 +9,7 @@ import { ChevronDown, Search, SlidersHorizontal, X } from 'lucide-react';
 export default function ProductsContent({ initialProducts = [], searchParams = {} }) {
   const products = useSelector((state) => state.products.products || []);
   const dispatch = useDispatch();
-  
+
   const searchQuery = searchParams?.search;
   const categoryQuery = searchParams?.category;
 
@@ -20,7 +20,6 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
   const [selectedOccasions, setSelectedOccasions] = useState([]);
   const [selectedColors, setSelectedColors] = useState([]);
   const [sortOption, setSortOption] = useState('featured');
-  const [filteredProducts, setFilteredProducts] = useState([]);
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const sortRef = useRef(null);
@@ -76,18 +75,28 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
   }, [dispatch, initialProducts]);
 
   // Check for search query or category filter in URL
+  // Scroll to top when the URL filter params change — legitimate side effect
   useEffect(() => {
     window.scrollTo(0, 0);
-    if (searchQuery) {
-      setSearchTerm(searchQuery);
-    }
+  }, [searchQuery, categoryQuery]);
+
+  // Sync URL params into local editable state — done during render, not in an effect
+  const [prevSearchQuery, setPrevSearchQuery] = useState(searchQuery);
+  const [prevCategoryQuery, setPrevCategoryQuery] = useState(categoryQuery);
+
+  if (searchQuery !== prevSearchQuery) {
+    setPrevSearchQuery(searchQuery);
+    setSearchTerm(searchQuery || '');
+  }
+  if (categoryQuery !== prevCategoryQuery) {
+    setPrevCategoryQuery(categoryQuery);
     if (categoryQuery) {
       setSelectedCategories([categoryQuery.toLowerCase()]);
     }
-  }, [searchQuery, categoryQuery]);
+  }
 
   // Filter and sort products
-  useEffect(() => {
+  const filteredProducts = useMemo(() => {
     let result = [...products];
 
     if (searchTerm) {
@@ -100,35 +109,28 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
     }
 
     result = result.filter(
-      (product) =>
-        product.price >= priceRange[0] && product.price <= priceRange[1]
+      (product) => product.price >= priceRange[0] && product.price <= priceRange[1]
     );
 
     if (selectedCategories.length > 0) {
       result = result.filter((product) => {
         const prodCat = product.category?.toLowerCase();
-        return selectedCategories.some(cat => 
+        return selectedCategories.some(cat =>
           cat === prodCat || cat.replace('-', ' ') === prodCat
         );
       });
     }
 
     if (selectedMaterials.length > 0) {
-      result = result.filter((product) =>
-        selectedMaterials.includes(product.material)
-      );
+      result = result.filter((product) => selectedMaterials.includes(product.material));
     }
 
     if (selectedOccasions.length > 0) {
-      result = result.filter((product) =>
-        selectedOccasions.includes(product.occasion)
-      );
+      result = result.filter((product) => selectedOccasions.includes(product.occasion));
     }
 
     if (selectedColors.length > 0) {
-      result = result.filter((product) =>
-        selectedColors.includes(product.color)
-      );
+      result = result.filter((product) => selectedColors.includes(product.color));
     }
 
     switch (sortOption) {
@@ -148,7 +150,7 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
         break;
     }
 
-    setFilteredProducts(result);
+    return result;
   }, [products, searchTerm, priceRange, selectedCategories, selectedMaterials, selectedOccasions, selectedColors, sortOption]);
 
   // Handle click outside for sort dropdown
@@ -317,7 +319,7 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
                   onClick={() => setIsSortOpen(!isSortOpen)}
                   className="bg-white px-4 py-2 rounded border border-gray-300 hover:border-jewelry-600 text-sm flex items-center gap-2"
                 >
-                   Sort: {sortOption} <ChevronDown className="w-3.5 h-3.5" />
+                  Sort: {sortOption} <ChevronDown className="w-3.5 h-3.5" />
                 </button>
                 {isSortOpen && (
                   <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded shadow-lg z-10 min-w-48">
@@ -353,7 +355,7 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
               </div>
             ) : (
               <div className="text-center py-16 bg-white rounded-lg shadow-sm">
-                 <Search className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                <Search className="w-12 h-12 text-gray-300 mx-auto mb-3" />
                 <p className="text-gray-500 text-md">No products match your filters</p>
               </div>
             )}
@@ -389,8 +391,8 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
       {isMobileFilterOpen && (
         <div className="fixed inset-0 z-50 overflow-hidden lg:hidden" aria-modal="true" role="dialog">
           {/* Backdrop */}
-          <div 
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" 
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
             onClick={() => setIsMobileFilterOpen(false)}
           />
 
@@ -400,13 +402,13 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
               {/* Header */}
               <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
                 <h2 className="text-xl font-bold text-jewelry-900 flex items-center gap-2">
-                   <SlidersHorizontal className="w-5 h-5 text-jewelry-600 inline" /> Filters
+                  <SlidersHorizontal className="w-5 h-5 text-jewelry-600 inline" /> Filters
                 </h2>
                 <button
                   onClick={() => setIsMobileFilterOpen(false)}
                   className="text-gray-400 hover:text-gray-500 p-1"
                 >
-                   <X className="w-5 h-5" />
+                  <X className="w-5 h-5" />
                 </button>
               </div>
 
@@ -450,13 +452,12 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
                   <h3 className="font-semibold text-gray-800 mb-3">Categories</h3>
                   <div className="grid grid-cols-2 gap-2">
                     {categories.map((category) => (
-                      <label 
-                        key={category.id} 
-                        className={`flex items-center justify-center p-3 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
-                          selectedCategories.includes(category.id) 
-                            ? 'border-jewelry-600 bg-jewelry-50/50 text-jewelry-800' 
-                            : 'border-gray-200 text-gray-600 hover:bg-gray-50'
-                        }`}
+                      <label
+                        key={category.id}
+                        className={`flex items-center justify-center p-3 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${selectedCategories.includes(category.id)
+                          ? 'border-jewelry-600 bg-jewelry-50/50 text-jewelry-800'
+                          : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                          }`}
                       >
                         <input
                           type="checkbox"
@@ -475,13 +476,12 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
                   <h3 className="font-semibold text-gray-800 mb-3">Material</h3>
                   <div className="grid grid-cols-2 gap-2">
                     {materials.map((mat) => (
-                      <label 
-                        key={mat.id} 
-                        className={`flex items-center justify-center p-3 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
-                          selectedMaterials.includes(mat.id) 
-                            ? 'border-jewelry-600 bg-jewelry-50/50 text-jewelry-800' 
-                            : 'border-gray-200 text-gray-600 hover:bg-gray-50'
-                        }`}
+                      <label
+                        key={mat.id}
+                        className={`flex items-center justify-center p-3 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${selectedMaterials.includes(mat.id)
+                          ? 'border-jewelry-600 bg-jewelry-50/50 text-jewelry-800'
+                          : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                          }`}
                       >
                         <input
                           type="checkbox"
@@ -500,13 +500,12 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
                   <h3 className="font-semibold text-gray-800 mb-3">Occasion</h3>
                   <div className="grid grid-cols-2 gap-2">
                     {occasions.map((occ) => (
-                      <label 
-                        key={occ.id} 
-                        className={`flex items-center justify-center p-3 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
-                          selectedOccasions.includes(occ.id) 
-                            ? 'border-jewelry-600 bg-jewelry-50/50 text-jewelry-800' 
-                            : 'border-gray-200 text-gray-600 hover:bg-gray-50'
-                        }`}
+                      <label
+                        key={occ.id}
+                        className={`flex items-center justify-center p-3 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${selectedOccasions.includes(occ.id)
+                          ? 'border-jewelry-600 bg-jewelry-50/50 text-jewelry-800'
+                          : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                          }`}
                       >
                         <input
                           type="checkbox"
@@ -525,13 +524,12 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
                   <h3 className="font-semibold text-gray-800 mb-3">Color</h3>
                   <div className="grid grid-cols-2 gap-2">
                     {colors.map((color) => (
-                      <label 
-                        key={color.id} 
-                        className={`flex items-center justify-center p-3 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${
-                          selectedColors.includes(color.id) 
-                            ? 'border-jewelry-600 bg-jewelry-50/50 text-jewelry-800' 
-                            : 'border-gray-200 text-gray-600 hover:bg-gray-50'
-                        }`}
+                      <label
+                        key={color.id}
+                        className={`flex items-center justify-center p-3 rounded-lg border text-sm font-medium transition-colors cursor-pointer ${selectedColors.includes(color.id)
+                          ? 'border-jewelry-600 bg-jewelry-50/50 text-jewelry-800'
+                          : 'border-gray-200 text-gray-600 hover:bg-gray-50'
+                          }`}
                       >
                         <input
                           type="checkbox"
