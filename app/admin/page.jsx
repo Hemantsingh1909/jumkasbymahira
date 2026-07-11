@@ -768,7 +768,7 @@ export default function AdminDashboard() {
                     <>
                       <div className="fixed inset-0 z-10" onClick={() => setIsMatOpen(false)} />
                       <div className="absolute z-20 mt-1 w-full bg-white border border-gray-300 rounded shadow-lg p-2 space-y-1 max-h-60 overflow-y-auto">
-                        {['Gold Plated', 'Silver', 'Brass'].map((mat) => {
+                        {['Gold Plated', 'Silver', 'Brass', 'German silver replica'].map((mat) => {
                           const isChecked = productForm.material
                             ?.split(',')
                             .map(m => m.trim())
