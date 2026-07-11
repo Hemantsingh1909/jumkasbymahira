@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
       lang="en" 
       className={`${poppins.variable} ${playfairDisplay.variable} ${cinzel.variable}`}
     >
-      <body>
+      <body suppressHydrationWarning>
         <Providers>
           <LayoutWrapper>{children}</LayoutWrapper>
         </Providers>

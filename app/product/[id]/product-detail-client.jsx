@@ -25,6 +25,10 @@ export default function ProductDetailClient({ product, relatedProducts }) {
   const [selectedSize, setSelectedSize] = useState(null);
   const [sizeError, setSizeError] = useState(null);
 
+  const disabledSizes = product.tags
+    ? product.tags.filter(t => t.startsWith('disabled-size:')).map(t => t.replace('disabled-size:', ''))
+    : [];
+
   const handleQuantityChange = (newQty) => {
     if (newQty >= 1 && newQty <= 10) {
       setQuantity(newQty);
@@ -200,23 +204,32 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                     <span className="text-xs text-gray-400 font-medium">(Required)</span>
                   </div>
                   <div className="flex flex-wrap gap-2.5">
-                    {['2.4', '2.6', '2.8', '2.10'].map((size) => (
-                      <button
-                        key={size}
-                        type="button"
-                        onClick={() => {
-                          setSelectedSize(size);
-                          setSizeError(null);
-                        }}
-                        className={`min-w-[3.5rem] h-10 px-3 rounded-lg border text-sm font-bold transition-all flex items-center justify-center ${
-                          selectedSize === size
-                            ? 'border-jewelry-600 bg-jewelry-50 text-jewelry-800 ring-2 ring-jewelry-100'
-                            : 'border-gray-200 text-gray-700 hover:border-jewelry-300 hover:bg-gray-50'
-                        }`}
-                      >
-                        {size}
-                      </button>
-                    ))}
+                    {['2.4', '2.6', '2.8', '2.10'].map((size) => {
+                      const isDisabled = disabledSizes.includes(size);
+                      return (
+                        <button
+                          key={size}
+                          type="button"
+                          disabled={isDisabled}
+                          onClick={() => {
+                            if (!isDisabled) {
+                              setSelectedSize(size);
+                              setSizeError(null);
+                            }
+                          }}
+                          className={`min-w-[3.5rem] h-10 px-3 rounded-lg border text-sm font-bold transition-all flex items-center justify-center relative ${
+                            isDisabled
+                              ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed line-through opacity-50'
+                              : selectedSize === size
+                              ? 'border-jewelry-600 bg-jewelry-50 text-jewelry-800 ring-2 ring-jewelry-100'
+                              : 'border-gray-200 text-gray-700 hover:border-jewelry-300 hover:bg-gray-50'
+                          }`}
+                          title={isDisabled ? `Size ${size} is currently out of stock` : `Select size ${size}`}
+                        >
+                          {size}
+                        </button>
+                      );
+                    })}
                   </div>
                   {sizeError && (
                     <p className="text-red-600 text-xs font-semibold mt-2">{sizeError}</p>
@@ -251,11 +264,11 @@ export default function ProductDetailClient({ product, relatedProducts }) {
 
             {/* Actions */}
             <div className="space-y-4">
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-3.5">
                 <button
                   onClick={handleAddToCart}
                   disabled={product.stockStatus === 'Out of Stock'}
-                  className={`flex-1 py-3.5 rounded-lg font-semibold text-white shadow-md transition-all flex items-center justify-center gap-2 ${product.stockStatus === 'Out of Stock'
+                  className={`w-full sm:flex-1 py-3.5 rounded-lg font-semibold text-white shadow-md transition-all flex items-center justify-center gap-2 ${product.stockStatus === 'Out of Stock'
                       ? 'bg-gray-300 text-gray-500 cursor-not-allowed shadow-none'
                       : 'bg-jewelry-600 hover:bg-jewelry-700 hover:shadow-lg transform active:scale-95'
                     }`}
@@ -266,7 +279,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
 
                 <button
                   onClick={toggleWishlist}
-                  className={`px-6 py-3.5 rounded-lg border-2 font-semibold transition-all flex items-center justify-center gap-2 ${isInWishlist
+                  className={`w-full sm:flex-1 py-3.5 rounded-lg border-2 font-semibold transition-all flex items-center justify-center gap-2 ${isInWishlist
                       ? 'border-red-200 text-red-500 bg-red-50/50 hover:bg-red-50'
                       : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
                     }`}
@@ -344,12 +357,20 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                    {product.category?.toLowerCase() === 'bangles' && (
                     <tr className="border-b border-gray-100">
                       <td className="py-2.5 font-semibold text-gray-500">Available Sizes</td>
-                      <td className="py-2.5 text-gray-700">2.4, 2.6, 2.8, 2.10</td>
+                      <td className="py-2.5 text-gray-700">
+                        {['2.4', '2.6', '2.8', '2.10']
+                          .filter(size => !disabledSizes.includes(size))
+                          .join(', ') || 'None available'}
+                      </td>
                     </tr>
                   )}
                   <tr>
                     <td className="py-2.5 font-semibold text-gray-500">Tags</td>
-                    <td className="py-2.5 text-gray-700 capitalize">{product.tags?.join(', ') || 'Traditional, Elegant'}</td>
+                    <td className="py-2.5 text-gray-700 capitalize">
+                      {product.tags
+                        ?.filter(t => !t.startsWith('disabled-size:'))
+                        .join(', ') || 'Traditional, Elegant'}
+                    </td>
                   </tr>
                 </tbody>
               </table>
