@@ -46,10 +46,28 @@ export default function AdminDashboard() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Authentication check - Strict Admin Email Restriction
   useEffect(() => {
-    setSession({ user: { email: 'sshreecollection593@gmail.com' } });
-    setAuthLoading(false);
+    supabasePublic.auth.getSession().then(({ data: { session } }) => {
+      if (session && session.user?.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
+        supabasePublic.auth.signOut();
+        setSession(null);
+      } else {
+        setSession(session);
+      }
+      setAuthLoading(false);
+    });
+
+    const { data: { subscription } } = supabasePublic.auth.onAuthStateChange((_event, session) => {
+      if (session && session.user?.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
+        supabasePublic.auth.signOut();
+        setSession(null);
+      } else {
+        setSession(session);
+      }
+      setAuthLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const handleAuthSubmit = async (e) => {
