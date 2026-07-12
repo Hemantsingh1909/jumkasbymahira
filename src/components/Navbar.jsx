@@ -117,34 +117,34 @@ const Navbar = () => {
               </Link>
 
               {/* Desktop Navigation Links */}
-              <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
+              <div className="hidden lg:flex items-center space-x-8 xl:space-x-12">
                 <Link
                   href="/products"
-                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
+                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
                 >
-                  All Products
+                  Products
                 </Link>
                 <Link
                   href="/products?filter=best-sellers"
-                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
+                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
                 >
                   Best Sellers
                 </Link>
                 <Link
                   href="/products?filter=new-arrivals"
-                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
+                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
                 >
                   New Arrivals
                 </Link>
                 <Link
                   href="/about"
-                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
+                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
                 >
-                  About Us
+                  About
                 </Link>
                 <Link
                   href="/contact"
-                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
+                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
                 >
                   Contact
                 </Link>
@@ -152,7 +152,7 @@ const Navbar = () => {
             </div>
 
             {/* Desktop Right Group: Search Bar & Actions */}
-            <div className="hidden lg:flex items-center space-x-4 xl:space-x-6">
+            <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
               {/* Desktop Search Bar */}
               <div className="flex-grow max-w-[200px] xl:max-w-[240px]">
                 <form onSubmit={handleSearch} className="relative">
@@ -173,53 +173,47 @@ const Navbar = () => {
                 </form>
               </div>
 
-              {/* Vertical Separator */}
-              <div className="h-8 border-l border-gray-300" />
-
               {/* Icons Group */}
-              <div className="flex items-center space-x-6">
+              <div className="flex items-center space-x-6 xl:space-x-7">
                 {/* Wishlist Link */}
                 <Link
                   href="/wishlist"
-                  className="text-gray-700 hover:text-jewelry-600 transition-colors flex flex-col items-center justify-center group"
+                  className="text-gray-700 hover:text-jewelry-600 transition-colors flex items-center justify-center group"
                   aria-label="Wishlist"
                 >
                   <div className="relative">
                     <i className="far fa-heart text-xl group-hover:scale-105 transition-transform"></i>
                     {wishlistCount > 0 && (
-                      <span className="absolute -top-1.5 -right-1.5 bg-[#E6455F] text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                      <span className="absolute -top-2 -right-2 bg-[#E6455F] text-white text-[9px] rounded-full h-4.5 w-4.5 flex items-center justify-center font-bold">
                         {wishlistCount}
                       </span>
                     )}
                   </div>
-                  <span className="text-[10px] text-gray-500 font-semibold mt-1">Wishlist</span>
                 </Link>
 
                 {/* Account Link */}
                 <Link
                   href="/admin"
-                  className="text-gray-700 hover:text-jewelry-600 transition-colors flex flex-col items-center justify-center group"
+                  className="text-gray-700 hover:text-jewelry-600 transition-colors flex items-center justify-center group"
                   aria-label="Account"
                 >
                   <i className="far fa-user text-xl group-hover:scale-105 transition-transform"></i>
-                  <span className="text-[10px] text-gray-500 font-semibold mt-1">Account</span>
                 </Link>
 
                 {/* Cart Link */}
                 <Link
                   href="/cart"
-                  className="text-gray-700 hover:text-jewelry-600 transition-colors flex flex-col items-center justify-center group"
+                  className="text-gray-700 hover:text-jewelry-600 transition-colors flex items-center justify-center group"
                   aria-label="Shopping cart"
                 >
                   <div className="relative">
                     <i className="fas fa-shopping-bag text-xl group-hover:scale-105 transition-transform"></i>
                     {totalCartItems > 0 && (
-                      <span className="absolute -top-1.5 -right-1.5 bg-[#E6455F] text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                      <span className="absolute -top-2 -right-2 bg-[#E6455F] text-white text-[9px] rounded-full h-4.5 w-4.5 flex items-center justify-center font-bold">
                         {totalCartItems}
                       </span>
                     )}
                   </div>
-                  <span className="text-[10px] text-gray-500 font-semibold mt-1">Cart</span>
                 </Link>
               </div>
             </div>
