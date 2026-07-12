@@ -33,6 +33,23 @@
   animation: kenBurnsZoomOut 7s ease-in-out forwards;
 }
 
+@keyframes ticker {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+.animate-ticker {
+  animation: ticker 30s linear infinite;
+}
+
+.ticker-container:hover .animate-ticker {
+  animation-play-state: paused;
+}
+
 /* Global styles */
 @layer base {
   html {
