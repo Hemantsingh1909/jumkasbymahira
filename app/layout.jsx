@@ -27,6 +27,9 @@ const cinzel = Cinzel({
 export const metadata = {
   title: 'Jhumkas by Malti',
   description: 'Premium handcrafted jhumkas and earrings',
+  icons: {
+    icon: '/icon.png',
+  },
 };
 
 export default function RootLayout({ children }) {
