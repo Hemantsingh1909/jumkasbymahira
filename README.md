@@ -7,6 +7,9 @@ A premium e-commerce platform for handcrafted jhumkas and traditional Indian ear
 ## Features
 
 - 🛍️ **Browse & Filter Products**: Dynamic catalog page with granular sidebar filters for Price Range, Categories, Materials, Occasions, and Colors.
+- ✨ **New Arrivals & Best Sellers Pages**: Separate filterable pages (`/new-arrivals` showing the latest products added by admin and `/best-sellers` displaying the oldest products).
+- ⭐ **Dynamic Customer Reviews System**: Fully dynamic, interactive user reviews component under each product page with ratings breakdown graphs, name details, review forms, and local client-side state persistence.
+- 📣 **Seamless Announcement Bar Loop**: Left-to-right infinite scrolling announcement marquee bar, styled with pre-translation values to prevent visual starting lag or jump on page reload.
 - 🔍 **Expanded search indexing**: Search matches against product name, SKU, tags, description, category, material, occasion, and color.
 - 🎡 **Dynamic Hero Banner**: An automatic sliding carousel featuring top-anchored banner images, smooth ease-in-out zoom-out animations, and a left-aligned typography layout with gradient overlays.
 - 🛒 **Shopping Cart & Wishlist**: Fully persistent, client-side cart and wishlist state management using Redux Toolkit and `localStorage`.
@@ -73,7 +76,9 @@ npm start
 │   ├── page.jsx            # Home page (Server Component)
 │   ├── homepage-client.jsx # Home page (Client Component, sliding banner)
 │   ├── products/           # Catalog list and filter view
-│   ├── product/[id]/       # Product detail page
+│   ├── new-arrivals/       # New Arrivals catalog sorted by latest added
+│   ├── best-sellers/       # Best Sellers catalog sorted by oldest added
+│   ├── product/[id]/       # Product detail page with dynamic customer reviews
 │   ├── cart/               # Cart page
 │   ├── checkout/           # Checkout flow
 │   ├── collections/        # Collections listing
