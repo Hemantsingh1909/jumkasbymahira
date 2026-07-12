@@ -73,26 +73,18 @@ const Navbar = () => {
   return (
     <>
       {/* Announcement Bar */}
-      <div className="ticker-container relative flex overflow-x-hidden bg-jewelry-900 text-white py-2 text-xs font-medium tracking-wide">
-        <div className="animate-ticker flex whitespace-nowrap shrink-0 gap-16 px-8">
+      <div className="ticker-container relative flex overflow-x-hidden bg-jewelry-900 text-white py-2.5 text-xs font-medium tracking-wide">
+        <div className="animate-ticker flex whitespace-nowrap shrink-0 gap-32 px-16">
           <span>✨ Handcrafted in India</span>
-          <span className="text-white/40">|</span>
           <span>🚚 Free Shipping Above ₹1499</span>
-          <span className="text-white/40">|</span>
-          <span>💎 Premium Quality</span>
-          <span className="text-white/40">|</span>
           <span>🔒 Secure Payments</span>
-          <span className="text-white/40">|</span>
+          <span>↩ Easy Returns</span>
         </div>
-        <div className="animate-ticker flex whitespace-nowrap shrink-0 gap-16 px-8" aria-hidden="true">
+        <div className="animate-ticker flex whitespace-nowrap shrink-0 gap-32 px-16" aria-hidden="true">
           <span>✨ Handcrafted in India</span>
-          <span className="text-white/40">|</span>
           <span>🚚 Free Shipping Above ₹1499</span>
-          <span className="text-white/40">|</span>
-          <span>💎 Premium Quality</span>
-          <span className="text-white/40">|</span>
           <span>🔒 Secure Payments</span>
-          <span className="text-white/40">|</span>
+          <span>↩ Easy Returns</span>
         </div>
       </div>
       <nav
