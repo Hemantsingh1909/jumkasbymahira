@@ -1,25 +1,32 @@
-# Jhumkas by Mahira
+# Jhumkas by Malti
 
-A modern e-commerce platform for handcrafted jhumkas (traditional Indian earrings), built with **Next.js 14**, **React 18**, **Redux Toolkit**, and **Tailwind CSS**.
+A premium e-commerce platform for handcrafted jhumkas and traditional Indian earrings, built with **Next.js 16**, **React 19**, **Redux Toolkit**, **Supabase**, and **Tailwind CSS**.
+
+---
 
 ## Features
 
-- 🛍️ Browse and filter products
-- 🛒 Shopping cart with persistent storage
-- ❤️ Wishlist functionality
-- 📦 Checkout process
-- 🎨 Beautiful, responsive design
-- 📱 Mobile-friendly interface
-- 🔍 Product search and filtering
+- 🛍️ **Browse & Filter Products**: Dynamic catalog page with granular sidebar filters for Price Range, Categories, Materials, Occasions, and Colors.
+- 🔍 **Expanded search indexing**: Search matches against product name, SKU, tags, description, category, material, occasion, and color.
+- 🎡 **Dynamic Hero Banner**: An automatic sliding carousel featuring top-anchored banner images, smooth ease-in-out zoom-out animations, and a left-aligned typography layout with gradient overlays.
+- 🛒 **Shopping Cart & Wishlist**: Fully persistent, client-side cart and wishlist state management using Redux Toolkit and `localStorage`.
+- 🔐 **Secure Admin Dashboard**: Administrative interfaces authenticated and verified via Supabase session validation.
+- 🎨 **Premium Visual Branding**: Custom brand favicon (`favicon.ico`) and high-resolution logo (`icon.png`) integrated seamlessly with Next.js App Router metadata.
+- ⚡ **Optimized Asset Performance**: Compressed media assets (91% file size reduction) for enhanced Largest Contentful Paint (LCP) performance.
+
+---
 
 ## Tech Stack
 
-- **Frontend Framework**: [Next.js 14](https://nextjs.org/)
-- **React**: 18.3.1
+- **Framework**: [Next.js 16 (App Router)](https://nextjs.org/)
+- **Core Library**: [React 19](https://react.dev/)
+- **Backend Database**: [Supabase JS Client](https://supabase.com/)
 - **State Management**: [Redux Toolkit](https://redux-toolkit.js.org/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Icons**: [Font Awesome](https://fontawesome.com/) & [React Icons](https://react-icons.github.io/react-icons/)
-- **HTTP Client**: [Axios](https://axios-http.com/)
+- **Icons**: [Font Awesome](https://fontawesome.com/) & [Lucide React](https://lucide.dev/)
+- **Client Client**: [Axios](https://axios-http.com/)
+
+---
 
 ## Getting Started
 
@@ -30,23 +37,24 @@ A modern e-commerce platform for handcrafted jhumkas (traditional Indian earring
 
 ### Installation
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd jumkasbymahira
-```
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/Hemantsingh1909/jumkasbymahira.git
+   cd jumkasbymahira
+   ```
 
-2. Install dependencies:
-```bash
-npm install
-```
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-3. Run the development server:
-```bash
-npm run dev
-```
+3. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
+4. **Open in browser**:
+   Navigate to [http://localhost:3000](http://localhost:3000).
 
 ### Build for Production
 
@@ -55,154 +63,37 @@ npm run build
 npm start
 ```
 
+---
+
 ## Project Structure
 
-```
-├── app/                    # Next.js App Router
-│   ├── layout.jsx         # Root layout
-│   ├── page.jsx           # Home page
-│   ├── products/          # Products page
-│   ├── product/[id]/      # Product detail page
-│   ├── cart/              # Cart page
-│   ├── checkout/          # Checkout page
-│   ├── contact/           # Contact page
-│   ├── collections/       # Collections page
-│   ├── state-collections/ # State collections page
-│   └── wishlist/          # Wishlist page
+```text
+├── app/                    # Next.js App Router Pages & Routes
+│   ├── layout.jsx          # Root layout and brand metadata
+│   ├── page.jsx            # Home page (Server Component)
+│   ├── homepage-client.jsx # Home page (Client Component, sliding banner)
+│   ├── products/           # Catalog list and filter view
+│   ├── product/[id]/       # Product detail page
+│   ├── cart/               # Cart page
+│   ├── checkout/           # Checkout flow
+│   ├── collections/        # Collections listing
+│   └── wishlist/           # Wishlist page
 ├── src/
-│   ├── components/        # React components
-│   │   ├── Navbar.jsx
-│   │   ├── Footer.jsx
-│   │   └── ProductCard.jsx
-│   ├── store/             # Redux store configuration
-│   │   ├── index.js
-│   │   ├── cartSlice.js
-│   │   └── productSlice.js
-│   ├── assets/            # Images and static files
-│   └── index.css          # Global styles
-├── public/                # Static files
-├── package.json
-├── next.config.js         # Next.js configuration
-├── tailwind.config.js     # Tailwind CSS configuration
-└── jsconfig.json          # JavaScript path configuration
+│   ├── components/         # Reusable React components (Navbar, Footer, ProductCard)
+│   ├── store/              # Redux store slice configuration (cart, products)
+│   ├── assets/             # Brand logos and vector assets
+│   └── index.css           # Custom CSS animations and Tailwind rules
+├── public/                 # Static images, assets, and robots configurations
+│   ├── favicon.ico         # Generated favicon file
+│   └── images/
+│       ├── hero/           # Optimized slider images (.jpg)
+│       └── products/       # Product gallery photos
 ```
 
-## Available Scripts
-
-- `npm run dev` - Start the development server
-- `npm run build` - Build for production
-- `npm start` - Start the production server
-- `npm run lint` - Run ESLint
-
-## Features
-
-### Product Management
-- Browse all products with filtering options
-- Search products by name
-- Filter by price range and categories
-- Sort by price and name
-
-### Shopping Cart
-- Add/remove products from cart
-- Update quantities
-- Persistent storage using localStorage
-- Real-time cart updates
-
-### Wishlist
-- Add/remove products from wishlist
-- View all wishlist items
-- Add wishlist items to cart
-- Persistent storage using localStorage
-
-### Checkout
-- Form validation
-- Order summary
-- Multiple payment options
-- Order confirmation
-
-## Styling
-
-The project uses Tailwind CSS with custom configurations for jewelry-themed colors:
-- Custom color palette with jewelry tones
-- Custom fonts (Poppins, Playfair Display, Cinzel)
-- Responsive design with mobile-first approach
-
-## Performance
-
-- Next.js 14 App Router for optimal performance
-- Image optimization
-- Code splitting and lazy loading
-- Fast refresh during development
-
-## Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
+---
 
 ## License
 
-This project is private and proprietary to Jhumkas by Mahira.
+This project is private and proprietary to **Jhumkas by Malti**.
 
-1. Clone the repository:
-
-   ```
-   git clone https://github.com/Hemantsingh1909/jumkasbymahira.git
-   cd jumkasbymahira
-   ```
-
-2. Install dependencies:
-
-   ```
-   npm install
-   ```
-
-3. Start the development server:
-
-   ```
-   npm run dev
-   ```
-
-4. Build for production:
-   ```
-   npm run build
-   ```
-
-## Deployment on Vercel
-
-### Method 1: Using Vercel Dashboard
-
-1. Push your code to GitHub (already done)
-2. Go to [Vercel](https://vercel.com) and sign up/login
-3. Click "Add New" > "Project"
-4. Import your GitHub repository
-5. Configure the project:
-   - Framework Preset: Vite
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
-6. Click "Deploy"
-
-### Method 2: Using Vercel CLI
-
-1. Install Vercel CLI:
-
-   ```
-   npm install -g vercel
-   ```
-
-2. Deploy to Vercel:
-
-   ```
-   vercel --prod
-   ```
-
-3. Follow the interactive prompts to complete the deployment
-
-## License
-
-MIT
-
-## Author
-
-Hemant Singh
+MIT License.
