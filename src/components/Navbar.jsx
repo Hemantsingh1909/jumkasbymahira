@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 const Navbar = () => {
   const cartItems = useSelector((state) => state.cart.items || []);
@@ -13,6 +13,8 @@ const Navbar = () => {
   const [wishlistCount, setWishlistCount] = useState(0);
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const filter = searchParams ? searchParams.get('filter') || '' : '';
 
   // Handle scroll effect for navbar
   useEffect(() => {
@@ -110,31 +112,51 @@ const Navbar = () => {
             <div className="hidden lg:flex items-center justify-center space-x-12 xl:space-x-16 mx-auto">
               <Link
                 href="/products"
-                className="text-[16px] lg:text-[17px] font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-sans tracking-wide"
+                className={`text-[16px] lg:text-[17px] font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${
+                  pathname === "/products" && !filter
+                    ? "text-[#E6455F] border-[#D2AD7B]"
+                    : "text-gray-700 border-transparent hover:text-jewelry-600"
+                }`}
               >
                 Products
               </Link>
               <Link
                 href="/products?filter=best-sellers"
-                className="text-[16px] lg:text-[17px] font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-sans tracking-wide"
+                className={`text-[16px] lg:text-[17px] font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${
+                  pathname === "/products" && filter === "best-sellers"
+                    ? "text-[#E6455F] border-[#D2AD7B]"
+                    : "text-gray-700 border-transparent hover:text-jewelry-600"
+                }`}
               >
                 Best Sellers
               </Link>
               <Link
                 href="/products?filter=new-arrivals"
-                className="text-[16px] lg:text-[17px] font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-sans tracking-wide"
+                className={`text-[16px] lg:text-[17px] font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${
+                  pathname === "/products" && filter === "new-arrivals"
+                    ? "text-[#E6455F] border-[#D2AD7B]"
+                    : "text-gray-700 border-transparent hover:text-jewelry-600"
+                }`}
               >
                 New Arrivals
               </Link>
               <Link
                 href="/about"
-                className="text-[16px] lg:text-[17px] font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-sans tracking-wide"
+                className={`text-[16px] lg:text-[17px] font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${
+                  pathname === "/about"
+                    ? "text-[#E6455F] border-[#D2AD7B]"
+                    : "text-gray-700 border-transparent hover:text-jewelry-600"
+                }`}
               >
                 About
               </Link>
               <Link
                 href="/contact"
-                className="text-[16px] lg:text-[17px] font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-sans tracking-wide"
+                className={`text-[16px] lg:text-[17px] font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${
+                  pathname === "/contact"
+                    ? "text-[#E6455F] border-[#D2AD7B]"
+                    : "text-gray-700 border-transparent hover:text-jewelry-600"
+                }`}
               >
                 Contact
               </Link>
