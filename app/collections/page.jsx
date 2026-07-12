@@ -2,12 +2,14 @@
 
 import Link from 'next/link';
 import { ArrowRight } from "lucide-react";
+import Image from 'next/image';
 
 const collections = [
   {
     name: "Gold Collection",
     description: "Timeless gold jhumkas for every occasion",
     gradient: "from-amber-200 via-yellow-100 to-amber-50",
+    image: "images/collections/Gold Collections.jpeg",
     accent: "text-amber-700 hover:text-amber-800",
     border: "border-amber-200",
   },
@@ -15,6 +17,7 @@ const collections = [
     name: "Kundan Collection",
     description: "Traditional kundan designs with modern aesthetics",
     gradient: "from-sky-200 via-blue-50 to-white",
+    image: "images/collections/Kundan Collection.jpeg",
     accent: "text-sky-700 hover:text-sky-800",
     border: "border-sky-200",
   },
@@ -22,6 +25,7 @@ const collections = [
     name: "Pearl Collection",
     description: "Elegant pearl earrings for a sophisticated look",
     gradient: "from-rose-100 via-pink-50 to-white",
+    image: "images/collections/Pearl Collection.jpeg",
     accent: "text-rose-700 hover:text-rose-800",
     border: "border-rose-200",
   },
@@ -29,6 +33,7 @@ const collections = [
     name: "Silver Collection",
     description: "Contemporary silver designs with minimalist elegance",
     gradient: "from-slate-200 via-gray-100 to-white",
+    image: "images/collections/Silver Collection.jpeg",
     accent: "text-slate-700 hover:text-slate-800",
     border: "border-slate-300",
   },
@@ -36,18 +41,27 @@ const collections = [
 
 const CollectionCard = ({ collection }) => (
   <div className="group relative bg-white rounded-2xl overflow-hidden border border-rose-100 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1 flex flex-col h-full">
-    {/* Image area with layered gradient + subtle pattern instead of emoji */}
+    {/* Image area with image or layered gradient fallback */}
     <div className={`relative h-64 bg-gradient-to-br ${collection.gradient} overflow-hidden`}>
-      {/* Decorative concentric rings to suggest jewelry */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className={`absolute w-16 h-16 rounded-full border-2 ${collection.border} opacity-40`} />
-      </div>
+      {collection.image ? (
+        <Image
+          src={collection.image.startsWith('/') ? collection.image : `/${collection.image}`}
+          alt={collection.name}
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-110"
+        />
+      ) : (
+        /* Decorative concentric rings to suggest jewelry */
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className={`absolute w-16 h-16 rounded-full border-2 ${collection.border} opacity-40`} />
+        </div>
+      )}
 
       {/* Soft shimmer overlay on hover */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10" />
 
       {/* Preview tag */}
-      <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-white/70 backdrop-blur-sm text-[10px] tracking-widest uppercase text-gray-500 font-semibold select-none">
+      <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-white/70 backdrop-blur-sm text-[10px] tracking-widest uppercase text-gray-500 font-semibold select-none z-10">
         Preview
       </div>
     </div>
