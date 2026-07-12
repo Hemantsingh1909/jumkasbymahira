@@ -104,51 +104,48 @@ const Navbar = () => {
       >
         <div className="w-full px-2 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
-            {/* Desktop Left Group: Logo & Navigation */}
-            <div className="flex items-center space-x-8 xl:space-x-12">
-              {/* Logo */}
-              <Link href="/" className="flex items-center shrink-0">
-                <div className="text-jewelry-800 font-display">
-                  <span className="text-2xl font-bold">Jhumkas</span>
-                  <span className="text-xl text-jewelry-600 italic ml-1">
-                    by Malti
-                  </span>
-                </div>
-              </Link>
-
-              {/* Desktop Navigation Links */}
-              <div className="hidden lg:flex items-center space-x-8 xl:space-x-12">
-                <Link
-                  href="/products"
-                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
-                >
-                  Products
-                </Link>
-                <Link
-                  href="/products?filter=best-sellers"
-                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
-                >
-                  Best Sellers
-                </Link>
-                <Link
-                  href="/products?filter=new-arrivals"
-                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
-                >
-                  New Arrivals
-                </Link>
-                <Link
-                  href="/about"
-                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
-                >
-                  About
-                </Link>
-                <Link
-                  href="/contact"
-                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
-                >
-                  Contact
-                </Link>
+            {/* Logo */}
+            <Link href="/" className="flex items-center shrink-0">
+              <div className="text-jewelry-800 font-display">
+                <span className="text-2xl font-bold">Jhumkas</span>
+                <span className="text-xl text-jewelry-600 italic ml-1">
+                  by Malti
+                </span>
               </div>
+            </Link>
+
+            {/* Desktop Navigation Links */}
+            <div className="hidden lg:flex items-center justify-center space-x-8 xl:space-x-12 mx-auto">
+              <Link
+                href="/products"
+                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
+              >
+                Products
+              </Link>
+              <Link
+                href="/products?filter=best-sellers"
+                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
+              >
+                Best Sellers
+              </Link>
+              <Link
+                href="/products?filter=new-arrivals"
+                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
+              >
+                New Arrivals
+              </Link>
+              <Link
+                href="/about"
+                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
+              >
+                About
+              </Link>
+              <Link
+                href="/contact"
+                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
+              >
+                Contact
+              </Link>
             </div>
 
             {/* Desktop Right Group: Search Bar & Actions */}
