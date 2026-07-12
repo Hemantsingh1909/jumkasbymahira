@@ -110,31 +110,31 @@ const Navbar = () => {
             <div className="hidden lg:flex items-center justify-center space-x-12 xl:space-x-16 mx-auto">
               <Link
                 href="/products"
-                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
+                className="text-[16px] lg:text-[17px] font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-sans tracking-wide"
               >
                 Products
               </Link>
               <Link
                 href="/products?filter=best-sellers"
-                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
+                className="text-[16px] lg:text-[17px] font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-sans tracking-wide"
               >
                 Best Sellers
               </Link>
               <Link
                 href="/products?filter=new-arrivals"
-                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
+                className="text-[16px] lg:text-[17px] font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-sans tracking-wide"
               >
                 New Arrivals
               </Link>
               <Link
                 href="/about"
-                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
+                className="text-[16px] lg:text-[17px] font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-sans tracking-wide"
               >
                 About
               </Link>
               <Link
                 href="/contact"
-                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
+                className="text-[16px] lg:text-[17px] font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-sans tracking-wide"
               >
                 Contact
               </Link>
