@@ -96,271 +96,287 @@ const Navbar = () => {
         </div>
       </div>
       <nav
-      className={`${
-        isScrolled
-          ? "bg-white shadow-md py-2"
-          : "bg-gradient-to-r from-jewelry-50 to-jewelry-100 py-3"
-      } text-gray-800 px-4 sticky top-0 z-50 transition-all duration-300`}
-    >
-      <div className="container-custom mx-auto">
-        <div className="flex flex-wrap justify-between items-center">
-          {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <div className="text-jewelry-800 font-display">
-              <span className="text-2xl font-bold">Jhumkas</span>
-              <span className="text-xl text-jewelry-600 italic ml-1">
-                by Malti
-              </span>
+        className={`${
+          isScrolled
+            ? "bg-white/95 shadow-md backdrop-blur-md py-2.5"
+            : "bg-[#FAF6F0] py-3.5"
+        } text-gray-800 px-4 sticky top-0 z-50 transition-all duration-300 border-b border-gray-100/50`}
+      >
+        <div className="container-custom mx-auto">
+          <div className="flex justify-between items-center">
+            {/* Logo */}
+            <Link href="/" className="flex items-center shrink-0">
+              <div className="text-jewelry-800 font-display">
+                <span className="text-2xl font-bold">Jhumkas</span>
+                <span className="text-xl text-jewelry-600 italic ml-1">
+                  by Malti
+                </span>
+              </div>
+            </Link>
+
+            {/* Desktop Navigation Links */}
+            <div className="hidden lg:flex items-center space-x-6 mx-4">
+              <Link
+                href="/collections"
+                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
+              >
+                Collections
+              </Link>
+              <Link
+                href="/products"
+                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
+              >
+                All Products
+              </Link>
+              <Link
+                href="/products?filter=best-sellers"
+                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
+              >
+                Best Sellers
+              </Link>
+              <Link
+                href="/products?filter=new-arrivals"
+                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
+              >
+                New Arrivals
+              </Link>
+              <Link
+                href="/contact"
+                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
+              >
+                About Us
+              </Link>
+              <Link
+                href="/contact"
+                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
+              >
+                Contact
+              </Link>
             </div>
-          </Link>
 
-          {/* Search Bar - Desktop */}
-          <div className="hidden md:block flex-grow max-w-md mx-4">
-            <form onSubmit={handleSearch} className="relative">
-              <input
-                type="text"
-                placeholder="Search for jhumkas..."
-                className="w-full py-2 pl-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-jewelry-400 focus:border-transparent"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <button
-                type="submit"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-jewelry-600 hover:text-jewelry-800"
-                aria-label="Search"
-              >
-                <i className="fas fa-search"></i>
-              </button>
-            </form>
-          </div>
-
-          {/* Mobile Menu Button */}
-          <div className="flex items-center lg:hidden">
-            <Link
-              href="/wishlist"
-              className="mr-4 text-jewelry-800 relative"
-              aria-label="Wishlist"
-            >
-              <i className="far fa-heart text-lg"></i>
-              {wishlistCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {wishlistCount}
-                </span>
-              )}
-            </Link>
-            <Link
-              href="/cart"
-              className="mr-4 text-jewelry-800 relative"
-              aria-label="Shopping cart"
-            >
-              <i className="fas fa-shopping-bag text-lg"></i>
-              {totalCartItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-jewelry-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {totalCartItems}
-                </span>
-              )}
-            </Link>
-            <button
-              className="text-jewelry-800 focus:outline-none flex items-center justify-center"
-              onClick={toggleMenu}
-              aria-label="Toggle menu"
-            >
-              {isMenuOpen ? (
-                <i className="fas fa-times text-xl"></i>
-              ) : (
-                <i className="fas fa-bars text-xl"></i>
-              )}
-            </button>
-          </div>
-
-          {/* Navigation Links - Desktop */}
-          <div className="hidden lg:flex items-center space-x-6">
-            <Link
-              href="/"
-              className="text-gray-700 hover:text-jewelry-600 transition-colors"
-            >
-              Home
-            </Link>
-            <Link
-              href="/collections"
-              className="text-gray-700 hover:text-jewelry-600 transition-colors"
-            >
-              Collections
-            </Link>
-
-            <Link
-              href="/products"
-              className="text-gray-700 hover:text-jewelry-600 transition-colors"
-            >
-              All Products
-            </Link>
-            <Link
-              href="/contact"
-              className="text-gray-700 hover:text-jewelry-600 transition-colors"
-            >
-              Contact
-            </Link>
-            <Link
-              href="/wishlist"
-              className="text-jewelry-800 hover:text-jewelry-600 transition-colors relative flex items-center justify-center"
-              aria-label="Wishlist"
-            >
-              <i className="far fa-heart text-[17px]"></i>
-              {wishlistCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {wishlistCount}
-                </span>
-              )}
-            </Link>
-            <Link
-              href="/cart"
-              className="text-jewelry-800 hover:text-jewelry-600 transition-colors relative flex items-center justify-center"
-              aria-label="Shopping cart"
-            >
-              <i className="fas fa-shopping-bag text-[17px]"></i>
-              {totalCartItems > 0 && (
-                <span className="absolute -top-2 -right-2 bg-jewelry-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {totalCartItems}
-                </span>
-              )}
-            </Link>
-          </div>
-        </div>
-
-        <div
-          className={`${
-            isMenuOpen ? "max-h-screen opacity-100 visible pointer-events-auto" : "max-h-0 opacity-0 invisible pointer-events-none"
-          } lg:hidden overflow-hidden transition-all duration-300 ease-in-out`}
-        >
-          {/* Search Bar - Mobile */}
-          <div className="mt-4 mb-3 md:hidden">
-            <form onSubmit={handleSearch} className="relative">
-              <input
-                type="text"
-                placeholder="Search for jhumkas..."
-                className="w-full py-2 pl-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-jewelry-400 focus:border-transparent"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <button
-                type="submit"
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-jewelry-600 hover:text-jewelry-800"
-                aria-label="Search"
-              >
-                <i className="fas fa-search"></i>
-              </button>
-            </form>
-          </div>
-
-          <div className="flex flex-col space-y-1.5 py-2">
-            <Link
-              href="/"
-              className={pathname === '/' 
-                ? "flex items-center text-jewelry-900 bg-jewelry-50/70 border-l-4 border-jewelry-600 rounded-r font-semibold pl-3 py-3 transition-colors" 
-                : "flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
-              }
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <i className={`fas fa-home mr-3 text-lg ${pathname === '/' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
-              <span>Home</span>
-            </Link>
-            <Link
-              href="/collections"
-              className={pathname === '/collections' 
-                ? "flex items-center text-jewelry-900 bg-jewelry-50/70 border-l-4 border-jewelry-600 rounded-r font-semibold pl-3 py-3 transition-colors" 
-                : "flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
-              }
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <i className={`fas fa-tags mr-3 text-lg ${pathname === '/collections' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
-              <span>Collections</span>
-            </Link>
-            <Link
-              href="/products"
-              className={pathname === '/products' 
-                ? "flex items-center text-jewelry-900 bg-jewelry-50/70 border-l-4 border-jewelry-600 rounded-r font-semibold pl-3 py-3 transition-colors" 
-                : "flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
-              }
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <i className={`fas fa-gem mr-3 text-lg ${pathname === '/products' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
-              <span>All Products</span>
-            </Link>
-            <Link
-              href="/wishlist"
-              className={pathname === '/wishlist' 
-                ? "flex items-center text-jewelry-900 bg-jewelry-50/70 border-l-4 border-jewelry-600 rounded-r font-semibold pl-3 py-3 transition-colors" 
-                : "flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
-              }
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <i className={`far fa-heart mr-3 text-lg ${pathname === '/wishlist' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
-              <span>Wishlist</span>
-            </Link>
-            <Link
-              href="/contact"
-              className={pathname === '/contact' 
-                ? "flex items-center text-jewelry-900 bg-jewelry-50/70 border-l-4 border-jewelry-600 rounded-r font-semibold pl-3 py-3 transition-colors" 
-                : "flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
-              }
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <i className={`fas fa-envelope mr-3 text-lg ${pathname === '/contact' ? 'text-jewelry-600' : 'text-jewelry-500/80'}`}></i>
-              <span>Contact</span>
-            </Link>
-
-            {/* Quick Category Shortcuts */}
-            <div className="border-t border-gray-100 pt-3 mt-2">
-              <p className="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Shop Categories</p>
-              <div className="grid grid-cols-2 gap-x-2 gap-y-2 px-3">
-                <Link
-                  href="/products?category=jhumkas"
-                  className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
-                  onClick={() => setIsMenuOpen(false)}
+            {/* Desktop Search Bar */}
+            <div className="hidden md:block flex-grow max-w-xs xl:max-w-sm mx-4">
+              <form onSubmit={handleSearch} className="relative">
+                <input
+                  type="text"
+                  placeholder="Search for jhumkas..."
+                  className="w-full py-1.5 pl-4 pr-10 rounded-full border border-[#D2AD7B] bg-transparent focus:outline-none focus:ring-1 focus:ring-[#D2AD7B] text-sm"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button
+                  type="submit"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#D2AD7B] hover:text-jewelry-800"
+                  aria-label="Search"
                 >
-                  <i className="fas fa-gem mr-2 text-xs text-jewelry-500/80"></i> Jhumkas
+                  <i className="fas fa-search"></i>
+                </button>
+              </form>
+            </div>
+
+            {/* Right Section Separator and Action Buttons */}
+            <div className="hidden lg:flex items-center">
+              {/* Vertical Separator */}
+              <div className="h-8 border-l border-gray-300 mx-4" />
+
+              <div className="flex items-center space-x-6">
+                {/* Wishlist Link */}
+                <Link
+                  href="/wishlist"
+                  className="text-gray-700 hover:text-jewelry-600 transition-colors flex flex-col items-center justify-center group"
+                  aria-label="Wishlist"
+                >
+                  <div className="relative">
+                    <i className="far fa-heart text-xl group-hover:scale-105 transition-transform"></i>
+                    {wishlistCount > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 bg-[#E6455F] text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                        {wishlistCount}
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-[10px] text-gray-500 font-semibold mt-1">Wishlist</span>
                 </Link>
+
+                {/* Account Link */}
                 <Link
-                  href="/products?category=meenakari"
-                  className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
-                  onClick={() => setIsMenuOpen(false)}
+                  href="/admin"
+                  className="text-gray-700 hover:text-jewelry-600 transition-colors flex flex-col items-center justify-center group"
+                  aria-label="Account"
                 >
-                  <i className="fas fa-palette mr-2 text-xs text-jewelry-500/80"></i> Meenakari
+                  <i className="far fa-user text-xl group-hover:scale-105 transition-transform"></i>
+                  <span className="text-[10px] text-gray-500 font-semibold mt-1">Account</span>
                 </Link>
+
+                {/* Cart Link */}
                 <Link
-                  href="/products?category=chandbali"
-                  className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
-                  onClick={() => setIsMenuOpen(false)}
+                  href="/cart"
+                  className="text-gray-700 hover:text-jewelry-600 transition-colors flex flex-col items-center justify-center group"
+                  aria-label="Shopping cart"
                 >
-                  <i className="fas fa-moon mr-2 text-xs text-jewelry-500/80"></i> Chandbali
-                </Link>
-                <Link
-                  href="/products?category=bridal-sets"
-                  className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <i className="fas fa-crown mr-2 text-xs text-jewelry-500/80"></i> Bridal Sets
-                </Link>
-                <Link
-                  href="/products?category=everyday"
-                  className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <i className="fas fa-star mr-2 text-xs text-jewelry-500/80"></i> Everyday
-                </Link>
-                <Link
-                  href="/products?category=bangles"
-                  className="flex items-center text-sm text-gray-600 hover:text-jewelry-800 py-2.5"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <i className="fas fa-circle-notch mr-2 text-xs text-jewelry-500/80"></i> Bangles
+                  <div className="relative">
+                    <i className="fas fa-shopping-bag text-xl group-hover:scale-105 transition-transform"></i>
+                    {totalCartItems > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 bg-[#E6455F] text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                        {totalCartItems}
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-[10px] text-gray-500 font-semibold mt-1">Cart</span>
                 </Link>
               </div>
             </div>
+
+            {/* Mobile Actions and Hamburger */}
+            <div className="flex items-center lg:hidden">
+              <Link
+                href="/wishlist"
+                className="mr-4 text-jewelry-800 relative"
+                aria-label="Wishlist"
+              >
+                <i className="far fa-heart text-lg"></i>
+                {wishlistCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {wishlistCount}
+                  </span>
+                )}
+              </Link>
+              <Link
+                href="/cart"
+                className="mr-4 text-jewelry-800 relative"
+                aria-label="Shopping cart"
+              >
+                <i className="fas fa-shopping-bag text-lg"></i>
+                {totalCartItems > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-jewelry-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {totalCartItems}
+                  </span>
+                )}
+              </Link>
+              <button
+                className="text-jewelry-800 focus:outline-none flex items-center justify-center"
+                onClick={toggleMenu}
+                aria-label="Toggle menu"
+              >
+                {isMenuOpen ? (
+                  <i className="fas fa-times text-xl"></i>
+                ) : (
+                  <i className="fas fa-bars text-xl"></i>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Menu Drawer */}
+          <div
+            className={`${
+              isMenuOpen
+                ? "max-h-screen opacity-100 visible pointer-events-auto"
+                : "max-h-0 opacity-0 invisible pointer-events-none"
+            } lg:hidden overflow-hidden transition-all duration-300 ease-in-out`}
+          >
+            {/* Search Bar - Mobile */}
+            <div className="mt-4 mb-3 md:hidden">
+              <form onSubmit={handleSearch} className="relative">
+                <input
+                  type="text"
+                  placeholder="Search for jhumkas..."
+                  className="w-full py-2 pl-4 pr-10 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-jewelry-400 focus:border-transparent"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button
+                  type="submit"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-jewelry-600 hover:text-jewelry-800"
+                  aria-label="Search"
+                >
+                  <i className="fas fa-search"></i>
+                </button>
+              </form>
+            </div>
+
+            <div className="flex flex-col space-y-1.5 py-2">
+              <Link
+                href="/collections"
+                className={
+                  pathname === "/collections"
+                    ? "flex items-center text-jewelry-900 bg-jewelry-50/70 border-l-4 border-jewelry-600 rounded-r font-semibold pl-3 py-3 transition-colors"
+                    : "flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
+                }
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <i
+                  className={`fas fa-tags mr-3 text-lg ${
+                    pathname === "/collections"
+                      ? "text-jewelry-600"
+                      : "text-jewelry-500/80"
+                  }`}
+                ></i>
+                <span>Collections</span>
+              </Link>
+              <Link
+                href="/products"
+                className={
+                  pathname === "/products"
+                    ? "flex items-center text-jewelry-900 bg-jewelry-50/70 border-l-4 border-jewelry-600 rounded-r font-semibold pl-3 py-3 transition-colors"
+                    : "flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
+                }
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <i
+                  className={`fas fa-gem mr-3 text-lg ${
+                    pathname === "/products"
+                      ? "text-jewelry-600"
+                      : "text-jewelry-500/80"
+                  }`}
+                ></i>
+                <span>All Products</span>
+              </Link>
+              <Link
+                href="/products?filter=best-sellers"
+                className="flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <i className="fas fa-fire mr-3 text-lg text-jewelry-500/80"></i>
+                <span>Best Sellers</span>
+              </Link>
+              <Link
+                href="/products?filter=new-arrivals"
+                className="flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <i className="fas fa-bullhorn mr-3 text-lg text-jewelry-500/80"></i>
+                <span>New Arrivals</span>
+              </Link>
+              <Link
+                href="/contact"
+                className="flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <i className="fas fa-info-circle mr-3 text-lg text-jewelry-500/80"></i>
+                <span>About Us</span>
+              </Link>
+              <Link
+                href="/contact"
+                className={
+                  pathname === "/contact"
+                    ? "flex items-center text-jewelry-900 bg-jewelry-50/70 border-l-4 border-jewelry-600 rounded-r font-semibold pl-3 py-3 transition-colors"
+                    : "flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
+                }
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <i
+                  className={`fas fa-envelope mr-3 text-lg ${
+                    pathname === "/contact"
+                      ? "text-jewelry-600"
+                      : "text-jewelry-500/80"
+                  }`}
+                ></i>
+                <span>Contact</span>
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
     </>
   );
 };
