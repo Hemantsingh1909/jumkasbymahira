@@ -52,6 +52,7 @@ export async function generateMetadata() {
 }
 
 export default async function ProductsPage({ searchParams }) {
+  const resolvedSearchParams = await searchParams;
   const data = await getCachedProducts();
 
   const products = data.map((p) => ({
@@ -63,7 +64,7 @@ export default async function ProductsPage({ searchParams }) {
   }));
 
   return (
-    <ProductsContent initialProducts={products} searchParams={searchParams} />
+    <ProductsContent initialProducts={products} searchParams={resolvedSearchParams} />
   );
 }
 

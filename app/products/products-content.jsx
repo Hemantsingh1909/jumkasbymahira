@@ -13,9 +13,11 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
   const searchQuery = searchParams?.search;
   const categoryQuery = searchParams?.category;
 
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(searchQuery || '');
   const [priceRange, setPriceRange] = useState([0, 30000]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState(
+    categoryQuery ? [categoryQuery.toLowerCase()] : []
+  );
   const [selectedMaterials, setSelectedMaterials] = useState([]);
   const [selectedOccasions, setSelectedOccasions] = useState([]);
   const [selectedColors, setSelectedColors] = useState([]);
@@ -116,8 +118,13 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
     if (searchTerm) {
       const lowerCaseSearch = searchTerm.toLowerCase();
       result = result.filter((product) =>
-        product.name.toLowerCase().includes(lowerCaseSearch) ||
+        product.name?.toLowerCase().includes(lowerCaseSearch) ||
         product.sku?.toLowerCase().includes(lowerCaseSearch) ||
+        product.description?.toLowerCase().includes(lowerCaseSearch) ||
+        product.category?.toLowerCase().includes(lowerCaseSearch) ||
+        product.material?.toLowerCase().includes(lowerCaseSearch) ||
+        product.occasion?.toLowerCase().includes(lowerCaseSearch) ||
+        product.color?.toLowerCase().includes(lowerCaseSearch) ||
         product.tags?.some(t => t.toLowerCase().includes(lowerCaseSearch))
       );
     }
