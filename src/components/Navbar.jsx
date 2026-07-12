@@ -102,83 +102,81 @@ const Navbar = () => {
             : "bg-[#FAF6F0] py-3.5"
         } text-gray-800 px-4 sticky top-0 z-50 transition-all duration-300 border-b border-gray-100/50`}
       >
-        <div className="container-custom mx-auto">
+        <div className="w-full px-2 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
-            {/* Logo */}
-            <Link href="/" className="flex items-center shrink-0">
-              <div className="text-jewelry-800 font-display">
-                <span className="text-2xl font-bold">Jhumkas</span>
-                <span className="text-xl text-jewelry-600 italic ml-1">
-                  by Malti
-                </span>
-              </div>
-            </Link>
+            {/* Desktop Left Group: Logo & Navigation */}
+            <div className="flex items-center space-x-8 xl:space-x-12">
+              {/* Logo */}
+              <Link href="/" className="flex items-center shrink-0">
+                <div className="text-jewelry-800 font-display">
+                  <span className="text-2xl font-bold">Jhumkas</span>
+                  <span className="text-xl text-jewelry-600 italic ml-1">
+                    by Malti
+                  </span>
+                </div>
+              </Link>
 
-            {/* Desktop Navigation Links */}
-            <div className="hidden lg:flex items-center space-x-6 mx-4">
-              <Link
-                href="/collections"
-                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
-              >
-                Collections
-              </Link>
-              <Link
-                href="/products"
-                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
-              >
-                All Products
-              </Link>
-              <Link
-                href="/products?filter=best-sellers"
-                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
-              >
-                Best Sellers
-              </Link>
-              <Link
-                href="/products?filter=new-arrivals"
-                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
-              >
-                New Arrivals
-              </Link>
-              <Link
-                href="/contact"
-                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
-              >
-                About Us
-              </Link>
-              <Link
-                href="/contact"
-                className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
-              >
-                Contact
-              </Link>
-            </div>
-
-            {/* Desktop Search Bar */}
-            <div className="hidden md:block flex-grow max-w-xs xl:max-w-sm mx-4">
-              <form onSubmit={handleSearch} className="relative">
-                <input
-                  type="text"
-                  placeholder="Search for jhumkas..."
-                  className="w-full py-1.5 pl-4 pr-10 rounded-full border border-[#D2AD7B] bg-transparent focus:outline-none focus:ring-1 focus:ring-[#D2AD7B] text-sm"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <button
-                  type="submit"
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#D2AD7B] hover:text-jewelry-800"
-                  aria-label="Search"
+              {/* Desktop Navigation Links */}
+              <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
+                <Link
+                  href="/products"
+                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
                 >
-                  <i className="fas fa-search"></i>
-                </button>
-              </form>
+                  All Products
+                </Link>
+                <Link
+                  href="/products?filter=best-sellers"
+                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
+                >
+                  Best Sellers
+                </Link>
+                <Link
+                  href="/products?filter=new-arrivals"
+                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
+                >
+                  New Arrivals
+                </Link>
+                <Link
+                  href="/about"
+                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
+                >
+                  About Us
+                </Link>
+                <Link
+                  href="/contact"
+                  className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors"
+                >
+                  Contact
+                </Link>
+              </div>
             </div>
 
-            {/* Right Section Separator and Action Buttons */}
-            <div className="hidden lg:flex items-center">
-              {/* Vertical Separator */}
-              <div className="h-8 border-l border-gray-300 mx-4" />
+            {/* Desktop Right Group: Search Bar & Actions */}
+            <div className="hidden lg:flex items-center space-x-4 xl:space-x-6">
+              {/* Desktop Search Bar */}
+              <div className="flex-grow max-w-[200px] xl:max-w-[240px]">
+                <form onSubmit={handleSearch} className="relative">
+                  <input
+                    type="text"
+                    placeholder="Search for jhumkas..."
+                    className="w-full py-1.5 pl-4 pr-10 rounded-full border border-[#D2AD7B] bg-transparent focus:outline-none focus:ring-1 focus:ring-[#D2AD7B] text-sm"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#D2AD7B] hover:text-jewelry-800"
+                    aria-label="Search"
+                  >
+                    <i className="fas fa-search"></i>
+                  </button>
+                </form>
+              </div>
 
+              {/* Vertical Separator */}
+              <div className="h-8 border-l border-gray-300" />
+
+              {/* Icons Group */}
               <div className="flex items-center space-x-6">
                 {/* Wishlist Link */}
                 <Link
@@ -296,24 +294,6 @@ const Navbar = () => {
 
             <div className="flex flex-col space-y-1.5 py-2">
               <Link
-                href="/collections"
-                className={
-                  pathname === "/collections"
-                    ? "flex items-center text-jewelry-900 bg-jewelry-50/70 border-l-4 border-jewelry-600 rounded-r font-semibold pl-3 py-3 transition-colors"
-                    : "flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
-                }
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <i
-                  className={`fas fa-tags mr-3 text-lg ${
-                    pathname === "/collections"
-                      ? "text-jewelry-600"
-                      : "text-jewelry-500/80"
-                  }`}
-                ></i>
-                <span>Collections</span>
-              </Link>
-              <Link
                 href="/products"
                 className={
                   pathname === "/products"
@@ -348,7 +328,7 @@ const Navbar = () => {
                 <span>New Arrivals</span>
               </Link>
               <Link
-                href="/contact"
+                href="/about"
                 className="flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
