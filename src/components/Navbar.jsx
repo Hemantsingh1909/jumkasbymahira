@@ -90,11 +90,10 @@ const Navbar = () => {
         </div>
       </div>
       <nav
-        className={`${
-          isScrolled
-            ? "bg-white/95 shadow-md backdrop-blur-md py-4"
-            : "bg-[#FAF6F0] py-6"
-        } text-gray-800 px-4 sticky top-0 z-50 transition-all duration-300 border-b border-gray-100/50`}
+        className={`${isScrolled
+            ? "bg-white/95 shadow-md backdrop-blur-md py-2.5"
+            : "bg-[#FAF6F0] py-3.5"
+          } text-gray-800 px-4 sticky top-0 z-50 transition-all duration-300 border-b border-gray-100/50`}
       >
         <div className="w-full px-2 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
@@ -112,51 +111,46 @@ const Navbar = () => {
             <div className="hidden lg:flex items-center justify-center space-x-12 xl:space-x-16 mx-auto">
               <Link
                 href="/products"
-                className={`text-[16px] lg:text-[17px] font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${
-                  pathname === "/products" && !filter
+                className={`text-sm font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${pathname === "/products" && !filter
                     ? "text-[#E6455F] border-[#D2AD7B]"
                     : "text-gray-700 border-transparent hover:text-jewelry-600"
-                }`}
+                  }`}
               >
                 Products
               </Link>
               <Link
                 href="/products?filter=best-sellers"
-                className={`text-[16px] lg:text-[17px] font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${
-                  pathname === "/products" && filter === "best-sellers"
+                className={`text-sm font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${pathname === "/products" && filter === "best-sellers"
                     ? "text-[#E6455F] border-[#D2AD7B]"
                     : "text-gray-700 border-transparent hover:text-jewelry-600"
-                }`}
+                  }`}
               >
                 Best Sellers
               </Link>
               <Link
                 href="/products?filter=new-arrivals"
-                className={`text-[16px] lg:text-[17px] font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${
-                  pathname === "/products" && filter === "new-arrivals"
+                className={`text-sm font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${pathname === "/products" && filter === "new-arrivals"
                     ? "text-[#E6455F] border-[#D2AD7B]"
                     : "text-gray-700 border-transparent hover:text-jewelry-600"
-                }`}
+                  }`}
               >
                 New Arrivals
               </Link>
               <Link
                 href="/about"
-                className={`text-[16px] lg:text-[17px] font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${
-                  pathname === "/about"
+                className={`text-sm font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${pathname === "/about"
                     ? "text-[#E6455F] border-[#D2AD7B]"
                     : "text-gray-700 border-transparent hover:text-jewelry-600"
-                }`}
+                  }`}
               >
                 About
               </Link>
               <Link
                 href="/contact"
-                className={`text-[16px] lg:text-[17px] font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${
-                  pathname === "/contact"
+                className={`text-sm font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${pathname === "/contact"
                     ? "text-[#E6455F] border-[#D2AD7B]"
                     : "text-gray-700 border-transparent hover:text-jewelry-600"
-                }`}
+                  }`}
               >
                 Contact
               </Link>
@@ -202,14 +196,6 @@ const Navbar = () => {
                   </div>
                 </Link>
 
-                {/* Account Link */}
-                <Link
-                  href="/admin"
-                  className="text-gray-700 hover:text-jewelry-600 transition-colors flex items-center justify-center group"
-                  aria-label="Account"
-                >
-                  <i className="far fa-user text-xl group-hover:scale-105 transition-transform"></i>
-                </Link>
 
                 {/* Cart Link */}
                 <Link
@@ -271,11 +257,10 @@ const Navbar = () => {
 
           {/* Mobile Menu Drawer */}
           <div
-            className={`${
-              isMenuOpen
+            className={`${isMenuOpen
                 ? "max-h-screen opacity-100 visible pointer-events-auto"
                 : "max-h-0 opacity-0 invisible pointer-events-none"
-            } lg:hidden overflow-hidden transition-all duration-300 ease-in-out`}
+              } lg:hidden overflow-hidden transition-all duration-300 ease-in-out`}
           >
             {/* Search Bar - Mobile */}
             <div className="mt-4 mb-3 md:hidden">
@@ -308,11 +293,10 @@ const Navbar = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 <i
-                  className={`fas fa-gem mr-3 text-lg ${
-                    pathname === "/products"
+                  className={`fas fa-gem mr-3 text-lg ${pathname === "/products"
                       ? "text-jewelry-600"
                       : "text-jewelry-500/80"
-                  }`}
+                    }`}
                 ></i>
                 <span>All Products</span>
               </Link>
@@ -350,11 +334,10 @@ const Navbar = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 <i
-                  className={`fas fa-envelope mr-3 text-lg ${
-                    pathname === "/contact"
+                  className={`fas fa-envelope mr-3 text-lg ${pathname === "/contact"
                       ? "text-jewelry-600"
                       : "text-jewelry-500/80"
-                  }`}
+                    }`}
                 ></i>
                 <span>Contact</span>
               </Link>

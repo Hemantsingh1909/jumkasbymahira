@@ -90,7 +90,7 @@ export default function HomepageClient({ initialProducts = [] }) {
   return (
     <div className="bg-gray-50">
       {/* Dynamic Hero Carousel */}
-      <section className="relative h-[calc(100vh-84px)] w-full overflow-hidden bg-jewelry-950">
+      <section className="relative h-[calc(100vh-64px)] w-full overflow-hidden bg-jewelry-950">
         {slides.map((slide, index) => {
           const isActive = index === currentSlide;
           return (
