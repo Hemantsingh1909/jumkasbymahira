@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { addToCart } from '@/src/store/cartSlice';
 import ProductCard from '@/src/components/ProductCard';
-import { Star, Minus, Plus, ShoppingBag, Heart, Truck, History } from 'lucide-react';
+import { Star, StarHalf, Minus, Plus, ShoppingBag, Heart, Truck, History } from 'lucide-react';
 
 export default function ProductDetailClient({ product, relatedProducts }) {
   const dispatch = useDispatch();
@@ -18,6 +18,64 @@ export default function ProductDetailClient({ product, relatedProducts }) {
     const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
     return wishlist.some((item) => item.id === product.id);
   });
+
+  const [reviews, setReviews] = useState(() => {
+    if (typeof window === 'undefined') return [];
+    return JSON.parse(localStorage.getItem(`product_reviews_${product.id}`) || '[]');
+  });
+
+  const [newReviewName, setNewReviewName] = useState('');
+  const [newReviewRating, setNewReviewRating] = useState(5);
+  const [newReviewComment, setNewReviewComment] = useState('');
+  const [hoverRating, setHoverRating] = useState(0);
+
+  const handleAddReview = (e) => {
+    e.preventDefault();
+    if (!newReviewName.trim() || !newReviewComment.trim()) return;
+
+    const newReview = {
+      id: Date.now(),
+      name: newReviewName,
+      rating: newReviewRating,
+      comment: newReviewComment,
+      date: new Date().toLocaleDateString('en-IN', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }),
+    };
+
+    const updatedReviews = [newReview, ...reviews];
+    localStorage.setItem(`product_reviews_${product.id}`, JSON.stringify(updatedReviews));
+    setReviews(updatedReviews);
+
+    setNewReviewName('');
+    setNewReviewRating(5);
+    setNewReviewComment('');
+
+    // Trigger cross-component sync event
+    window.dispatchEvent(new CustomEvent(`reviewsUpdated_${product.id}`));
+  };
+
+  const averageRating = reviews.length > 0
+    ? Math.round((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length) * 10) / 10
+    : 0;
+
+  const renderDetailStars = (rating) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalf = rating % 1 >= 0.4;
+    for (let i = 1; i <= 5; i++) {
+      if (i <= fullStars) {
+        stars.push(<Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />);
+      } else if (i === fullStars + 1 && hasHalf) {
+        stars.push(<StarHalf key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />);
+      } else {
+        stars.push(<Star key={i} className="w-4 h-4 text-gray-300" />);
+      }
+    }
+    return stars;
+  };
 
   const [activeTab, setActiveTab] = useState('description');
   const [zoomStyle, setZoomStyle] = useState({ display: 'none' });
@@ -159,12 +217,16 @@ export default function ProductDetailClient({ product, relatedProducts }) {
               </h1>
 
               <div className="flex items-center gap-4 mb-6">
-                <div className="flex text-yellow-400 gap-0.5">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <span className="text-xs text-gray-500">(15 verified reviews)</span>
+                {reviews.length > 0 ? (
+                  <>
+                    <div className="flex text-yellow-400 gap-0.5">
+                      {renderDetailStars(averageRating)}
+                    </div>
+                    <span className="text-xs text-gray-500">({averageRating} rating from {reviews.length} reviews)</span>
+                  </>
+                ) : (
+                  <span className="text-xs text-gray-400 italic">No reviews yet</span>
+                )}
               </div>
 
               {/* Price */}
@@ -384,6 +446,139 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                   <li>Clean gently with a dry, soft cloth after every wear to preserve shine.</li>
                   <li>Do not submerge in water or wear during showers/swimming.</li>
                 </ul>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Customer Reviews Section */}
+        <div className="mt-8 bg-white rounded-xl shadow-sm p-6 md:p-8 space-y-8">
+          <div className="border-b border-gray-100 pb-5">
+            <h2 className="text-2xl font-serif font-bold text-jewelry-900">Customer Reviews</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Left Column: Rating summary breakdown */}
+            <div className="md:col-span-1 space-y-4">
+              <div className="flex items-baseline gap-2">
+                <span className="text-5xl font-extrabold text-jewelry-800">{averageRating > 0 ? averageRating : '0.0'}</span>
+                <span className="text-gray-400 text-sm">out of 5</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-yellow-400">
+                {renderDetailStars(averageRating)}
+                <span className="text-xs text-gray-500 ml-1">({reviews.length} reviews)</span>
+              </div>
+
+              {/* Bar breakdown */}
+              <div className="space-y-2.5 pt-2">
+                {[5, 4, 3, 2, 1].map((stars) => {
+                  const count = reviews.filter(r => r.rating === stars).length;
+                  const percentage = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
+                  return (
+                    <div key={stars} className="flex items-center text-xs text-gray-600 gap-2">
+                      <span className="w-3 text-right">{stars}</span>
+                      <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                      <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-jewelry-500 rounded-full" style={{ width: `${percentage}%` }} />
+                      </div>
+                      <span className="w-8 text-right text-gray-400">{count}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Right Column: Write a Review form */}
+            <div className="md:col-span-2 bg-gray-50/50 p-6 rounded-xl border border-gray-100">
+              <h3 className="text-lg font-serif font-semibold text-jewelry-800 mb-4">Write a Review</h3>
+              <form onSubmit={handleAddReview} className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase mb-1.5">Your Name</label>
+                    <input
+                      type="text"
+                      required
+                      value={newReviewName}
+                      onChange={(e) => setNewReviewName(e.target.value)}
+                      placeholder="e.g. Priyanjali Sen"
+                      className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-jewelry-500 bg-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase mb-1.5">Rating</label>
+                    <div className="flex items-center gap-1 mt-1.5">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          type="button"
+                          onClick={() => setNewReviewRating(star)}
+                          onMouseEnter={() => setHoverRating(star)}
+                          onMouseLeave={() => setHoverRating(0)}
+                          className="focus:outline-none transition-transform hover:scale-110"
+                        >
+                          <Star
+                            className={`w-6 h-6 ${
+                              star <= (hoverRating || newReviewRating)
+                                ? 'fill-yellow-400 text-yellow-400'
+                                : 'text-gray-300'
+                            }`}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase mb-1.5">Review Description</label>
+                  <textarea
+                    required
+                    rows="3"
+                    value={newReviewComment}
+                    onChange={(e) => setNewReviewComment(e.target.value)}
+                    placeholder="Share details of your experience with this jewelry (design, finish, material quality)..."
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-jewelry-500 bg-white"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="bg-jewelry-600 hover:bg-jewelry-700 text-white font-semibold px-6 py-2.5 rounded-lg text-sm shadow transition-all hover:shadow-md active:scale-95"
+                >
+                  Submit Review
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {/* List of Reviews */}
+          <div className="pt-4 space-y-6">
+            <h3 className="text-lg font-serif font-bold text-jewelry-800 border-b border-gray-100 pb-3">Reviews List</h3>
+            {reviews.length > 0 ? (
+              <div className="space-y-6 divide-y divide-gray-100">
+                {reviews.map((rev) => (
+                  <div key={rev.id} className="pt-6 first:pt-0 space-y-2">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-semibold text-gray-800 text-sm">{rev.name}</h4>
+                        <div className="flex text-yellow-400 gap-0.5 mt-1">
+                          {[1, 2, 3, 4, 5].map((s) => (
+                            <Star
+                              key={s}
+                              className={`w-3.5 h-3.5 ${s <= rev.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200'}`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <span className="text-xs text-gray-400 font-medium">{rev.date}</span>
+                    </div>
+                    <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-wrap">{rev.comment}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-10 bg-gray-50/30 rounded-xl border border-dashed border-gray-200">
+                <p className="text-gray-400 font-medium text-sm">No reviews yet. Be the first to share your thoughts on this piece!</p>
               </div>
             )}
           </div>

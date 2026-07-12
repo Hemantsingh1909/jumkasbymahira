@@ -108,7 +108,7 @@ const Navbar = () => {
             </Link>
 
             {/* Desktop Navigation Links */}
-            <div className="hidden lg:flex items-center justify-center space-x-12 xl:space-x-16 mx-auto">
+            <div className="hidden lg:flex items-center justify-center space-x-12 xl:space-x-16 ml-auto mr-16 xl:mr-24">
               <Link
                 href="/products"
                 className={`text-sm font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${pathname === "/products" && !filter
@@ -116,11 +116,11 @@ const Navbar = () => {
                     : "text-gray-700 border-transparent hover:text-jewelry-600"
                   }`}
               >
-                Products
+                All Products
               </Link>
               <Link
-                href="/products?filter=best-sellers"
-                className={`text-sm font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${pathname === "/products" && filter === "best-sellers"
+                href="/best-sellers"
+                className={`text-sm font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${pathname === "/best-sellers"
                     ? "text-[#E6455F] border-[#D2AD7B]"
                     : "text-gray-700 border-transparent hover:text-jewelry-600"
                   }`}
@@ -128,8 +128,8 @@ const Navbar = () => {
                 Best Sellers
               </Link>
               <Link
-                href="/products?filter=new-arrivals"
-                className={`text-sm font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${pathname === "/products" && filter === "new-arrivals"
+                href="/new-arrivals"
+                className={`text-sm font-medium transition-colors font-sans tracking-wide pb-1 border-b-2 ${pathname === "/new-arrivals"
                     ? "text-[#E6455F] border-[#D2AD7B]"
                     : "text-gray-700 border-transparent hover:text-jewelry-600"
                   }`}
@@ -189,7 +189,7 @@ const Navbar = () => {
                   <div className="relative">
                     <i className="far fa-heart text-xl group-hover:scale-105 transition-transform"></i>
                     {wishlistCount > 0 && (
-                      <span className="absolute -top-2 -right-2 bg-[#E6455F] text-white text-[9px] rounded-full h-4.5 w-4.5 flex items-center justify-center font-bold">
+                      <span className="absolute -top-2.5 -right-2.5 bg-[#E6455F] text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center font-bold leading-none">
                         {wishlistCount}
                       </span>
                     )}
@@ -206,7 +206,7 @@ const Navbar = () => {
                   <div className="relative">
                     <i className="fas fa-shopping-bag text-xl group-hover:scale-105 transition-transform"></i>
                     {totalCartItems > 0 && (
-                      <span className="absolute -top-2 -right-2 bg-[#E6455F] text-white text-[9px] rounded-full h-4.5 w-4.5 flex items-center justify-center font-bold">
+                      <span className="absolute -top-2.5 -right-2.5 bg-[#E6455F] text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center font-bold leading-none">
                         {totalCartItems}
                       </span>
                     )}
@@ -301,19 +301,39 @@ const Navbar = () => {
                 <span>All Products</span>
               </Link>
               <Link
-                href="/products?filter=best-sellers"
-                className="flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
+                href="/best-sellers"
+                className={
+                  pathname === "/best-sellers"
+                    ? "flex items-center text-jewelry-900 bg-jewelry-50/70 border-l-4 border-jewelry-600 rounded-r font-semibold pl-3 py-3 transition-colors"
+                    : "flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
+                }
                 onClick={() => setIsMenuOpen(false)}
               >
-                <i className="fas fa-fire mr-3 text-lg text-jewelry-500/80"></i>
+                <i
+                  className={`fas fa-fire mr-3 text-lg ${
+                    pathname === "/best-sellers"
+                      ? "text-jewelry-600"
+                      : "text-jewelry-500/80"
+                  }`}
+                ></i>
                 <span>Best Sellers</span>
               </Link>
               <Link
-                href="/products?filter=new-arrivals"
-                className="flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
+                href="/new-arrivals"
+                className={
+                  pathname === "/new-arrivals"
+                    ? "flex items-center text-jewelry-900 bg-jewelry-50/70 border-l-4 border-jewelry-600 rounded-r font-semibold pl-3 py-3 transition-colors"
+                    : "flex items-center text-black lg:hover:text-jewelry-800 pl-3 py-3 lg:hover:bg-jewelry-50/50 rounded transition-colors"
+                }
                 onClick={() => setIsMenuOpen(false)}
               >
-                <i className="fas fa-bullhorn mr-3 text-lg text-jewelry-500/80"></i>
+                <i
+                  className={`fas fa-bullhorn mr-3 text-lg ${
+                    pathname === "/new-arrivals"
+                      ? "text-jewelry-600"
+                      : "text-jewelry-500/80"
+                  }`}
+                ></i>
                 <span>New Arrivals</span>
               </Link>
               <Link

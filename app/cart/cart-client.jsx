@@ -26,7 +26,7 @@ export default function CartClient() {
   const total = calculateOrderTotal(subtotal);
 
   return (
-    <div className="bg-gray-50 py-12">
+    <div className="bg-gray-50 py-12 min-h-[calc(100vh-420px)]">
       <div className="container-custom mx-auto px-4">
         <nav className="flex mb-8 text-sm">
           <Link href="/" className="text-gray-500 hover:text-jewelry-600">

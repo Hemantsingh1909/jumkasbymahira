@@ -6,7 +6,7 @@ import { setProducts } from '@/src/store/productSlice';
 import ProductCard from '@/src/components/ProductCard';
 import { ChevronDown, Search, SlidersHorizontal, X } from 'lucide-react';
 
-export default function ProductsContent({ initialProducts = [], searchParams = {} }) {
+export default function ProductsContent({ initialProducts = [], searchParams = {}, title = 'All Products' }) {
   const products = useSelector((state) => state.products.products || []);
   const dispatch = useDispatch();
 
@@ -206,7 +206,7 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
     <div className="bg-gray-50 min-h-screen">
       <div className="container-custom py-8">
         <h1 className="text-4xl font-display font-bold text-jewelry-900 mb-8">
-          All Products
+          {title}
         </h1>
 
         <div className="flex flex-col lg:flex-row gap-8">

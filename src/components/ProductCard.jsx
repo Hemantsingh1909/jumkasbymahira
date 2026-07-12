@@ -3,7 +3,7 @@
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../store/cartSlice";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { getProductUrl } from "../lib/slug";
@@ -23,6 +23,43 @@ const ProductCard = ({ product, priority = false }) => {
 
   // Check if product is already in cart
   const isInCart = cartItems.some((item) => item.id === product.id);
+
+  const [reviewsSummary, setReviewsSummary] = useState({ rating: 0, count: 0 });
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const loadReviews = () => {
+      const stored = JSON.parse(localStorage.getItem(`product_reviews_${product.id}`) || '[]');
+      if (stored.length > 0) {
+        const avg = stored.reduce((sum, r) => sum + r.rating, 0) / stored.length;
+        setReviewsSummary({ rating: Math.round(avg * 10) / 10, count: stored.length });
+      } else {
+        setReviewsSummary({ rating: 0, count: 0 });
+      }
+    };
+    loadReviews();
+
+    window.addEventListener(`reviewsUpdated_${product.id}`, loadReviews);
+    return () => {
+      window.removeEventListener(`reviewsUpdated_${product.id}`, loadReviews);
+    };
+  }, [product.id]);
+
+  const renderStars = (rating) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalf = rating % 1 >= 0.4;
+    for (let i = 1; i <= 5; i++) {
+      if (i <= fullStars) {
+        stars.push(<Star key={i} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />);
+      } else if (i === fullStars + 1 && hasHalf) {
+        stars.push(<StarHalf key={i} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />);
+      } else {
+        stars.push(<Star key={i} className="w-3.5 h-3.5 text-gray-300" />);
+      }
+    }
+    return stars;
+  };
 
   const handleAddToCart = () => {
     dispatch(addToCart(product));
@@ -114,14 +151,16 @@ const ProductCard = ({ product, priority = false }) => {
             ₹{Number(product.price || 0).toFixed(2)}
           </p>
           <div className="flex items-center">
-            <div className="flex text-yellow-400 gap-0.5">
-              <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-              <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-              <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-              <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-              <StarHalf className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
-            </div>
-            <span className="text-xs text-gray-500 ml-1">(4.5)</span>
+            {reviewsSummary.count > 0 ? (
+              <>
+                <div className="flex text-yellow-400 gap-0.5">
+                  {renderStars(reviewsSummary.rating)}
+                </div>
+                <span className="text-xs text-gray-500 ml-1">({reviewsSummary.rating})</span>
+              </>
+            ) : (
+              <span className="text-xs text-gray-400 italic font-sans">No reviews yet</span>
+            )}
           </div>
         </div>
 

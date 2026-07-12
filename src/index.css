@@ -43,6 +43,7 @@
 }
 
 .animate-ticker {
+  transform: translate3d(-100%, 0, 0);
   animation: ticker 30s linear infinite;
 }
 
