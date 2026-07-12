@@ -92,8 +92,8 @@ const Navbar = () => {
       <nav
         className={`${
           isScrolled
-            ? "bg-white/95 shadow-md backdrop-blur-md py-2.5"
-            : "bg-[#FAF6F0] py-3.5"
+            ? "bg-white/95 shadow-md backdrop-blur-md py-4"
+            : "bg-[#FAF6F0] py-6"
         } text-gray-800 px-4 sticky top-0 z-50 transition-all duration-300 border-b border-gray-100/50`}
       >
         <div className="w-full px-2 sm:px-6 lg:px-8">
