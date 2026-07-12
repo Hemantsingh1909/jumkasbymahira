@@ -107,7 +107,7 @@ const Navbar = () => {
             </Link>
 
             {/* Desktop Navigation Links */}
-            <div className="hidden lg:flex items-center justify-center space-x-8 xl:space-x-12 mx-auto">
+            <div className="hidden lg:flex items-center justify-center space-x-12 xl:space-x-16 mx-auto">
               <Link
                 href="/products"
                 className="text-sm font-medium text-gray-700 hover:text-jewelry-600 transition-colors font-display tracking-wide"
@@ -143,22 +143,22 @@ const Navbar = () => {
             {/* Desktop Right Group: Search Bar & Actions */}
             <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
               {/* Desktop Search Bar */}
-              <div className="flex-grow max-w-[200px] xl:max-w-[240px]">
+              <div className="flex-grow max-w-[260px] xl:max-w-[320px]">
                 <form onSubmit={handleSearch} className="relative">
+                  <button
+                    type="submit"
+                    className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-[#D2AD7B] hover:text-jewelry-800"
+                    aria-label="Search"
+                  >
+                    <i className="fas fa-search text-sm"></i>
+                  </button>
                   <input
                     type="text"
-                    placeholder="Search for jhumkas..."
-                    className="w-full py-1.5 pl-4 pr-10 rounded-full border border-[#D2AD7B] bg-transparent focus:outline-none focus:ring-1 focus:ring-[#D2AD7B] text-sm"
+                    placeholder="Search handcrafted jhumkas..."
+                    className="w-full py-1.5 pl-10 pr-4 rounded-full border border-[#D2AD7B] bg-transparent focus:outline-none focus:ring-1 focus:ring-[#D2AD7B] text-sm"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
-                  <button
-                    type="submit"
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#D2AD7B] hover:text-jewelry-800"
-                    aria-label="Search"
-                  >
-                    <i className="fas fa-search"></i>
-                  </button>
                 </form>
               </div>
 
