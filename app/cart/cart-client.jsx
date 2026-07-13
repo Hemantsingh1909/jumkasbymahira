@@ -1,3 +1,4 @@
+// app/cart/cart-client.jsx
 'use client';
 
 import { useEffect } from 'react';
@@ -6,7 +7,6 @@ import Link from 'next/link';
 import { incrementItem, decrementItem, removeItem } from '@/src/store/cartSlice';
 import { calculateShippingFee, calculateOrderTotal } from '@/src/lib/shipping';
 import { getProductUrl } from '@/src/lib/slug';
-import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react';
 
 export default function CartClient() {
   const cartItems = useSelector((state) => state.cart.items || []);
@@ -87,25 +87,25 @@ export default function CartClient() {
                             <div className="flex items-center border border-gray-300 rounded-md">
                               <button
                                 onClick={() => dispatch(decrementItem(item))}
-                                className="bg-gray-100 text-gray-600 px-3 py-1 rounded-l-md hover:bg-gray-200 transition-colors"
+                                className="bg-gray-100 text-gray-600 px-3 py-1 rounded-l-md hover:bg-gray-200 transition-colors flex items-center justify-center h-7 w-8"
                               >
-                                <Minus className="w-3 h-3 mx-auto" />
+                                <i className="fa-solid fa-minus text-[10px]"></i>
                               </button>
                               <span className="px-4 py-1 text-gray-800 font-medium">
                                 {item.quantity}
                               </span>
                               <button
                                 onClick={() => dispatch(incrementItem(item))}
-                                className="bg-gray-100 text-gray-600 px-3 py-1 rounded-r-md hover:bg-gray-200 transition-colors"
+                                className="bg-gray-100 text-gray-600 px-3 py-1 rounded-r-md hover:bg-gray-200 transition-colors flex items-center justify-center h-7 w-8"
                               >
-                                <Plus className="w-3 h-3 mx-auto" />
+                                <i className="fa-solid fa-plus text-[10px]"></i>
                               </button>
                             </div>
                             <button
                               onClick={() => dispatch(removeItem(item))}
                               className="ml-4 text-red-500 text-sm hover:text-red-700 transition-colors flex items-center"
                             >
-                              <Trash2 className="w-3.5 h-3.5 mr-1" /> Remove
+                              <i className="fa-solid fa-trash-can mr-1.5 text-xs"></i> Remove
                             </button>
                           </div>
                         </div>
@@ -166,7 +166,7 @@ export default function CartClient() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <ShoppingBag className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <i className="fa-solid fa-bag-shopping text-5xl text-gray-300 mb-4 block"></i>
             <p className="text-xl text-gray-600 mb-6">Your cart is empty</p>
             <Link
               href="/products"

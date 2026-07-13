@@ -1,7 +1,7 @@
+// app/collections/page.jsx
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight } from "lucide-react";
 import Image from 'next/image';
 
 const collections = [
@@ -79,7 +79,7 @@ const CollectionCard = ({ collection }) => (
         className={`group/btn inline-flex items-center gap-2 text-sm font-semibold ${collection.accent} pt-2 transition-colors`}
       >
         Explore Now
-        <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+        <i className="fa-solid fa-arrow-right text-xs group-hover/btn:translate-x-1 transition-transform"></i>
       </Link>
     </div>
   </div>
@@ -98,15 +98,14 @@ export default function CollectionsSection() {
             Our Collections
           </h2>
           <p className="text-gray-500 max-w-xl mx-auto leading-relaxed">
-            Explore our carefully curated collections, each designed to celebrate
-            your unique style and personality.
+            Discover our carefully selected ranges, each reflecting a unique style of handcrafted elegance.
           </p>
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {collections.map((c) => (
-            <CollectionCard key={c.name} collection={c} />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {collections.map((col, idx) => (
+            <CollectionCard key={idx} collection={col} />
           ))}
         </div>
       </div>

@@ -1,3 +1,4 @@
+// app/wishlist/page.jsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -6,7 +7,6 @@ import Link from 'next/link';
 import ProductCard from '@/src/components/ProductCard';
 import { addToCart } from '@/src/store/cartSlice';
 import { getProductUrl } from '@/src/lib/slug';
-import { Trash2, Heart } from 'lucide-react';
 
 export default function Wishlist() {
   const [wishlistItems, setWishlistItems] = useState(() => {
@@ -86,10 +86,10 @@ export default function Wishlist() {
                     )}
                     <button
                       onClick={() => removeFromWishlist(product.id)}
-                      className="px-4 py-2 bg-red-50 text-red-600 rounded text-sm hover:bg-red-100 transition-colors"
+                      className="px-4 py-2 bg-red-550 text-[#dc2626] bg-[#fee2e2] hover:bg-[#fca5a5] rounded text-sm transition-colors flex items-center justify-center"
                       title="Remove from wishlist"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <i className="fa-solid fa-trash-can text-sm"></i>
                     </button>
                   </div>
                 </div>
@@ -98,7 +98,7 @@ export default function Wishlist() {
           </div>
         ) : (
           <div className="text-center py-12">
-            <Heart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <i className="fa-regular fa-heart text-5xl text-gray-300 mb-4 block"></i>
             <p className="text-xl text-gray-600 mb-6">Your wishlist is empty</p>
             <Link
               href="/products"

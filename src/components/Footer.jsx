@@ -3,8 +3,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import logo from '../assets/Logo.png'; // Import the logo with correct capitalization
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -32,109 +30,183 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-gray-900 text-white pt-16 pb-8">
-      <div className="container-custom">
+    <footer className="bg-[#FAF6F0] text-gray-700 relative overflow-hidden pt-16">
+      {/* Decorative Floral Backgrounds */}
+      <div 
+        className="absolute left-0 bottom-16 w-[360px] h-[360px] pointer-events-none select-none opacity-[0.06] mix-blend-multiply bg-no-repeat bg-left-bottom hidden xl:block"
+        style={{ 
+          backgroundImage: `url('/images/floral-ornament.png')`,
+          backgroundSize: 'contain',
+        }}
+      />
+      <div 
+        className="absolute right-0 bottom-16 w-[360px] h-[360px] pointer-events-none select-none opacity-[0.06] mix-blend-multiply bg-no-repeat bg-right-bottom scale-x-[-1] hidden xl:block"
+        style={{ 
+          backgroundImage: `url('/images/floral-ornament.png')`,
+          backgroundSize: 'contain',
+        }}
+      />
+
+      <div className="container-custom max-w-7xl mx-auto px-4 md:px-8 relative z-10">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-12 md:gap-x-8 gap-y-10 md:gap-y-8 lg:flex lg:flex-row lg:justify-between lg:items-stretch lg:gap-y-0 lg:gap-x-0 pb-8 text-center md:text-center lg:text-left">
+          
           {/* Brand Section */}
-          <div className="space-y-4 lg:col-span-3">
-            <Link href="/" className="inline-block">
-              <img
-                src={logo?.src || logo}
-                alt="Jhumkas by Malti"
-                className="h-20 object-contain bg-white rounded-lg p-2"
-              />
+          <div className="col-span-12 md:col-span-12 lg:w-[24%] md:border-b lg:border-b-0 lg:border-r md:border-[#E8DCC4]/60 md:pb-8 md:mb-8 lg:pb-0 lg:mb-0 lg:pr-8 flex flex-col items-center md:items-center lg:items-start">
+            <Link href="/" className="flex items-center justify-center md:justify-center lg:justify-start shrink-0 select-none">
+              <div className="text-jewelry-800 font-display">
+                <span className="text-2xl font-bold">Jhumkas</span>
+                <span className="text-xl text-jewelry-600 italic ml-1">
+                  by Malti
+                </span>
+              </div>
             </Link>
-            <p className="text-gray-400 mt-4">
-              Exquisite jhumkas for every occasion, crafted with love and
-              tradition.
+            
+            <p className="text-gray-600 text-sm mt-5 leading-relaxed max-w-xs text-center md:text-center lg:text-left">
+              Exquisite jhumkas for every occasion, crafted with love and tradition.
             </p>
-            <div className="flex space-x-4 mt-4">
+
+            {/* Line-Lotus-Line Divider */}
+            <div className="flex items-center gap-3 my-6 w-full max-w-[200px] justify-center md:justify-center lg:justify-start">
+              <div className="h-[0.5px] bg-[#D2AD7B]/40 flex-grow"></div>
+              <svg className="w-5 h-5 text-[#C19A5B]" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2s1.5 4.5 3 6c1.5 1.5 5 2.5 5 4.5s-3 3-5 3.5c-2 .5-3 2-3 4 0-2-1-3.5-3-4-2-.5-5-1.5-5-3.5s3.5-3 5-4.5c1.5-1.5 3-6 3-6zm0 4.5c-.5 1-1.5 2.5-2.5 3.5-1 1-3 1.5-3 2.5 0 .8 1.5 1.2 2.5 1.5 1 .3 1.8 1 2.2 2 .4-1 1.2-1.7 2.2-2 1-.3 2.5-.7 2.5-1.5 0-1-2-1.5-3-2.5-1-1-2-2.5-2.5-3.5z" />
+              </svg>
+              <div className="h-[0.5px] bg-[#D2AD7B]/40 flex-grow"></div>
+            </div>
+
+            {/* Social Icons */}
+            <div className="flex space-x-3.5 mt-2 justify-center md:justify-center lg:justify-start">
               <a
                 href="https://www.instagram.com/jhumkas_by_malti/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-jewelry-400 transition-colors flex items-center justify-center"
+                className="w-9 h-9 rounded-full bg-[#F3EFE9] text-[#5C1625] hover:bg-[#5C1625] hover:text-white flex items-center justify-center transition-all duration-300 shadow-sm"
                 aria-label="Visit our Instagram page"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 448 512"
-                  fill="currentColor"
-                  className="w-[18px] h-[18px]"
-                >
-                  <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
-                </svg>
+                <i className="fa-brands fa-instagram text-base"></i>
               </a>
               <a
                 href="https://pin.it/4RhiTEUIl"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-jewelry-400 transition-colors flex items-center justify-center"
+                className="w-9 h-9 rounded-full bg-[#F3EFE9] text-[#5C1625] hover:bg-[#5C1625] hover:text-white flex items-center justify-center transition-all duration-300 shadow-sm"
                 aria-label="Visit our Pinterest boards"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 496 512"
-                  fill="currentColor"
-                  className="w-[18px] h-[18px]"
-                >
-                  <path d="M496 256c0 137-111 248-248 248-25.6 0-50.2-3.9-73.4-11.1 10.1-16.5 25.2-43.5 30.8-65 3-11.6 15.4-59 15.4-59 8.1 15.4 31.7 28.5 56.8 28.5 74.8 0 128.7-68.8 128.7-154.3 0-81.9-66.9-143.2-152.9-143.2-108.8 0-169.5 77.7-169.5 161.4 0 37.1 19.2 84 50.8 98.9 5.4 2.5 8.3 1.4 9.6-3.8 1-3.9 3.3-13.6 4.7-19 1.4-5.6 1-8.3-3.2-13.4-9.6-11.6-17.5-26.6-17.5-48.9 0-63 47.4-124.7 127.3-124.7 69.3 0 117.7 47.4 117.7 112 0 76.5-38.3 129.5-91.1 129.5-28.3 0-49.4-23.3-42.6-52 8.2-34.6 24-71.9 24-96.9 0-22.3-12-41-41-41-32.5 0-58.7 33.6-58.7 78.6 0 28.8 9.7 48.3 9.7 48.3s-3.2 13.5-9.7 41c-10.1 42.6-15.1 95.2-12.6 142.9C64.9 443.3 0 357.1 0 256 0 119 111 8 248 8s248 111 248 248z" />
-                </svg>
+                <i className="fa-brands fa-pinterest text-base"></i>
               </a>
               <a
                 href="https://wa.me/8238672255"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-jewelry-400 transition-colors flex items-center justify-center"
+                className="w-9 h-9 rounded-full bg-[#F3EFE9] text-[#5C1625] hover:bg-[#5C1625] hover:text-white flex items-center justify-center transition-all duration-300 shadow-sm"
                 aria-label="Contact us on WhatsApp"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 448 512"
-                  fill="currentColor"
-                  className="w-[18px] h-[18px]"
-                >
-                  <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.8 111.2L3 480l112.5-29.5c32.9 17.5 69.6 26.8 108.4 26.8 122.4 0 222-99.6 222-222 0-59.3-23.2-115.1-65-157.2zM223.9 446c-33.1 0-65.6-8.9-93.9-25.7l-6.7-4-69.8 18.3L72 366.1l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 54 81.2 54 130.4 0 101.7-82.8 184.5-184.6 184.5zm100.5-137.5c-5.5-2.7-32.6-16.1-37.7-18-5.1-1.9-8.8-2.7-12.5 2.7-3.7 5.5-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.7-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.6-13.4 37.2-26.3 4.6-13 4.6-24.1 3.2-26.3-1.4-2.2-5-3.5-10.5-6.2z" />
-                </svg>
+                <i className="fa-brands fa-whatsapp text-base"></i>
+              </a>
+              <a
+                href="mailto:sshreecollection593@gmail.com"
+                className="w-9 h-9 rounded-full bg-[#F3EFE9] text-[#5C1625] hover:bg-[#5C1625] hover:text-white flex items-center justify-center transition-all duration-300 shadow-sm"
+                aria-label="Send us an email"
+              >
+                <i className="fa-solid fa-envelope text-base"></i>
               </a>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="lg:col-span-2">
-            <h4 className="text-lg font-serif font-semibold mb-4 text-white">
-              Quick Links
+          {/* Shop Column */}
+          <div className="col-span-12 md:col-span-4 lg:w-[15%] md:border-b lg:border-b-0 lg:border-r md:border-[#E8DCC4]/60 md:pb-8 md:mb-8 lg:pb-0 lg:mb-0 lg:px-6 flex flex-col items-center md:items-start mt-0">
+            <h4 className="text-sm font-serif font-bold uppercase tracking-wider text-[#5C1625] mb-2">
+              Shop
             </h4>
-            <ul className="space-y-2">
+            <div className="w-10 h-[1.5px] bg-[#C19A5B] mb-5"></div>
+            <ul className="space-y-2 text-center md:text-left lg:text-left">
               <li>
                 <Link
-                  href="/"
-                  className="text-gray-400 hover:text-jewelry-300 transition-colors"
+                  href="/products"
+                  className="text-gray-600 hover:text-[#5C1625] transition-colors font-sans text-[13px] tracking-wide block py-1"
                 >
-                  Home
+                  All Products
                 </Link>
               </li>
               <li>
                 <Link
                   href="/collections"
-                  className="text-gray-400 hover:text-jewelry-300 transition-colors"
+                  className="text-gray-600 hover:text-[#5C1625] transition-colors font-sans text-[13px] tracking-wide block py-1"
                 >
                   Collections
                 </Link>
               </li>
               <li>
                 <Link
+                  href="/best-sellers"
+                  className="text-gray-600 hover:text-[#5C1625] transition-colors font-sans text-[13px] tracking-wide block py-1"
+                >
+                  Best Sellers
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/new-arrivals"
+                  className="text-gray-600 hover:text-[#5C1625] transition-colors font-sans text-[13px] tracking-wide block py-1"
+                >
+                  New Arrivals
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/products?category=gift-cards"
+                  className="text-gray-600 hover:text-[#5C1625] transition-colors font-sans text-[13px] tracking-wide block py-1"
+                >
+                  Gift Cards
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Company Column */}
+          <div className="col-span-12 md:col-span-4 lg:w-[17%] md:border-b lg:border-r lg:border-b-0 md:border-[#E8DCC4]/60 md:pb-8 md:mb-8 lg:pb-0 lg:mb-0 lg:px-6 flex flex-col items-center md:items-start mt-0">
+            <h4 className="text-sm font-serif font-bold uppercase tracking-wider text-[#5C1625] mb-2">
+              Company
+            </h4>
+            <div className="w-10 h-[1.5px] bg-[#C19A5B] mb-5"></div>
+            <ul className="space-y-2 text-center md:text-left lg:text-left">
+              <li>
+                <Link
                   href="/about"
-                  className="text-gray-400 hover:text-jewelry-300 transition-colors"
+                  className="text-gray-600 hover:text-[#5C1625] transition-colors font-sans text-[13px] tracking-wide block py-1"
                 >
                   About Us
                 </Link>
               </li>
               <li>
                 <Link
+                  href="/about#craftsmanship"
+                  className="text-gray-600 hover:text-[#5C1625] transition-colors font-sans text-[13px] tracking-wide block py-1"
+                >
+                  Our Craftsmanship
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about#reviews"
+                  className="text-gray-600 hover:text-[#5C1625] transition-colors font-sans text-[13px] tracking-wide block py-1"
+                >
+                  Reviews
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/about#care-guide"
+                  className="text-gray-600 hover:text-[#5C1625] transition-colors font-sans text-[13px] tracking-wide block py-1"
+                >
+                  Care Guide
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/contact"
-                  className="text-gray-400 hover:text-jewelry-300 transition-colors"
+                  className="text-gray-600 hover:text-[#5C1625] transition-colors font-sans text-[13px] tracking-wide block py-1"
                 >
                   Contact Us
                 </Link>
@@ -142,88 +214,159 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact Information */}
-          <div className="lg:col-span-4">
-            <h4 className="text-lg font-serif font-semibold mb-4 text-white">
+          {/* Contact Us Column */}
+          <div className="col-span-12 md:col-span-4 lg:w-[24%] md:border-b lg:border-b-0 lg:border-r md:border-[#E8DCC4]/60 md:pb-8 md:mb-8 lg:pb-0 lg:mb-0 lg:px-6 flex flex-col items-center md:items-start mt-0">
+            <h4 className="text-sm font-serif font-bold uppercase tracking-wider text-[#5C1625] mb-2">
               Contact Us
             </h4>
-            <ul className="space-y-2 text-gray-400">
-              <li className="flex items-center">
-                <i className="fas fa-phone mr-2 text-jewelry-400 text-sm"></i>
-                <span>+91 8238672255</span>
+            <div className="w-10 h-[1.5px] bg-[#C19A5B] mb-5"></div>
+            <ul className="space-y-3.5 text-gray-600 text-[13px] font-sans w-full text-center md:text-left lg:text-left">
+              <li className="flex items-start justify-center md:justify-start lg:justify-start gap-2.5">
+                <i className="fa-solid fa-phone text-[#C19A5B] text-sm w-4 h-4 flex items-center justify-center shrink-0 mt-0.5"></i>
+                <span className="leading-tight">+91 82386 72255</span>
               </li>
-              <li className="flex items-center">
-                <i className="fas fa-envelope mr-2 text-jewelry-400 text-sm"></i>
-                <a href="mailto:sshreecollection593@gmail.com" className="hover:text-jewelry-300 transition-colors break-all">
+              <li className="flex items-start justify-center md:justify-start lg:justify-start gap-2.5">
+                <i className="fa-solid fa-envelope text-[#C19A5B] text-sm w-4 h-4 flex items-center justify-center shrink-0 mt-0.5"></i>
+                <a href="mailto:sshreecollection593@gmail.com" className="leading-tight hover:text-[#5C1625] transition-colors whitespace-nowrap">
                   sshreecollection593@gmail.com
                 </a>
+              </li>
+              <li className="flex items-start justify-center md:justify-start lg:justify-start gap-2.5">
+                <i className="fa-solid fa-location-dot text-[#C19A5B] text-sm w-4 h-4 flex items-center justify-center shrink-0 mt-0.5"></i>
+                <span className="leading-tight">
+                  Dahod, Gujrat, India - 389151
+                </span>
               </li>
             </ul>
           </div>
 
-          {/* Newsletter */}
-          <div className="lg:col-span-3">
-            <h4 className="text-lg font-serif font-semibold mb-4 text-white">
-              Join Our Newsletter
+          {/* Stay Connected Column */}
+          <div className="col-span-12 md:col-span-12 lg:w-[20%] lg:pl-8 flex flex-col items-center md:items-center lg:items-start mt-0">
+            <h4 className="text-sm font-serif font-bold uppercase tracking-wider text-[#5C1625] mb-2">
+              Stay Connected
             </h4>
-            <p className="text-gray-400 mb-4">
-              Subscribe to receive updates, access to exclusive deals, and more.
+            <div className="w-10 h-[1.5px] bg-[#C19A5B] mb-5"></div>
+            <p className="text-gray-600 text-[13px] font-sans leading-relaxed mb-4 max-w-xs md:max-w-none text-center md:text-center lg:text-left">
+              Subscribe to receive updates, exclusive offers, and more.
             </p>
             {subscribed ? (
-              <div className="bg-gray-800 p-3 rounded">
-                <p className="text-jewelry-300 text-sm">
+              <div className="bg-[#FAF6F0] border border-[#C19A5B]/30 p-3 rounded-md w-full max-w-sm md:max-w-none">
+                <p className="text-[#5C1625] text-xs font-medium">
                   Thank you for subscribing! You will receive our updates soon.
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-2">
-                <div className="flex">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Your email address"
-                    className="bg-gray-800 text-white px-4 py-2 rounded-l w-full focus:outline-none focus:ring-1 focus:ring-jewelry-400"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    className="bg-jewelry-500 hover:bg-jewelry-600 text-white px-4 py-2 rounded-r transition-colors"
-                  >
-                    Join
-                  </button>
-                </div>
-                <p className="text-gray-500 text-xs">
-                  By subscribing, you agree to our Privacy Policy.
-                </p>
+              <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row w-full max-w-sm md:max-w-md lg:max-w-none gap-2 lg:gap-0 items-stretch justify-center md:justify-center lg:justify-start">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Your email address"
+                  className="bg-white border border-[#E3D8C4] rounded-md lg:rounded-none lg:rounded-l-md px-3 py-2 w-full text-xs focus:outline-none focus:ring-1 focus:ring-[#5C1625] text-gray-800"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="bg-[#4A1521] text-white px-4 py-2 rounded-md lg:rounded-none lg:rounded-r-md text-xs font-semibold hover:bg-[#5C1625] transition-colors duration-300 shrink-0"
+                >
+                  Subscribe
+                </button>
               </form>
             )}
+            <div className="flex items-center gap-1.5 mt-3 text-xs text-gray-500 font-sans justify-center md:justify-center lg:justify-start">
+              <i className="fa-solid fa-lock text-[#C19A5B] text-[11px] w-3.5 h-3.5 flex items-center justify-center shrink-0"></i>
+              <span>We respect your privacy. Unsubscribe anytime.</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Middle Value Propositions Bar */}
+      <div className="border-t border-[#E8DCC4] py-8 relative z-10">
+        <div className="container-custom max-w-7xl mx-auto px-4 md:px-8">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap lg:flex-nowrap justify-start sm:justify-center lg:justify-between items-start sm:items-center gap-y-6 gap-x-8 lg:gap-x-0 w-fit sm:w-full mx-auto sm:mx-0">
+            
+            {/* Proposition 1 */}
+            <div className="flex items-center justify-start gap-4 px-4 lg:flex-1 lg:justify-center lg:border-r lg:border-[#E8DCC4]/60 lg:pr-6">
+              <i className="fa-solid fa-gem text-[#C19A5B] text-2xl shrink-0"></i>
+              <div className="text-left">
+                <h5 className="font-serif text-sm font-bold text-gray-800">Premium Quality</h5>
+                <p className="text-xs text-gray-500 font-sans mt-0.5">Finest materials</p>
+              </div>
+            </div>
+
+            {/* Proposition 2 */}
+            <div className="flex items-center justify-start gap-4 px-4 lg:px-6 lg:flex-1 lg:justify-center lg:border-r lg:border-[#E8DCC4]/60">
+              <i className="fa-solid fa-hand-holding-heart text-[#C19A5B] text-2xl shrink-0"></i>
+              <div className="text-left">
+                <h5 className="font-serif text-sm font-bold text-gray-800">Handcrafted with Love</h5>
+                <p className="text-xs text-gray-500 font-sans mt-0.5">By skilled artisans</p>
+              </div>
+            </div>
+
+            {/* Proposition 3 */}
+            <div className="flex items-center justify-start gap-4 px-4 lg:px-6 lg:flex-1 lg:justify-center lg:border-r lg:border-[#E8DCC4]/60">
+              <i className="fa-solid fa-truck text-[#C19A5B] text-2xl shrink-0"></i>
+              <div className="text-left">
+                <h5 className="font-serif text-sm font-bold text-gray-800">Free Shipping</h5>
+                <p className="text-xs text-gray-500 font-sans mt-0.5">On orders above ₹1499</p>
+              </div>
+            </div>
+
+            {/* Proposition 4 */}
+            <div className="flex items-center justify-start gap-4 px-4 lg:px-6 lg:flex-1 lg:justify-center lg:border-r lg:border-[#E8DCC4]/60">
+              <i className="fa-solid fa-shield-halved text-[#C19A5B] text-2xl shrink-0"></i>
+              <div className="text-left">
+                <h5 className="font-serif text-sm font-bold text-gray-800">Secure Payments</h5>
+                <p className="text-xs text-gray-500 font-sans mt-0.5">100% protected</p>
+              </div>
+            </div>
+
+            {/* Proposition 5 */}
+            <div className="flex items-center justify-start gap-4 px-4 lg:pl-6 lg:flex-1 lg:justify-center">
+              <i className="fa-solid fa-arrow-rotate-left text-[#C19A5B] text-2xl shrink-0"></i>
+              <div className="text-left">
+                <h5 className="font-serif text-sm font-bold text-gray-800">Easy Returns</h5>
+                <p className="text-xs text-gray-500 font-sans mt-0.5">Hassle-free returns</p>
+              </div>
+            </div>
+
           </div>
         </div>
+      </div>
 
-        {/* Divider */}
-        <div className="border-t border-gray-800 my-8"></div>
-
-        {/* Bottom Footer */}
-        <div className="flex flex-col md:flex-row justify-between items-center text-gray-500 text-sm">
-          <p>
-            &copy; {new Date().getFullYear()} Jhumkas by Malti. All rights
-            reserved.
+      {/* Bottom Copyright Bar */}
+      <div className="bg-[#4A1521] py-6 relative z-10">
+        <div className="container-custom max-w-7xl mx-auto px-4 md:px-8 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+          
+          {/* Copyright Text */}
+          <p className="text-xs text-[#E3D8C4] font-serif" suppressHydrationWarning>
+            &copy; {new Date().getFullYear()} Jhumkas by Malti. All rights reserved.
           </p>
-          <div className="mt-4 md:mt-0 space-x-4">
-            <Link href="/privacy-policy" className="hover:text-jewelry-300 transition-colors">
-              Privacy Policy
-            </Link>
-            <Link href="/terms-of-service" className="hover:text-jewelry-300 transition-colors">
-              Terms of Service
-            </Link>
-            <Link href="/shipping-policy" className="hover:text-jewelry-300 transition-colors">
-              Shipping Policy
-            </Link>
-            <Link href="/admin" className="hover:text-jewelry-300 transition-colors border-l border-gray-700 pl-4">
-              Admin Panel
-            </Link>
+
+          {/* Lotus Ornament */}
+          <div className="flex items-center gap-4 text-[#D2AD7B]/50 w-full max-w-[200px] justify-center">
+            <div className="h-[0.5px] bg-[#D2AD7B]/30 flex-grow"></div>
+            <svg className="w-5 h-5 text-[#C19A5B]" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2s1.5 4.5 3 6c1.5 1.5 5 2.5 5 4.5s-3 3-5 3.5c-2 .5-3 2-3 4 0-2-1-3.5-3-4-2-.5-5-1.5-5-3.5s3.5-3 5-4.5c1.5-1.5 3-6 3-6zm0 4.5c-.5 1-1.5 2.5-2.5 3.5-1 1-3 1.5-3 2.5 0 .8 1.5 1.2 2.5 1.5 1 .3 1.8 1 2.2 2 .4-1 1.2-1.7 2.2-2 1-.3 2.5-.7 2.5-1.5 0-1-2-1.5-3-2.5-1-1-2-2.5-2.5-3.5z" />
+            </svg>
+            <div className="h-[0.5px] bg-[#D2AD7B]/30 flex-grow"></div>
           </div>
+
+          {/* Legal Links */}
+          <div className="flex flex-wrap justify-center md:justify-end gap-x-4 gap-y-2 text-xs text-[#E3D8C4] font-sans">
+            <Link href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <span className="text-[#D2AD7B]/30">|</span>
+            <Link href="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link>
+            <span className="text-[#D2AD7B]/30">|</span>
+            <Link href="/shipping-policy" className="hover:text-white transition-colors">Shipping Policy</Link>
+            <span className="text-[#D2AD7B]/30">|</span>
+            <Link href="/shipping-policy#returns" className="hover:text-white transition-colors">Returns Policy</Link>
+            <span className="text-[#D2AD7B]/30">|</span>
+            <Link href="/admin" className="hover:text-white transition-colors">Admin Panel</Link>
+          </div>
+
         </div>
       </div>
     </footer>

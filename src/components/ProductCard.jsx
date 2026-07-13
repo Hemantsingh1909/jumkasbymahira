@@ -1,3 +1,4 @@
+// src/components/ProductCard.jsx
 'use client';
 
 import PropTypes from "prop-types";
@@ -7,7 +8,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { getProductUrl } from "../lib/slug";
-import { Heart, Star, StarHalf } from "lucide-react";
 
 const ProductCard = ({ product, priority = false }) => {
   const dispatch = useDispatch();
@@ -51,11 +51,11 @@ const ProductCard = ({ product, priority = false }) => {
     const hasHalf = rating % 1 >= 0.4;
     for (let i = 1; i <= 5; i++) {
       if (i <= fullStars) {
-        stars.push(<Star key={i} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />);
+        stars.push(<i key={i} className="fa-solid fa-star text-yellow-400 text-[13px] w-3.5 h-3.5 flex items-center justify-center"></i>);
       } else if (i === fullStars + 1 && hasHalf) {
-        stars.push(<StarHalf key={i} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />);
+        stars.push(<i key={i} className="fa-solid fa-star-half-stroke text-yellow-400 text-[13px] w-3.5 h-3.5 flex items-center justify-center"></i>);
       } else {
-        stars.push(<Star key={i} className="w-3.5 h-3.5 text-gray-300" />);
+        stars.push(<i key={i} className="fa-regular fa-star text-gray-300 text-[13px] w-3.5 h-3.5 flex items-center justify-center"></i>);
       }
     }
     return stars;
@@ -90,7 +90,6 @@ const ProductCard = ({ product, priority = false }) => {
     }
 
     // Dispatch custom event to notify other components about wishlist changes
-    // Using a more compatible approach for cross-browser support
     const wishlistEvent = new CustomEvent("wishlistUpdated");
     window.dispatchEvent(wishlistEvent);
   };
@@ -122,10 +121,10 @@ const ProductCard = ({ product, priority = false }) => {
             isInWishlist ? "Remove from wishlist" : "Add to wishlist"
           }
         >
-          <Heart
-            className={`w-5 h-5 ${isInWishlist ? "fill-red-500 text-red-500" : "text-gray-400"
+          <i
+            className={`w-5 h-5 flex items-center justify-center text-sm ${isInWishlist ? "fa-solid fa-heart text-red-500" : "fa-regular fa-heart text-gray-400"
               }`}
-          />
+          ></i>
         </button>
 
         {/* Added to Cart Message */}

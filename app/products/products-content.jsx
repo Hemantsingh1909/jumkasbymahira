@@ -4,7 +4,6 @@ import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setProducts } from '@/src/store/productSlice';
 import ProductCard from '@/src/components/ProductCard';
-import { ChevronDown, Search, SlidersHorizontal, X } from 'lucide-react';
 
 export default function ProductsContent({ initialProducts = [], searchParams = {}, title = 'All Products' }) {
   const products = useSelector((state) => state.products.products || []);
@@ -348,7 +347,7 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
                   onClick={() => setIsSortOpen(!isSortOpen)}
                   className="bg-white px-4 py-2 rounded border border-gray-300 hover:border-jewelry-600 text-sm flex items-center gap-2"
                 >
-                  Sort: {sortOption} <ChevronDown className="w-3.5 h-3.5" />
+                  Sort: {sortOption} <i className="fa-solid fa-chevron-down text-xs"></i>
                 </button>
                 {isSortOpen && (
                   <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded shadow-lg z-10 min-w-48">
@@ -384,7 +383,7 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
               </div>
             ) : (
               <div className="text-center py-16 bg-white rounded-lg shadow-sm">
-                <Search className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                <i className="fa-solid fa-magnifying-glass text-5xl text-gray-300 mb-3 block mx-auto"></i>
                 <p className="text-gray-500 text-md">No products match your filters</p>
               </div>
             )}
@@ -398,20 +397,7 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
           onClick={() => setIsMobileFilterOpen(true)}
           className="bg-jewelry-900 text-white font-display font-semibold py-3.5 px-6 rounded-full shadow-lg border border-jewelry-800 flex items-center gap-3 active:scale-95 transition-transform"
         >
-          <svg
-            className="w-5 h-5 text-jewelry-200"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-            />
-          </svg>
+          <i className="fa-solid fa-sliders text-jewelry-200"></i>
           Filters
         </button>
       </div>
@@ -431,13 +417,13 @@ export default function ProductsContent({ initialProducts = [], searchParams = {
               {/* Header */}
               <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
                 <h2 className="text-xl font-bold text-jewelry-900 flex items-center gap-2">
-                  <SlidersHorizontal className="w-5 h-5 text-jewelry-600 inline" /> Filters
+                  <i className="fa-solid fa-sliders text-jewelry-600 text-base"></i> Filters
                 </h2>
                 <button
                   onClick={() => setIsMobileFilterOpen(false)}
-                  className="text-gray-400 hover:text-gray-500 p-1"
+                  className="text-gray-400 hover:text-gray-500 p-1 flex items-center justify-center"
                 >
-                  <X className="w-5 h-5" />
+                  <i className="fa-solid fa-xmark text-lg"></i>
                 </button>
               </div>
 

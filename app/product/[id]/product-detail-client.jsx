@@ -1,3 +1,4 @@
+// app/product/[id]/product-detail-client.jsx
 'use client';
 
 import { useState } from 'react';
@@ -6,7 +7,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { addToCart } from '@/src/store/cartSlice';
 import ProductCard from '@/src/components/ProductCard';
-import { Star, StarHalf, Minus, Plus, ShoppingBag, Heart, Truck, History } from 'lucide-react';
 
 export default function ProductDetailClient({ product, relatedProducts }) {
   const dispatch = useDispatch();
@@ -67,11 +67,11 @@ export default function ProductDetailClient({ product, relatedProducts }) {
     const hasHalf = rating % 1 >= 0.4;
     for (let i = 1; i <= 5; i++) {
       if (i <= fullStars) {
-        stars.push(<Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />);
+        stars.push(<i key={i} className="fa-solid fa-star text-yellow-400 text-sm"></i>);
       } else if (i === fullStars + 1 && hasHalf) {
-        stars.push(<StarHalf key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />);
+        stars.push(<i key={i} className="fa-solid fa-star-half-stroke text-yellow-400 text-sm"></i>);
       } else {
-        stars.push(<Star key={i} className="w-4 h-4 text-gray-300" />);
+        stars.push(<i key={i} className="fa-regular fa-star text-gray-300 text-sm"></i>);
       }
     }
     return stars;
@@ -98,27 +98,28 @@ export default function ProductDetailClient({ product, relatedProducts }) {
       setSizeError('Please select a size before adding to cart.');
       return;
     }
-    for (let i = 0; i < quantity; i++) {
-      dispatch(addToCart({ ...product, selectedSize }));
-    }
+    setSizeError(null);
+    dispatch(addToCart({ ...product, quantity, selectedSize }));
   };
 
   const toggleWishlist = () => {
     const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    let updated;
+
     if (isInWishlist) {
-      updated = wishlist.filter((item) => item.id !== product.id);
+      const updatedWishlist = wishlist.filter((item) => item.id !== product.id);
+      localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
       setIsInWishlist(false);
     } else {
       wishlist.push(product);
-      updated = wishlist;
+      localStorage.setItem('wishlist', JSON.stringify(wishlist));
       setIsInWishlist(true);
     }
-    localStorage.setItem('wishlist', JSON.stringify(updated));
-    window.dispatchEvent(new CustomEvent('wishlistUpdated'));
+
+    const wishlistEvent = new CustomEvent('wishlistUpdated');
+    window.dispatchEvent(wishlistEvent);
   };
 
-  // Zoom feature handlers
+  // Zoom implementation
   const handleMouseMove = (e) => {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = ((e.pageX - left - window.scrollX) / width) * 100;
@@ -136,36 +137,29 @@ export default function ProductDetailClient({ product, relatedProducts }) {
     setZoomStyle({ display: 'none' });
   };
 
-  const productImages = product.images && product.images.length > 0
-    ? product.images
-    : [product.image];
-
   return (
-    <div className="bg-gray-50 pb-12">
-      {/* Breadcrumbs */}
-      <div className="container-custom py-4">
-        <nav className="flex text-sm">
-          <Link href="/" className="text-gray-500 hover:text-jewelry-600 transition-colors">
+    <div className="bg-gray-50 py-12 min-h-[calc(100vh-420px)]">
+      <div className="container-custom mx-auto px-4">
+        {/* Breadcrumb */}
+        <nav className="flex mb-8 text-sm">
+          <Link href="/" className="text-gray-500 hover:text-jewelry-600">
             Home
           </Link>
           <span className="mx-2 text-gray-400">/</span>
-          <Link href="/products" className="text-gray-500 hover:text-jewelry-600 transition-colors">
-            Products
+          <Link href="/products" className="text-gray-500 hover:text-jewelry-600 capitalize">
+            {product.category || 'Products'}
           </Link>
           <span className="mx-2 text-gray-400">/</span>
-          <span className="text-jewelry-600 capitalize font-medium">{product.name}</span>
+          <span className="text-jewelry-600 truncate max-w-[200px] sm:max-w-none">{product.name}</span>
         </nav>
-      </div>
 
-      {/* Product Information Grid */}
-      <div className="container-custom">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white rounded-xl shadow-sm p-6 md:p-8">
-
-          {/* Images Section */}
+        {/* Product Details Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+          {/* Left Column: Images */}
           <div className="space-y-4">
-            {/* Main Zoomable Image */}
-            <div
-              className="relative h-96 md:h-[480px] bg-gray-50 border border-gray-100 rounded-lg overflow-hidden cursor-zoom-in"
+            {/* Main Image Viewport */}
+            <div 
+              className="relative h-[320px] sm:h-[450px] bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden cursor-zoom-in"
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
             >
@@ -174,119 +168,103 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                 alt={product.name}
                 fill
                 priority
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-contain p-4"
+                className="object-cover"
               />
-
-              {/* Zoom overlay window */}
-              <div
-                className="absolute inset-0 pointer-events-none transition-opacity duration-200 border border-gray-200 shadow-inner rounded-lg"
+              
+              {/* Zoom Preview Overlay */}
+              <div 
+                className="absolute inset-0 z-30 pointer-events-none border border-gray-200/50 rounded-xl bg-no-repeat shadow-inner transition-opacity duration-150"
                 style={zoomStyle}
               />
             </div>
 
-            {/* Thumbnail Selection */}
-            {productImages.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto pb-1">
-                {productImages.map((imgUrl, index) => (
+            {/* Carousel Thumbnails */}
+            {product.images && product.images.length > 0 && (
+              <div className="flex gap-3 overflow-x-auto py-1">
+                {product.images.map((img, idx) => (
                   <button
-                    key={index}
-                    onClick={() => setActiveImage(imgUrl)}
-                    className={`relative w-20 h-20 border rounded-md p-1 overflow-hidden bg-white transition-all flex-shrink-0 ${activeImage === imgUrl ? 'border-jewelry-600 ring-2 ring-jewelry-100' : 'border-gray-200 hover:border-jewelry-300'
-                      }`}
+                    key={idx}
+                    onClick={() => setActiveImage(img)}
+                    className={`relative w-20 h-20 rounded-lg overflow-hidden bg-white shadow-sm border-2 shrink-0 transition-all ${
+                      activeImage === img ? 'border-jewelry-600 scale-[1.02]' : 'border-transparent hover:border-jewelry-200'
+                    }`}
                   >
-                    <Image src={imgUrl} alt={`Thumbnail ${index + 1}`} fill sizes="80px" className="object-cover p-1" />
+                    <Image
+                      src={img}
+                      alt={`Product view ${idx + 1}`}
+                      fill
+                      className="object-cover"
+                    />
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Details Section */}
-          <div className="flex flex-col justify-between">
-            <div>
-              <div className="flex justify-between items-start mb-2">
-                <span className="text-xs text-jewelry-600 font-bold uppercase tracking-wider bg-jewelry-50 px-2.5 py-1 rounded-full">
-                  {product.category}
+          {/* Right Column: Info & Purchase Controls */}
+          <div className="flex flex-col justify-between space-y-6">
+            <div className="space-y-4">
+              <div>
+                <span className="text-xs uppercase tracking-widest text-[#C19A5B] font-semibold">{product.category}</span>
+                <h1 className="text-3xl sm:text-4xl font-serif font-bold text-gray-800 mt-1 mb-2">
+                  {product.name}
+                </h1>
+                
+                {/* Rating summary */}
+                <div className="flex items-center gap-2">
+                  <div className="flex text-yellow-400 gap-0.5">
+                    {renderDetailStars(averageRating)}
+                  </div>
+                  <span className="text-sm font-semibold text-gray-700 mt-0.5">({averageRating})</span>
+                  <span className="text-xs text-gray-400 mt-0.5">|</span>
+                  <span className="text-xs text-gray-500 mt-0.5">{reviews.length} Customer Reviews</span>
+                </div>
+              </div>
+
+              <div className="flex items-baseline gap-3">
+                <span className="text-2xl font-bold text-jewelry-600">
+                  ₹{Number(product.price || 0).toFixed(2)}
                 </span>
-                <span className="text-xs text-gray-400 font-mono">SKU: {product.sku}</span>
+                <span className="text-xs text-gray-400">Inclusive of all taxes</span>
               </div>
 
-              <h1 className="text-3xl md:text-4xl font-display font-bold text-jewelry-900 mb-4">
-                {product.name}
-              </h1>
-
-              <div className="flex items-center gap-4 mb-6">
-                {reviews.length > 0 ? (
-                  <>
-                    <div className="flex text-yellow-400 gap-0.5">
-                      {renderDetailStars(averageRating)}
-                    </div>
-                    <span className="text-xs text-gray-500">({averageRating} rating from {reviews.length} reviews)</span>
-                  </>
-                ) : (
-                  <span className="text-xs text-gray-400 italic">No reviews yet</span>
-                )}
+              <div className="prose prose-sm text-gray-600 max-w-none leading-relaxed">
+                <p>{product.description}</p>
               </div>
 
-              {/* Price */}
-              <div className="mb-6 py-4 border-y border-gray-100">
-                <p className="text-4xl font-bold text-jewelry-600">₹{product.price.toLocaleString('en-IN')}</p>
-                <p className="text-xs text-gray-400 mt-1">Inclusive of all local taxes</p>
+              {/* Specs overview */}
+              <div className="border-t border-b border-gray-200 py-3.5 grid grid-cols-2 gap-y-2 text-sm text-gray-600">
+                <div><strong>SKU:</strong> <span className="font-mono text-xs">{product.sku}</span></div>
+                <div><strong>Stock:</strong> <span className={product.stockStatus === 'In Stock' ? 'text-green-600 font-medium' : 'text-red-500 font-medium'}>{product.stockStatus}</span></div>
+                <div><strong>Material:</strong> <span>{product.material}</span></div>
+                <div><strong>Color:</strong> <span>{product.color}</span></div>
               </div>
 
-              {/* Product Attributes List */}
-              <div className="grid grid-cols-2 gap-y-3 gap-x-4 mb-6 text-sm">
-                <div>
-                  <span className="text-gray-400">Material:</span> <span className="font-medium text-gray-700">{product.material}</span>
-                </div>
-                <div>
-                  <span className="text-gray-400">Color:</span> <span className="font-medium text-gray-700">{product.color}</span>
-                </div>
-                <div>
-                  <span className="text-gray-400">Occasion:</span> <span className="font-medium text-gray-700">{product.occasion}</span>
-                </div>
-                <div>
-                  <span className="text-gray-400">Stock Availability:</span>{' '}
-                  <span className={`font-semibold ${product.stockStatus === 'In Stock' ? 'text-green-600' :
-                      product.stockStatus === 'Low Stock' ? 'text-amber-500' : 'text-red-500'
-                    }`}>
-                    {product.stockStatus}
-                  </span>
-                </div>
-              </div>
-              
-              {/* Size Selector for Bangles */}
-              {product.stockStatus !== 'Out of Stock' && product.category?.toLowerCase() === 'bangles' && (
-                <div className="mb-6">
+              {/* Bangles Size Selection */}
+              {product.category?.toLowerCase() === 'bangles' && (
+                <div className="py-2.5">
                   <div className="flex justify-between items-center mb-2">
-                    <label className="block text-sm font-semibold text-gray-700">
-                      Select Size <span className="text-red-500">*</span>
-                    </label>
-                    <span className="text-xs text-gray-400 font-medium">(Required)</span>
+                    <span className="text-sm font-bold text-gray-700">Select Bangle Size (Diameter) *</span>
+                    <Link href="/about#care-guide" className="text-xs text-[#C19A5B] hover:underline font-medium">Bangle Size Guide</Link>
                   </div>
                   <div className="flex flex-wrap gap-2.5">
-                    {['2.4', '2.6', '2.8', '2.10'].map((size) => {
+                    {['2.4', '2.6', '2.8'].map((size) => {
                       const isDisabled = disabledSizes.includes(size);
                       return (
                         <button
                           key={size}
-                          type="button"
-                          disabled={isDisabled}
                           onClick={() => {
                             if (!isDisabled) {
                               setSelectedSize(size);
                               setSizeError(null);
                             }
                           }}
-                          className={`min-w-[3.5rem] h-10 px-3 rounded-lg border text-sm font-bold transition-all flex items-center justify-center relative ${
-                            isDisabled
-                              ? 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed line-through opacity-50'
-                              : selectedSize === size
-                              ? 'border-jewelry-600 bg-jewelry-50 text-jewelry-800 ring-2 ring-jewelry-100'
-                              : 'border-gray-200 text-gray-700 hover:border-jewelry-300 hover:bg-gray-50'
+                          disabled={isDisabled}
+                          className={`w-12 h-12 rounded-lg border text-sm font-bold flex items-center justify-center transition-all ${
+                            isDisabled ? 'bg-gray-100 text-gray-300 border-gray-200 cursor-not-allowed line-through' :
+                            selectedSize === size ? 'border-[#5C1625] bg-[#5C1625] text-white shadow-sm scale-105' :
+                            'border-gray-300 text-gray-700 hover:border-gray-450 hover:bg-gray-50'
                           }`}
-                          title={isDisabled ? `Size ${size} is currently out of stock` : `Select size ${size}`}
                         >
                           {size}
                         </button>
@@ -294,7 +272,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                     })}
                   </div>
                   {sizeError && (
-                    <p className="text-red-600 text-xs font-semibold mt-2">{sizeError}</p>
+                    <p className="text-red-500 text-xs font-semibold mt-2">{sizeError}</p>
                   )}
                 </div>
               )}
@@ -309,7 +287,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                       className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors flex items-center justify-center"
                       disabled={quantity <= 1}
                     >
-                      <Minus className="w-3.5 h-3.5" />
+                      <i className="fa-solid fa-minus text-xs"></i>
                     </button>
                     <span className="px-6 py-2 font-semibold text-gray-800">{quantity}</span>
                     <button
@@ -317,7 +295,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                       className="px-4 py-2 text-gray-600 hover:bg-gray-100 transition-colors flex items-center justify-center"
                       disabled={quantity >= 10}
                     >
-                      <Plus className="w-3.5 h-3.5" />
+                      <i className="fa-solid fa-plus text-xs"></i>
                     </button>
                   </div>
                 </div>
@@ -335,7 +313,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                       : 'bg-jewelry-600 hover:bg-jewelry-700 hover:shadow-lg transform active:scale-95'
                     }`}
                 >
-                  <ShoppingBag className="w-5 h-5" />
+                  <i className="fa-solid fa-bag-shopping text-lg"></i>
                   {product.stockStatus === 'Out of Stock' ? 'Sold Out' : 'Add to Cart'}
                 </button>
 
@@ -346,7 +324,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                       : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50'
                     }`}
                 >
-                  <Heart className={`w-5 h-5 ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+                  <i className={`text-lg ${isInWishlist ? 'fa-solid fa-heart text-red-500' : 'fa-regular fa-heart text-gray-400'}`}></i>
                   {isInWishlist ? 'In Wishlist' : 'Add to Wishlist'}
                 </button>
               </div>
@@ -354,11 +332,11 @@ export default function ProductDetailClient({ product, relatedProducts }) {
               {/* Delivery Details */}
               <div className="bg-jewelry-50/50 p-4 rounded-xl border border-jewelry-100/50 space-y-2">
                 <p className="text-xs text-gray-600 flex items-center gap-2">
-                  <Truck className="w-4 h-4 text-jewelry-600 shrink-0" />
+                  <i className="fa-solid fa-truck text-jewelry-600 text-sm shrink-0"></i>
                   <span><strong>Free Delivery</strong> on orders over ₹5,000 (standard shipping: ₹99)</span>
                 </p>
                 <p className="text-xs text-gray-600 flex items-center gap-2">
-                  <History className="w-4 h-4 text-jewelry-600 shrink-0" />
+                  <i className="fa-solid fa-clock-rotate-left text-jewelry-600 text-sm shrink-0"></i>
                   <span><strong>7-Day Hassle-Free Returns</strong> if not satisfied</span>
                 </p>
               </div>
@@ -378,73 +356,58 @@ export default function ProductDetailClient({ product, relatedProducts }) {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-6 py-4 font-semibold text-sm transition-all relative ${activeTab === tab.id
-                    ? 'text-jewelry-600 border-b-2 border-jewelry-600'
-                    : 'text-gray-500 hover:text-jewelry-500'
-                  }`}
+                className={`flex-1 py-4 px-6 font-semibold text-sm transition-all focus:outline-none ${
+                  activeTab === tab.id
+                    ? 'text-jewelry-700 bg-jewelry-50/20 border-b-2 border-jewelry-600'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
               >
                 {tab.label}
               </button>
             ))}
           </div>
 
-          <div className="p-6 text-sm text-gray-600 leading-relaxed space-y-4">
+          <div className="p-6 sm:p-8">
             {activeTab === 'description' && (
-              <div>
+              <div className="prose prose-sm max-w-none text-gray-600 leading-relaxed space-y-4">
                 <p>{product.description}</p>
-                <p className="mt-2 text-gray-500">
-                  Indulge in ethnic luxury with Jhumkas by Malti. Each pair is meticulously handcrafted to celebrate the rich cultural heritage and timeless elegance of Indian jewelry.
-                </p>
+                <p>This handcrafted piece showcases delicate design details and represents a synthesis of modern lifestyle requirements with classic design grammar.</p>
               </div>
             )}
+
             {activeTab === 'specifications' && (
-              <table className="w-full text-left border-collapse">
-                <tbody>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-2.5 font-semibold text-gray-500 w-1/3">SKU</td>
-                    <td className="py-2.5 text-gray-700">{product.sku}</td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-2.5 font-semibold text-gray-500">Material</td>
-                    <td className="py-2.5 text-gray-700">{product.material}</td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-2.5 font-semibold text-gray-500">Primary Color</td>
-                    <td className="py-2.5 text-gray-700">{product.color}</td>
-                  </tr>
-                  <tr className="border-b border-gray-100">
-                    <td className="py-2.5 font-semibold text-gray-500">Occasion</td>
-                    <td className="py-2.5 text-gray-700">{product.occasion}</td>
-                  </tr>
-                   {product.category?.toLowerCase() === 'bangles' && (
-                    <tr className="border-b border-gray-100">
-                      <td className="py-2.5 font-semibold text-gray-500">Available Sizes</td>
-                      <td className="py-2.5 text-gray-700">
-                        {['2.4', '2.6', '2.8', '2.10']
-                          .filter(size => !disabledSizes.includes(size))
-                          .join(', ') || 'None available'}
-                      </td>
+              <div className="max-w-md">
+                <table className="w-full text-sm text-gray-600">
+                  <tbody className="divide-y divide-gray-100">
+                    <tr className="py-2.5 flex justify-between">
+                      <td className="font-semibold text-gray-700">SKU Code</td>
+                      <td className="font-mono text-xs">{product.sku}</td>
                     </tr>
-                  )}
-                  <tr>
-                    <td className="py-2.5 font-semibold text-gray-500">Tags</td>
-                    <td className="py-2.5 text-gray-700 capitalize">
-                      {product.tags
-                        ?.filter(t => !t.startsWith('disabled-size:'))
-                        .join(', ') || 'Traditional, Elegant'}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                    <tr className="py-2.5 flex justify-between">
+                      <td className="font-semibold text-gray-700">Material</td>
+                      <td>{product.material}</td>
+                    </tr>
+                    <tr className="py-2.5 flex justify-between">
+                      <td className="font-semibold text-gray-700">Base Color</td>
+                      <td>{product.color}</td>
+                    </tr>
+                    <tr className="py-2.5 flex justify-between">
+                      <td className="font-semibold text-gray-700">Occasion Recommendation</td>
+                      <td>{product.occasion}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             )}
+
             {activeTab === 'care' && (
-              <div className="space-y-2">
-                <p className="font-semibold text-jewelry-700">How to care for your jewelry:</p>
-                <ul className="list-disc pl-5 space-y-1">
-                  <li>Keep dry and store in a moisture-free pouch/air-tight container.</li>
-                  <li>Avoid contact with perfumes, hairspray, lotions, or harsh cleaning chemicals.</li>
-                  <li>Clean gently with a dry, soft cloth after every wear to preserve shine.</li>
-                  <li>Do not submerge in water or wear during showers/swimming.</li>
+              <div className="prose prose-sm max-w-none text-gray-600 leading-relaxed space-y-3">
+                <h4 className="font-serif font-bold text-gray-800 text-md">How to care for your Jhumkas:</h4>
+                <ul className="list-disc pl-5 space-y-1.5">
+                  <li>Store in airtight zip bags or original box when not in use.</li>
+                  <li>Avoid direct contact with perfumes, deodorants, water, and spray sanitizers.</li>
+                  <li>Clean gently with a soft dry cloth after use to remove sweat/oils before storing.</li>
+                  <li>Do not store along with other velvet/fabric based boxes to protect silver replica coatings.</li>
                 </ul>
               </div>
             )}
@@ -452,21 +415,19 @@ export default function ProductDetailClient({ product, relatedProducts }) {
         </div>
 
         {/* Customer Reviews Section */}
-        <div className="mt-8 bg-white rounded-xl shadow-sm p-6 md:p-8 space-y-8">
-          <div className="border-b border-gray-100 pb-5">
-            <h2 className="text-2xl font-serif font-bold text-jewelry-900">Customer Reviews</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Left Column: Rating summary breakdown */}
-            <div className="md:col-span-1 space-y-4">
-              <div className="flex items-baseline gap-2">
-                <span className="text-5xl font-extrabold text-jewelry-800">{averageRating > 0 ? averageRating : '0.0'}</span>
-                <span className="text-gray-400 text-sm">out of 5</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-yellow-400">
-                {renderDetailStars(averageRating)}
-                <span className="text-xs text-gray-500 ml-1">({reviews.length} reviews)</span>
+        <div id="reviews" className="mt-8 bg-white rounded-xl shadow-sm p-6 sm:p-8 space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-b border-gray-100 pb-8">
+            {/* Left Column: Rating breakdown summary */}
+            <div className="space-y-4">
+              <h2 className="text-2xl font-serif font-bold text-jewelry-800">Reviews & Ratings</h2>
+              <div className="flex items-baseline gap-2.5">
+                <span className="text-5xl font-extrabold text-gray-800">{averageRating}</span>
+                <div className="space-y-1">
+                  <div className="flex text-yellow-400 gap-0.5">
+                    {renderDetailStars(averageRating)}
+                  </div>
+                  <p className="text-xs text-gray-400">Based on {reviews.length} reviews</p>
+                </div>
               </div>
 
               {/* Bar breakdown */}
@@ -477,7 +438,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                   return (
                     <div key={stars} className="flex items-center text-xs text-gray-600 gap-2">
                       <span className="w-3 text-right">{stars}</span>
-                      <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                      <i className="fa-solid fa-star text-yellow-400 text-[11px]"></i>
                       <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
                         <div className="h-full bg-jewelry-500 rounded-full" style={{ width: `${percentage}%` }} />
                       </div>
@@ -516,13 +477,13 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                           onMouseLeave={() => setHoverRating(0)}
                           className="focus:outline-none transition-transform hover:scale-110"
                         >
-                          <Star
-                            className={`w-6 h-6 ${
+                          <i
+                            className={`text-xl transition-all ${
                               star <= (hoverRating || newReviewRating)
-                                ? 'fill-yellow-400 text-yellow-400'
-                                : 'text-gray-300'
+                                ? 'fa-solid fa-star text-yellow-400'
+                                : 'fa-regular fa-star text-gray-300'
                             }`}
-                          />
+                          ></i>
                         </button>
                       ))}
                     </div>
@@ -563,10 +524,10 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                         <h4 className="font-semibold text-gray-800 text-sm">{rev.name}</h4>
                         <div className="flex text-yellow-400 gap-0.5 mt-1">
                           {[1, 2, 3, 4, 5].map((s) => (
-                            <Star
+                            <i
                               key={s}
-                              className={`w-3.5 h-3.5 ${s <= rev.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200'}`}
-                            />
+                              className={`text-xs ${s <= rev.rating ? 'fa-solid fa-star text-yellow-400' : 'fa-regular fa-star text-gray-300'}`}
+                            ></i>
                           ))}
                         </div>
                       </div>
@@ -578,26 +539,23 @@ export default function ProductDetailClient({ product, relatedProducts }) {
               </div>
             ) : (
               <div className="text-center py-10 bg-gray-50/30 rounded-xl border border-dashed border-gray-200">
-                <p className="text-gray-400 font-medium text-sm">No reviews yet. Be the first to share your thoughts on this piece!</p>
+                <p className="text-sm text-gray-450 italic font-sans">No reviews have been written for this product yet.</p>
               </div>
             )}
           </div>
         </div>
 
-        {/* Related Products Section */}
-        {relatedProducts.length > 0 && (
-          <div className="mt-12">
-            <h2 className="text-2xl font-display font-bold text-jewelry-900 mb-6">
-              You May Also Like
-            </h2>
+        {/* Related Products Carousel */}
+        {relatedProducts && relatedProducts.length > 0 && (
+          <div className="mt-16 space-y-8">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-jewelry-800 text-center">You May Also Like</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {relatedProducts.map((prod) => (
-                <ProductCard key={prod.id} product={prod} />
+              {relatedProducts.slice(0, 4).map((item) => (
+                <ProductCard key={item.id} product={item} />
               ))}
             </div>
           </div>
         )}
-
       </div>
     </div>
   );
