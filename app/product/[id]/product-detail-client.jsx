@@ -1,7 +1,7 @@
 // app/product/[id]/product-detail-client.jsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -29,6 +29,64 @@ export default function ProductDetailClient({ product, relatedProducts }) {
   const [newReviewComment, setNewReviewComment] = useState('');
   const [hoverRating, setHoverRating] = useState(0);
 
+  // New review states for size chart and images upload/lightbox
+  const [isSizeChartOpen, setIsSizeChartOpen] = useState(false);
+  const [uploadedImages, setUploadedImages] = useState([]);
+  const [activeReviewImage, setActiveReviewImage] = useState(null);
+  const [imageError, setImageError] = useState(null);
+
+  // Lock scrolling when modals are open
+  const isOverlayOpen = isSizeChartOpen || !!activeReviewImage;
+  useEffect(() => {
+    if (isOverlayOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOverlayOpen]);
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (!files || files.length === 0) return;
+
+    if (uploadedImages.length + files.length > 5) {
+      setImageError('You can upload a maximum of 5 images for a review.');
+      return;
+    }
+
+    setImageError(null);
+
+    const promises = files.map((file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          resolve(event.target.result);
+        };
+        reader.onerror = (err) => {
+          reject(err);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(promises)
+      .then((base64Images) => {
+        setUploadedImages((prev) => [...prev, ...base64Images].slice(0, 5));
+      })
+      .catch((err) => {
+        console.error('Error reading images:', err);
+        setImageError('Failed to read some images. Please try again.');
+      });
+  };
+
+  const removeUploadedImage = (indexToRemove) => {
+    setUploadedImages((prev) => prev.filter((_, index) => index !== indexToRemove));
+    setImageError(null);
+  };
+
   const handleAddReview = (e) => {
     e.preventDefault();
     if (!newReviewName.trim() || !newReviewComment.trim()) return;
@@ -38,6 +96,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
       name: newReviewName,
       rating: newReviewRating,
       comment: newReviewComment,
+      images: uploadedImages,
       date: new Date().toLocaleDateString('en-IN', {
         year: 'numeric',
         month: 'long',
@@ -52,6 +111,8 @@ export default function ProductDetailClient({ product, relatedProducts }) {
     setNewReviewName('');
     setNewReviewRating(5);
     setNewReviewComment('');
+    setUploadedImages([]);
+    setImageError(null);
 
     // Trigger cross-component sync event
     window.dispatchEvent(new CustomEvent(`reviewsUpdated_${product.id}`));
@@ -245,10 +306,16 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                 <div className="py-2.5">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-sm font-bold text-gray-700">Select Bangle Size (Diameter) *</span>
-                    <Link href="/about#care-guide" className="text-xs text-[#C19A5B] hover:underline font-medium">Bangle Size Guide</Link>
+                    <button
+                      type="button"
+                      onClick={() => setIsSizeChartOpen(true)}
+                      className="text-xs text-[#C19A5B] hover:underline font-medium focus:outline-none"
+                    >
+                      Bangle Size Guide
+                    </button>
                   </div>
                   <div className="flex flex-wrap gap-2.5">
-                    {['2.4', '2.6', '2.8'].map((size) => {
+                    {['2.4', '2.6', '2.8', '2.10'].map((size) => {
                       const isDisabled = disabledSizes.includes(size);
                       return (
                         <button
@@ -502,6 +569,52 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                   />
                 </div>
 
+                {/* Image Upload for Reviews */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold text-gray-500 uppercase">
+                    Upload Images (Maximum 5)
+                  </label>
+                  
+                  <div className="flex flex-wrap gap-3 items-center">
+                    {/* Add Image Button */}
+                    {uploadedImages.length < 5 && (
+                      <label className="w-16 h-16 rounded-lg border border-dashed border-gray-300 hover:border-jewelry-500 cursor-pointer flex flex-col items-center justify-center bg-white transition-colors">
+                        <i className="fa-solid fa-camera text-gray-400 hover:text-jewelry-500"></i>
+                        <span className="text-[10px] text-gray-400 mt-1">Add</span>
+                        <input
+                          type="file"
+                          multiple
+                          accept="image/*"
+                          onChange={handleImageChange}
+                          className="hidden"
+                          id="review-image-input"
+                        />
+                      </label>
+                    )}
+                    
+                    {/* Image Previews */}
+                    {uploadedImages.map((img, index) => (
+                      <div key={index} className="relative w-16 h-16 group rounded-lg overflow-hidden border border-gray-200 shadow-sm bg-gray-50">
+                        <img src={img} alt={`Preview ${index + 1}`} className="w-full h-full object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => removeUploadedImage(index)}
+                          className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center shadow hover:bg-red-600 transition-colors focus:outline-none"
+                        >
+                          <i className="fa-solid fa-xmark text-[10px]"></i>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
+                  {imageError && (
+                    <p className="text-red-500 text-xs font-semibold">{imageError}</p>
+                  )}
+                  <p className="text-[11px] text-gray-455">
+                    Upload up to 5 photos showing the details of the product (JPEG, PNG, WebP).
+                  </p>
+                </div>
+
                 <button
                   type="submit"
                   className="bg-jewelry-600 hover:bg-jewelry-700 text-white font-semibold px-6 py-2.5 rounded-lg text-sm shadow transition-all hover:shadow-md active:scale-95"
@@ -534,6 +647,19 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                       <span className="text-xs text-gray-400 font-medium">{rev.date}</span>
                     </div>
                     <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-wrap">{rev.comment}</p>
+                    {rev.images && rev.images.length > 0 && (
+                      <div className="flex flex-wrap gap-2.5 pt-1.5">
+                        {rev.images.map((img, imgIndex) => (
+                          <div 
+                            key={imgIndex} 
+                            onClick={() => setActiveReviewImage(img)}
+                            className="w-20 h-20 rounded-lg overflow-hidden border border-gray-150 cursor-zoom-in hover:opacity-90 hover:border-jewelry-300 shadow-sm transition-all hover:scale-[1.02] bg-gray-50"
+                          >
+                            <img src={img} alt={`Review photo ${imgIndex + 1}`} className="w-full h-full object-cover" />
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -557,6 +683,144 @@ export default function ProductDetailClient({ product, relatedProducts }) {
           </div>
         )}
       </div>
+
+      {/* Bangle Size Chart Modal */}
+      {isSizeChartOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300">
+          <div className="bg-[#FAF6F0] w-full max-w-2xl rounded-2xl shadow-2xl border border-jewelry-100 overflow-hidden max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
+            {/* Modal Header */}
+            <div className="px-6 py-4 bg-[#992E3F] text-white flex justify-between items-center border-b border-[#7D2534]">
+              <h3 className="font-display text-xl font-bold tracking-wide">Bangle Size Guide</h3>
+              <button
+                onClick={() => setIsSizeChartOpen(false)}
+                className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors focus:outline-none"
+              >
+                <i className="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+            
+            {/* Modal Body */}
+            <div className="p-6 overflow-y-auto space-y-6">
+              {/* Introduction */}
+              <div>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  Bangles are sized by their inner diameter in inches. For instance, a size 2.6 bangle has an inner diameter of 2 and 6/16th inches (or 2.375"). Use the reference table and measurement methods below to find your perfect fit.
+                </p>
+              </div>
+
+              {/* Size Table */}
+              <div className="overflow-x-auto rounded-xl border border-jewelry-100 bg-white">
+                <table className="w-full text-left border-collapse text-sm">
+                  <thead>
+                    <tr className="bg-jewelry-50/50 text-jewelry-900 border-b border-jewelry-100">
+                      <th className="p-3.5 font-bold font-serif">Bangle Size</th>
+                      <th className="p-3.5 font-bold font-serif">Inner Diameter (Inches)</th>
+                      <th className="p-3.5 font-bold font-serif">Inner Diameter (mm)</th>
+                      <th className="p-3.5 font-bold font-serif">Inner Circumference (mm)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-jewelry-50">
+                    <tr className="hover:bg-jewelry-50/20 transition-colors">
+                      <td className="p-3.5 font-bold text-jewelry-800">2.4</td>
+                      <td className="p-3.5 text-gray-700">2.25" (2 & 4/16")</td>
+                      <td className="p-3.5 text-gray-700">57.2 mm</td>
+                      <td className="p-3.5 text-gray-700">179.4 mm</td>
+                    </tr>
+                    <tr className="hover:bg-jewelry-50/20 transition-colors">
+                      <td className="p-3.5 font-bold text-jewelry-800">2.6</td>
+                      <td className="p-3.5 text-gray-700">2.375" (2 & 6/16")</td>
+                      <td className="p-3.5 text-gray-700">60.3 mm</td>
+                      <td className="p-3.5 text-gray-700">189.4 mm</td>
+                    </tr>
+                    <tr className="hover:bg-jewelry-50/20 transition-colors">
+                      <td className="p-3.5 font-bold text-jewelry-800">2.8</td>
+                      <td className="p-3.5 text-gray-700">2.5" (2 & 8/16")</td>
+                      <td className="p-3.5 text-gray-700">63.5 mm</td>
+                      <td className="p-3.5 text-gray-700">199.4 mm</td>
+                    </tr>
+                    <tr className="hover:bg-jewelry-50/20 transition-colors">
+                      <td className="p-3.5 font-bold text-jewelry-800">2.10</td>
+                      <td className="p-3.5 text-gray-700">2.625" (2 & 10/16")</td>
+                      <td className="p-3.5 text-gray-700">66.7 mm</td>
+                      <td className="p-3.5 text-gray-700">209.4 mm</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* How to Measure Section */}
+              <div className="space-y-4 pt-2">
+                <h4 className="font-serif font-bold text-[#992E3F] text-base border-b border-jewelry-100 pb-2">How to Measure Your Bangle Size</h4>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-white p-4 rounded-xl border border-jewelry-100/50 space-y-2">
+                    <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-jewelry-100 text-jewelry-800">Method A: Measure an Existing Bangle</span>
+                    <p className="text-xs text-gray-650 leading-relaxed">
+                      1. Take a bangle that fits you perfectly.<br />
+                      2. Lay it flat on a ruler and measure the <strong>inner diameter</strong> (distance across the inner edges at the widest point) in inches.<br />
+                      3. Match this measurement with our chart to find your size (e.g. 2.625 inches matches size 2.10).
+                    </p>
+                  </div>
+                  
+                  <div className="bg-white p-4 rounded-xl border border-jewelry-100/50 space-y-2">
+                    <span className="inline-block px-2.5 py-0.5 rounded-full text-xs font-bold bg-jewelry-100 text-jewelry-800">Method B: Measure Your Hand Circumference</span>
+                    <p className="text-xs text-gray-650 leading-relaxed">
+                      1. Bring your thumb and little finger together as if putting on a bangle.<br />
+                      2. Wrap a thread or soft tape measure around the widest part of your hand (the knuckles).<br />
+                      3. Mark the point and measure the length on a ruler to get the circumference in mm.<br />
+                      4. Compare with the circumference column in the chart (e.g. 209.4 mm matches size 2.10).
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="px-6 py-4 bg-gray-50 border-t border-gray-150 flex justify-end gap-3">
+              <Link
+                href="/about#care-guide"
+                onClick={() => setIsSizeChartOpen(false)}
+                className="px-4 py-2 text-xs font-semibold text-[#992E3F] hover:underline flex items-center gap-1.5"
+              >
+                View Full Care & Size Guide <i className="fa-solid fa-arrow-right"></i>
+              </Link>
+              <button
+                onClick={() => setIsSizeChartOpen(false)}
+                className="bg-jewelry-800 hover:bg-jewelry-900 text-white font-semibold px-5 py-2 rounded-lg text-xs shadow-sm focus:outline-none"
+              >
+                Close Guide
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Review Image Lightbox Modal */}
+      {activeReviewImage && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={() => setActiveReviewImage(null)}
+        >
+          <button
+            onClick={() => setActiveReviewImage(null)}
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors focus:outline-none"
+            aria-label="Close image lightbox"
+          >
+            <i className="fa-solid fa-xmark text-xl"></i>
+          </button>
+          
+          <div 
+            className="relative max-w-full max-h-[85vh] flex items-center justify-center animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={activeReviewImage}
+              alt="Review image expanded"
+              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl border border-white/10"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

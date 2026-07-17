@@ -129,6 +129,133 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
+
+      {/* Care Guide & Size Chart Section */}
+      <section id="care-guide" className="py-16 md:py-24 bg-white border-t border-jewelry-100 scroll-mt-20">
+        <div className="container-custom mx-auto px-6">
+          <div className="text-center max-w-xl mx-auto mb-16 space-y-4">
+            <span className="text-xs uppercase tracking-widest font-semibold text-jewelry-600">Fit & Longevity</span>
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-jewelry-900">
+              Care Guide & Size Chart
+            </h2>
+            <div className="w-16 h-0.5 bg-jewelry-600 mx-auto"></div>
+            <p className="text-gray-600">
+              Ensure your handcrafted jewelry fits perfectly and stays as brilliant as the day you bought it.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            {/* Left side: Bangle Size Chart & Instructions */}
+            <div className="lg:col-span-7 space-y-8">
+              <div className="space-y-4">
+                <h3 className="font-serif text-2xl font-bold text-jewelry-900 flex items-center gap-2">
+                  <i className="fa-solid fa-ruler-combined text-lg text-jewelry-700"></i> Bangle Size Guide
+                </h3>
+                <p className="text-sm text-gray-650 leading-relaxed">
+                  Indian bangles are measured by their inner diameter. Use the reference table below to identify your size. If you are between sizes, we recommend choosing the larger size for a comfortable fit.
+                </p>
+              </div>
+
+              {/* Table */}
+              <div className="overflow-x-auto rounded-xl border border-jewelry-100 shadow-sm bg-[#FAF6F0]/30">
+                <table className="w-full text-left border-collapse text-sm">
+                  <thead>
+                    <tr className="bg-jewelry-50 text-jewelry-900 border-b border-jewelry-100">
+                      <th className="p-4 font-bold font-serif">Bangle Size</th>
+                      <th className="p-4 font-bold font-serif">Inner Diameter (Inches)</th>
+                      <th className="p-4 font-bold font-serif">Inner Diameter (mm)</th>
+                      <th className="p-4 font-bold font-serif">Inner Circumference (mm)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-jewelry-100/50">
+                    <tr className="hover:bg-jewelry-50/50 transition-colors">
+                      <td className="p-4 font-bold text-jewelry-800">2.4</td>
+                      <td className="p-4 text-gray-700">2.25" (2 & 4/16")</td>
+                      <td className="p-4 text-gray-600">57.2 mm</td>
+                      <td className="p-4 text-gray-600">179.4 mm</td>
+                    </tr>
+                    <tr className="hover:bg-jewelry-50/50 transition-colors">
+                      <td className="p-4 font-bold text-jewelry-800">2.6</td>
+                      <td className="p-4 text-gray-700">2.375" (2 & 6/16")</td>
+                      <td className="p-4 text-gray-600">60.3 mm</td>
+                      <td className="p-4 text-gray-600">189.4 mm</td>
+                    </tr>
+                    <tr className="hover:bg-jewelry-50/50 transition-colors">
+                      <td className="p-4 font-bold text-jewelry-800">2.8</td>
+                      <td className="p-4 text-gray-700">2.5" (2 & 8/16")</td>
+                      <td className="p-4 text-gray-600">63.5 mm</td>
+                      <td className="p-4 text-gray-600">199.4 mm</td>
+                    </tr>
+                    <tr className="hover:bg-jewelry-50/50 transition-colors">
+                      <td className="p-4 font-bold text-jewelry-800">2.10</td>
+                      <td className="p-4 text-gray-700">2.625" (2 & 10/16")</td>
+                      <td className="p-4 text-gray-600">66.7 mm</td>
+                      <td className="p-4 text-gray-600">209.4 mm</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Measuring Methods */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                <div className="bg-[#FAF6F0]/40 p-5 rounded-xl border border-jewelry-100/40 space-y-2.5">
+                  <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-jewelry-100 text-jewelry-800">Method 1: Measure a Good Bangle</span>
+                  <p className="text-xs text-gray-600 leading-relaxed">
+                    1. Select an existing bangle that fits your hand comfortably.<br />
+                    2. Position a ruler flat across the center of the bangle to measure the exact <strong>internal diameter</strong> in inches.<br />
+                    3. Compare with the column on our size chart (e.g. 2.375" corresponds to size 2.6).
+                  </p>
+                </div>
+                
+                <div className="bg-[#FAF6F0]/40 p-5 rounded-xl border border-jewelry-100/40 space-y-2.5">
+                  <span className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-jewelry-100 text-jewelry-800">Method 2: Measure Your Knuckles</span>
+                  <p className="text-xs text-gray-600 leading-relaxed">
+                    1. Fold your hand so that the thumb points inward to touch the base of your little finger (ready to wear a bangle).<br />
+                    2. Wrap a flexible measuring tape or strip of paper around the widest part of your knuckles.<br />
+                    3. Read the length in millimeters to find the circumference. Compare to the table (e.g. 209.4 mm is size 2.10).
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right side: Jewelry Care Instructions */}
+            <div className="lg:col-span-5 bg-[#FAF6F0] p-8 rounded-2xl border border-jewelry-100 space-y-6">
+              <h3 className="font-display text-2xl font-bold text-jewelry-900 flex items-center gap-2">
+                <i className="fa-solid fa-sparkles text-lg text-jewelry-700"></i> Care Instructions
+              </h3>
+              <p className="text-sm text-gray-650 leading-relaxed">
+                Our luxury gold-plated jhumkas, necklaces, and bangles are created using traditional techniques and delicate metal overlays. Follow these simple practices to preserve their brilliant luster for years:
+              </p>
+              
+              <ul className="space-y-4">
+                <li className="flex gap-3.5 items-start">
+                  <span className="w-6 h-6 rounded-full bg-jewelry-100 text-jewelry-800 flex items-center justify-center flex-shrink-0 text-xs font-bold">1</span>
+                  <div>
+                    <strong className="text-sm text-gray-800 block mb-0.5">Keep Dry and Chemical-Free</strong>
+                    <span className="text-xs text-gray-600 leading-relaxed">Always apply perfumes, hairsprays, cosmetics, and lotions before putting on your jewelry. Avoid wearing it while bathing, swimming, or washing dishes.</span>
+                  </div>
+                </li>
+                
+                <li className="flex gap-3.5 items-start">
+                  <span className="w-6 h-6 rounded-full bg-jewelry-100 text-jewelry-800 flex items-center justify-center flex-shrink-0 text-xs font-bold">2</span>
+                  <div>
+                    <strong className="text-sm text-gray-800 block mb-0.5">Store with Care</strong>
+                    <span className="text-xs text-gray-600 leading-relaxed">Store each piece individually in soft airtight zip-lock bags or lined jewelry boxes to prevent metal-on-metal scratches and reduce oxidization from moisture.</span>
+                  </div>
+                </li>
+
+                <li className="flex gap-3.5 items-start">
+                  <span className="w-6 h-6 rounded-full bg-jewelry-100 text-jewelry-800 flex items-center justify-center flex-shrink-0 text-xs font-bold">3</span>
+                  <div>
+                    <strong className="text-sm text-gray-800 block mb-0.5">Gently Clean</strong>
+                    <span className="text-xs text-gray-600 leading-relaxed">After wearing, gently wipe away perspiration or oil using a soft lint-free cotton cloth. Do NOT use jewelry cleaners, abrasive pads, or harsh chemicals.</span>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
