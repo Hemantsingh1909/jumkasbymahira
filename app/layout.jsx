@@ -1,6 +1,7 @@
 import { Providers } from './providers';
 import LayoutWrapper from './layout-wrapper';
 import { Poppins, Playfair_Display, Cinzel } from 'next/font/google';
+import { Analytics } from "@vercel/analytics/next";
 import '../src/index.css';
 
 const poppins = Poppins({
@@ -42,6 +43,7 @@ export default function RootLayout({ children }) {
         <Providers>
           <LayoutWrapper>{children}</LayoutWrapper>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
