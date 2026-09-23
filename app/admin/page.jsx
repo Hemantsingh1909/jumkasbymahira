@@ -550,7 +550,16 @@ export default function AdminDashboard() {
                                 <td className="p-4 text-xs max-w-xs truncate" title={`${order.customer.address}, ${order.customer.city}`}>
                                   {order.customer.address}, {order.customer.city}
                                 </td>
-                                <td className="p-4 font-semibold text-gray-900">₹{order.total.toFixed(2)}</td>
+                                <td className="p-4">
+                                  <div className="font-semibold text-gray-900">₹{order.total.toFixed(2)}</div>
+                                  <span className={`inline-block text-[10px] font-bold px-1.5 py-0.5 rounded mt-0.5 uppercase ${
+                                    (order.payment_method === 'razorpay' || order.customer?.paymentMethod === 'razorpay')
+                                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                      : 'bg-gray-100 text-gray-600'
+                                  }`}>
+                                    {(order.payment_method === 'razorpay' || order.customer?.paymentMethod === 'razorpay') ? 'Online (Paid)' : 'COD'}
+                                  </span>
+                                </td>
                                 <td className="p-4">
                                   <select
                                     value={order.status}
