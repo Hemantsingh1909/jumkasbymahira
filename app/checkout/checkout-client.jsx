@@ -138,7 +138,6 @@ export default function CheckoutClient() {
         body: JSON.stringify({
           amount: amountInPaise,
           currency: 'INR',
-          receipt: `rcpt_${Date.now()}`,
           notes: {
             customerName: `${formData.firstName} ${formData.lastName}`,
             email: formData.email,
@@ -154,7 +153,11 @@ export default function CheckoutClient() {
       }
 
       const razorpayKey =
-        process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_TfWjAlOdHEGvng';
+        orderData.key_id || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+
+      if (!razorpayKey) {
+        throw new Error('Razorpay Key ID is not configured. Please check your environment variables.');
+      }
 
       // Step 2: Open Razorpay Checkout Modal
       const options = {
