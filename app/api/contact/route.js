@@ -24,7 +24,7 @@ export async function POST(request) {
     if (resendApiKey) {
       try {
         const adminEmail = process.env.ADMIN_EMAIL || 'sshreecollection593@gmail.com';
-        const fromEmail = process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
+        const fromEmail = process.env.RESEND_FROM_EMAIL || 'orders@jhumkasbymalti.in';
 
         const emailRes = await fetch('https://api.resend.com/emails', {
           method: 'POST',
