@@ -28,6 +28,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
   const [newReviewRating, setNewReviewRating] = useState(5);
   const [newReviewComment, setNewReviewComment] = useState('');
   const [hoverRating, setHoverRating] = useState(0);
+  const [reviewErrors, setReviewErrors] = useState({});
 
   // New review states for size chart and images upload/lightbox
   const [isSizeChartOpen, setIsSizeChartOpen] = useState(false);
@@ -87,15 +88,32 @@ export default function ProductDetailClient({ product, relatedProducts }) {
     setImageError(null);
   };
 
+  const validateReview = () => {
+    const errors = {};
+    if (!newReviewName.trim()) {
+      errors.name = 'Please enter your name';
+    }
+    if (!newReviewRating || newReviewRating < 1 || newReviewRating > 5) {
+      errors.rating = 'Please select a star rating';
+    }
+    if (!newReviewComment.trim()) {
+      errors.comment = 'Please write a review description';
+    } else if (newReviewComment.trim().length < 5) {
+      errors.comment = 'Review must be at least 5 characters long';
+    }
+    setReviewErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleAddReview = (e) => {
     e.preventDefault();
-    if (!newReviewName.trim() || !newReviewComment.trim()) return;
+    if (!validateReview()) return;
 
     const newReview = {
       id: Date.now(),
-      name: newReviewName,
+      name: newReviewName.trim(),
       rating: newReviewRating,
-      comment: newReviewComment,
+      comment: newReviewComment.trim(),
       images: uploadedImages,
       date: new Date().toLocaleDateString('en-IN', {
         year: 'numeric',
@@ -112,6 +130,7 @@ export default function ProductDetailClient({ product, relatedProducts }) {
     setNewReviewRating(5);
     setNewReviewComment('');
     setUploadedImages([]);
+    setReviewErrors({});
     setImageError(null);
 
     // Trigger cross-component sync event
@@ -519,27 +538,35 @@ export default function ProductDetailClient({ product, relatedProducts }) {
             {/* Right Column: Write a Review form */}
             <div className="md:col-span-2 bg-gray-50/50 p-6 rounded-xl border border-gray-100">
               <h3 className="text-lg font-serif font-semibold text-jewelry-800 mb-4">Write a Review</h3>
-              <form onSubmit={handleAddReview} className="space-y-4">
+              <form onSubmit={handleAddReview} noValidate className="space-y-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-500 uppercase mb-1.5">Your Name</label>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase mb-1.5">Your Name *</label>
                     <input
                       type="text"
-                      required
                       value={newReviewName}
-                      onChange={(e) => setNewReviewName(e.target.value)}
+                      onChange={(e) => {
+                        setNewReviewName(e.target.value);
+                        if (reviewErrors.name) setReviewErrors(prev => ({ ...prev, name: '' }));
+                      }}
                       placeholder="e.g. Priyanjali Sen"
-                      className="w-full px-3 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-jewelry-500 bg-white"
+                      className={`w-full px-3 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-jewelry-500 bg-white ${
+                        reviewErrors.name ? 'border-red-400 bg-red-50/20' : 'border-gray-200'
+                      }`}
                     />
+                    {reviewErrors.name && <p className="text-red-500 text-[11px] mt-1">{reviewErrors.name}</p>}
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-gray-500 uppercase mb-1.5">Rating</label>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase mb-1.5">Rating *</label>
                     <div className="flex items-center gap-1 mt-1.5">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button
                           key={star}
                           type="button"
-                          onClick={() => setNewReviewRating(star)}
+                          onClick={() => {
+                            setNewReviewRating(star);
+                            if (reviewErrors.rating) setReviewErrors(prev => ({ ...prev, rating: '' }));
+                          }}
                           onMouseEnter={() => setHoverRating(star)}
                           onMouseLeave={() => setHoverRating(0)}
                           className="focus:outline-none transition-transform hover:scale-110"
@@ -554,19 +581,25 @@ export default function ProductDetailClient({ product, relatedProducts }) {
                         </button>
                       ))}
                     </div>
+                    {reviewErrors.rating && <p className="text-red-500 text-[11px] mt-1">{reviewErrors.rating}</p>}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase mb-1.5">Review Description</label>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase mb-1.5">Review Description *</label>
                   <textarea
-                    required
                     rows="3"
                     value={newReviewComment}
-                    onChange={(e) => setNewReviewComment(e.target.value)}
+                    onChange={(e) => {
+                      setNewReviewComment(e.target.value);
+                      if (reviewErrors.comment) setReviewErrors(prev => ({ ...prev, comment: '' }));
+                    }}
                     placeholder="Share details of your experience with this jewelry (design, finish, material quality)..."
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-jewelry-500 bg-white"
+                    className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-jewelry-500 bg-white ${
+                      reviewErrors.comment ? 'border-red-400 bg-red-50/20' : 'border-gray-200'
+                    }`}
                   />
+                  {reviewErrors.comment && <p className="text-red-500 text-[11px] mt-1">{reviewErrors.comment}</p>}
                 </div>
 
                 {/* Image Upload for Reviews */}

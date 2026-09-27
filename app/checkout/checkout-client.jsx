@@ -5,7 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { clearCart } from '@/src/store/cartSlice';
-import { calculateShippingFee, calculateOrderTotal } from '@/src/lib/shipping';
+import { calculateShippingFee, calculateOrderTotal, getFreeShippingProgress, SHIPPING_THRESHOLD } from '@/src/lib/shipping';
+import { INDIAN_STATES, findStateByCity, findStateByPincode } from '@/src/lib/indiaLocation';
 
 const loadRazorpayScript = () => {
   return new Promise((resolve) => {
@@ -61,10 +62,38 @@ export default function CheckoutClient() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
+    
+    let updatedFormData = {
+      ...formData,
       [name]: value,
-    }));
+    };
+
+    // Auto-detect State when City is entered or changed
+    if (name === 'city') {
+      const detectedState = findStateByCity(value);
+      if (detectedState) {
+        updatedFormData.state = detectedState;
+        if (errors.state) {
+          setErrors((prev) => ({ ...prev, state: '' }));
+        }
+      }
+    }
+
+    // Auto-detect State when Pincode is typed
+    if (name === 'pincode') {
+      const cleanPin = value.replace(/\D/g, '');
+      if (cleanPin.length === 6 && !updatedFormData.state) {
+        const detectedState = findStateByPincode(cleanPin);
+        if (detectedState) {
+          updatedFormData.state = detectedState;
+          if (errors.state) {
+            setErrors((prev) => ({ ...prev, state: '' }));
+          }
+        }
+      }
+    }
+
+    setFormData(updatedFormData);
 
     if (errors[name]) {
       setErrors((prev) => ({
@@ -119,6 +148,7 @@ export default function CheckoutClient() {
   const subtotal = calculateSubtotal();
   const shippingFee = calculateShippingFee(subtotal);
   const total = calculateOrderTotal(subtotal);
+  const freeShipping = getFreeShippingProgress(subtotal);
 
   const handleRazorpayCheckout = async () => {
     setSubmitting(true);
@@ -139,7 +169,7 @@ export default function CheckoutClient() {
           amount: amountInPaise,
           currency: 'INR',
           notes: {
-            customerName: `${formData.firstName} ${formData.lastName}`,
+            customerName: `${formData.firstName} ${formData.lastName}`.trim(),
             email: formData.email,
             phone: formData.phone,
           },
@@ -182,10 +212,12 @@ export default function CheckoutClient() {
                 orderData: {
                   items: cartItems.map((item) => ({
                     id: item.id,
-                    name: item.name,
-                    price: item.price,
-                    quantity: item.quantity,
+                    name: item.name || item.title || 'Handcrafted Jewelry',
+                    price: Number(item.price),
+                    quantity: Number(item.quantity || 1),
                     selectedSize: item.selectedSize || null,
+                    image: item.image || (Array.isArray(item.images) ? item.images[0] : null) || null,
+                    sku: item.sku || null,
                   })),
                   customer: formData,
                   subtotal,
@@ -275,48 +307,7 @@ export default function CheckoutClient() {
       return;
     }
 
-    if (formData.paymentMethod === 'razorpay') {
-      await handleRazorpayCheckout();
-    } else if (formData.paymentMethod === 'cod') {
-      setSubmitting(true);
-      setPaymentError(null);
-      try {
-        const response = await fetch('/api/orders', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            items: cartItems.map((item) => ({
-              id: item.id,
-              name: item.name,
-              price: item.price,
-              quantity: item.quantity,
-              selectedSize: item.selectedSize || null,
-            })),
-            customer: formData,
-            subtotal,
-            shipping: shippingFee,
-            total,
-          }),
-        });
-
-        if (response.ok) {
-          const newOrder = await response.json();
-          setPlacedOrder(newOrder);
-          setOrderPlaced(true);
-          dispatch(clearCart());
-        } else {
-          const data = await response.json();
-          setPaymentError(data.error || 'Failed to place COD order.');
-        }
-      } catch (error) {
-        console.error('Error placing COD order:', error);
-        setPaymentError(error.message || 'An unexpected error occurred while placing your order.');
-      } finally {
-        setSubmitting(false);
-      }
-    }
+    await handleRazorpayCheckout();
   };
 
   const getWhatsAppLink = () => {
@@ -489,9 +480,65 @@ Please confirm my order. Thank you!`;
 
   return (
     <div className="max-w-7xl mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-8 text-center text-jewelry-800 font-serif">
+      <h1 className="text-3xl font-bold mb-6 text-center text-jewelry-800 font-serif">
         Secure Checkout
       </h1>
+
+      {/* Free Shipping Advertisement Banner with Dynamic Progress */}
+      <div className={`mb-8 p-4 md:p-5 rounded-2xl border transition-all ${
+        freeShipping.isFree
+          ? 'bg-gradient-to-r from-emerald-50 via-teal-50 to-emerald-50 border-emerald-300/80 text-emerald-900 shadow-sm'
+          : 'bg-gradient-to-r from-amber-50 via-rose-50 to-amber-50 border-amber-300/70 text-gray-800 shadow-sm'
+      }`}>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-2.5">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl shrink-0">
+              {freeShipping.isFree ? '🎉' : '🚚'}
+            </span>
+            <div>
+              <p className="font-semibold text-sm md:text-base leading-snug">
+                {freeShipping.isFree ? (
+                  <span className="text-emerald-900">
+                    Congratulations! You have unlocked <strong className="text-emerald-700 underline decoration-emerald-400 font-bold">FREE Express Shipping</strong> on this order!
+                  </span>
+                ) : (
+                  <span>
+                    Add items worth <strong className="text-jewelry-800 font-bold">₹{freeShipping.remaining.toFixed(2)}</strong> more to avail <strong className="text-emerald-700 font-bold">FREE Shipping</strong>!
+                  </span>
+                )}
+              </p>
+              {!freeShipping.isFree && (
+                <p className="text-xs text-gray-500 mt-0.5">
+                  Free shipping is automatically applied on all orders of ₹{SHIPPING_THRESHOLD.toLocaleString('en-IN')} or above.
+                </p>
+              )}
+            </div>
+          </div>
+          {!freeShipping.isFree && (
+            <Link
+              href="/products"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-jewelry-800 bg-white border border-jewelry-300 hover:bg-jewelry-50 hover:border-jewelry-400 px-3.5 py-1.5 rounded-lg shadow-xs transition-all shrink-0 active:scale-95"
+            >
+              <span>+ Add More Items</span>
+              <svg className="w-3.5 h-3.5 text-jewelry-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          )}
+        </div>
+
+        {/* Dynamic Progress Bar */}
+        <div className="w-full bg-gray-200/90 rounded-full h-2.5 overflow-hidden shadow-inner mt-1">
+          <div
+            className={`h-2.5 rounded-full transition-all duration-700 ease-out ${
+              freeShipping.isFree
+                ? 'bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600'
+                : 'bg-gradient-to-r from-amber-400 via-rose-500 to-jewelry-700'
+            }`}
+            style={{ width: `${freeShipping.percentage}%` }}
+          ></div>
+        </div>
+      </div>
 
       {paymentError && (
         <div className="mb-6 max-w-4xl mx-auto p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg flex items-start gap-3 shadow-sm animate-shake">
@@ -644,7 +691,7 @@ Please confirm my order. Thank you!`;
                   name="city"
                   value={formData.city}
                   onChange={handleChange}
-                  placeholder="e.g. Mumbai"
+                  placeholder="e.g. Mumbai, Jaipur, Pune"
                   className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-jewelry-500/20 transition-all ${
                     errors.city ? 'border-red-500 bg-red-50/20' : 'border-gray-300'
                   }`}
@@ -654,20 +701,37 @@ Please confirm my order. Thank you!`;
                 )}
               </div>
               <div>
-                <label htmlFor="state" className="block text-gray-700 text-sm font-medium mb-1">
-                  State *
+                <label htmlFor="state" className="block text-gray-700 text-sm font-medium mb-1 flex items-center justify-between">
+                  <span>State *</span>
+                  {formData.city && findStateByCity(formData.city) && formData.state === findStateByCity(formData.city) && (
+                    <span className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1 bg-emerald-50 px-1.5 py-0.5 rounded">
+                      ✓ Auto-selected
+                    </span>
+                  )}
                 </label>
-                <input
-                  type="text"
-                  id="state"
-                  name="state"
-                  value={formData.state}
-                  onChange={handleChange}
-                  placeholder="e.g. Maharashtra"
-                  className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-jewelry-500/20 transition-all ${
-                    errors.state ? 'border-red-500 bg-red-50/20' : 'border-gray-300'
-                  }`}
-                />
+                <div className="relative">
+                  <select
+                    id="state"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                    className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-jewelry-500/20 transition-all bg-white appearance-none pr-8 cursor-pointer ${
+                      errors.state ? 'border-red-500 bg-red-50/20' : 'border-gray-300'
+                    }`}
+                  >
+                    <option value="">Select State / UT</option>
+                    {INDIAN_STATES.map((stateName) => (
+                      <option key={stateName} value={stateName}>
+                        {stateName}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2.5 text-gray-500">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
                 {errors.state && (
                   <p className="text-red-500 text-xs mt-1">{errors.state}</p>
                 )}
@@ -699,74 +763,32 @@ Please confirm my order. Thank you!`;
               Payment Method
             </h2>
             
-            <div className="space-y-3 mb-8">
-              {/* Razorpay Option */}
-              <label
-                className={`relative flex items-start p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                  formData.paymentMethod === 'razorpay'
-                    ? 'border-jewelry-600 bg-jewelry-50/40 shadow-sm'
-                    : 'border-gray-200 hover:border-gray-300 bg-white'
-                }`}
-              >
-                <div className="flex items-center h-5">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="razorpay"
-                    checked={formData.paymentMethod === 'razorpay'}
-                    onChange={handleChange}
-                    className="h-4 w-4 text-jewelry-600 focus:ring-jewelry-500 border-gray-300 accent-jewelry-700"
-                  />
-                </div>
-                <div className="ml-3 flex-1">
-                  <div className="flex items-center justify-between flex-wrap gap-2">
-                    <span className="text-sm font-bold text-gray-900 flex items-center gap-2">
-                      Online Payment (UPI, Cards, NetBanking, Wallets)
-                      <span className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full shadow-xs">
-                        Recommended • Fast & Secure
-                      </span>
+            {/* Direct Online Payment Option (COD Removed) */}
+            <div className="mb-8">
+              <div className="p-5 rounded-xl border-2 border-jewelry-600 bg-jewelry-50/40 shadow-xs relative">
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <span className="text-base font-bold text-gray-900 flex items-center gap-2">
+                    Online Payment (UPI, Cards, NetBanking, Wallets)
+                    <span className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-full shadow-xs">
+                      Instant & Secure
                     </span>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">
-                    Instant payment confirmation powered by Razorpay Standard Checkout. Supports GPay, PhonePe, Paytm, All Major Cards & Netbanking.
-                  </p>
-                  <div className="flex items-center gap-2 mt-2 pt-2 border-t border-gray-100 text-xs text-gray-400">
-                    <span className="inline-flex items-center font-semibold text-gray-600">
-                      🔒 256-bit Encrypted
-                    </span>
-                    <span>•</span>
-                    <span>Razorpay Verified</span>
-                  </div>
-                </div>
-              </label>
-
-              {/* COD Option */}
-              <label
-                className={`relative flex items-start p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                  formData.paymentMethod === 'cod'
-                    ? 'border-jewelry-600 bg-jewelry-50/40 shadow-sm'
-                    : 'border-gray-200 hover:border-gray-300 bg-white'
-                }`}
-              >
-                <div className="flex items-center h-5">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="cod"
-                    checked={formData.paymentMethod === 'cod'}
-                    onChange={handleChange}
-                    className="h-4 w-4 text-jewelry-600 focus:ring-jewelry-500 border-gray-300 accent-jewelry-700"
-                  />
-                </div>
-                <div className="ml-3 flex-1">
-                  <span className="text-sm font-semibold text-gray-900 block">
-                    Cash on Delivery (COD)
                   </span>
-                  <p className="text-xs text-gray-500 mt-0.5">
-                    Pay with cash when your artisanal jewelry arrives at your doorstep.
-                  </p>
                 </div>
-              </label>
+                <p className="text-xs sm:text-sm text-gray-600 mt-1.5 leading-relaxed">
+                  Pay securely via Razorpay with Google Pay, PhonePe, Paytm, all UPI apps, Credit/Debit Cards, NetBanking, and Wallets.
+                </p>
+                <div className="flex flex-wrap items-center gap-4 mt-3 pt-3 border-t border-gray-200/70 text-xs text-gray-500 font-medium">
+                  <span className="inline-flex items-center gap-1 text-emerald-800 font-semibold">
+                    🔒 256-bit Bank-Grade Encryption
+                  </span>
+                  <span>•</span>
+                  <span className="inline-flex items-center gap-1 text-jewelry-800 font-semibold">
+                    ⚡ Instant Order Confirmation
+                  </span>
+                  <span>•</span>
+                  <span>Razorpay Verified</span>
+                </div>
+              </div>
             </div>
 
             <button
@@ -780,12 +802,10 @@ Please confirm my order. Thank you!`;
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Processing Checkout...
+                  Processing Secure Payment...
                 </>
-              ) : formData.paymentMethod === 'razorpay' ? (
-                `Pay ₹${total.toFixed(2)} via Razorpay`
               ) : (
-                `Place COD Order (₹${total.toFixed(2)})`
+                `Pay ₹${total.toFixed(2)} via Razorpay`
               )}
             </button>
           </form>
@@ -823,10 +843,16 @@ Please confirm my order. Thank you!`;
                 <span className="text-gray-500">Subtotal</span>
                 <span className="text-gray-800 font-medium">₹{subtotal.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-between text-sm items-center">
                 <span className="text-gray-500">Shipping</span>
-                <span className="text-green-600 font-semibold">
-                  {shippingFee === 0 ? 'FREE' : `₹${shippingFee.toFixed(2)}`}
+                <span className="font-semibold">
+                  {shippingFee === 0 ? (
+                    <span className="text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded text-xs font-bold">
+                      FREE SHIPPING
+                    </span>
+                  ) : (
+                    <span className="text-gray-800">₹{shippingFee.toFixed(2)}</span>
+                  )}
                 </span>
               </div>
               <div className="flex justify-between font-bold text-lg pt-3 border-t border-gray-100">

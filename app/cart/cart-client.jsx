@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Link from 'next/link';
 import { incrementItem, decrementItem, removeItem } from '@/src/store/cartSlice';
-import { calculateShippingFee, calculateOrderTotal } from '@/src/lib/shipping';
+import { calculateShippingFee, calculateOrderTotal, getFreeShippingProgress, SHIPPING_THRESHOLD } from '@/src/lib/shipping';
 import { getProductUrl } from '@/src/lib/slug';
 
 export default function CartClient() {
@@ -24,6 +24,7 @@ export default function CartClient() {
   const subtotal = calculateSubtotal();
   const shippingFee = calculateShippingFee(subtotal);
   const total = calculateOrderTotal(subtotal);
+  const freeShipping = getFreeShippingProgress(subtotal);
 
   return (
     <div className="bg-gray-50 py-12 min-h-[calc(100vh-420px)]">
@@ -128,6 +129,30 @@ export default function CartClient() {
                   Order Summary
                 </h3>
                 <div className="space-y-3 mb-6 pb-6 border-b border-gray-100">
+                  {/* Free Shipping Progress Widget */}
+                  <div className={`p-3 rounded-lg text-xs mb-3 border ${
+                    freeShipping.isFree
+                      ? 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                      : 'bg-amber-50 border-amber-200 text-gray-800'
+                  }`}>
+                    <p className="font-semibold mb-1.5 flex items-center gap-1.5">
+                      <span>{freeShipping.isFree ? '🎉' : '🚚'}</span>
+                      {freeShipping.isFree ? (
+                        <span>You've unlocked <strong>FREE Shipping!</strong></span>
+                      ) : (
+                        <span>Add <strong>₹{freeShipping.remaining.toFixed(2)}</strong> more for <strong>FREE Shipping!</strong></span>
+                      )}
+                    </p>
+                    <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                      <div
+                        className={`h-2 rounded-full transition-all duration-500 ${
+                          freeShipping.isFree ? 'bg-emerald-500' : 'bg-jewelry-600'
+                        }`}
+                        style={{ width: `${freeShipping.percentage}%` }}
+                      ></div>
+                    </div>
+                  </div>
+
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Subtotal</span>
                     <span className="font-medium">₹{subtotal.toFixed(2)}</span>

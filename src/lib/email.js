@@ -25,22 +25,36 @@ export async function sendOrderEmails({ order, items, customer, subtotal, shippi
   const isPaidOnline = paymentMethod === 'razorpay' || !!paymentId;
   const paymentMethodLabel = isPaidOnline ? 'Paid Online (Razorpay)' : 'Cash on Delivery (COD)';
 
-  // Build items HTML table rows
-  const itemsRowsHtml = (items || []).map(item => {
-    const itemTotal = (Number(item.price || 0) * Number(item.quantity || 1)).toFixed(2);
+  // Build items HTML table rows with exact product name, size, unit price, and total
+  const itemsRowsHtml = (items || []).map((item, index) => {
+    const exactProductName = item.name || item.title || item.product_name || `Item #${index + 1}`;
+    const unitPrice = Number(item.price || 0);
+    const quantity = Number(item.quantity || 1);
+    const itemTotal = (unitPrice * quantity).toFixed(2);
+
     const sizeBadge = item.selectedSize
-      ? `<br/><span style="display: inline-block; font-size: 11px; background-color: #fdf2f4; color: #831843; padding: 2px 6px; border-radius: 4px; margin-top: 4px; font-weight: 600;">Size: ${item.selectedSize}</span>`
+      ? `<div style="margin-top: 4px;"><span style="display: inline-block; font-size: 11px; background-color: #fdf2f4; color: #831843; padding: 2px 6px; border-radius: 4px; font-weight: 600; border: 1px solid #fce7eb;">Size / Variant: ${item.selectedSize}</span></div>`
       : '';
+    const skuBadge = item.sku
+      ? `<div style="margin-top: 2px; font-size: 11px; color: #6b7280; font-family: monospace;">SKU: ${item.sku}</div>`
+      : '';
+    const imgHtml = (item.image || (Array.isArray(item.images) ? item.images[0] : null) || item.image_url)
+      ? `<img src="${item.image || (Array.isArray(item.images) ? item.images[0] : null) || item.image_url}" alt="${exactProductName}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #e5e7eb; float: left; margin-right: 12px;" />`
+      : '';
+
     return `
       <tr>
         <td style="padding: 12px 10px; border-bottom: 1px solid #f0e6e8; color: #1f2937; font-size: 14px; vertical-align: top;">
-          <div style="font-weight: 600; color: #1f2937;">${item.name || 'Jewelry Item'}</div>
+          ${imgHtml}
+          <div style="font-weight: 700; color: #111827; font-size: 14px; line-height: 1.4;">${exactProductName}</div>
           ${sizeBadge}
+          ${skuBadge}
+          <div style="font-size: 12px; color: #6b7280; margin-top: 3px;">Unit Price: ₹${unitPrice.toFixed(2)}</div>
         </td>
-        <td style="padding: 12px 10px; border-bottom: 1px solid #f0e6e8; color: #4b5563; font-size: 14px; text-align: center; vertical-align: top;">
-          ${item.quantity || 1}
+        <td style="padding: 12px 10px; border-bottom: 1px solid #f0e6e8; color: #374151; font-size: 14px; text-align: center; vertical-align: middle; font-weight: 600;">
+          ${quantity}
         </td>
-        <td style="padding: 12px 10px; border-bottom: 1px solid #f0e6e8; color: #1f2937; font-size: 14px; text-align: right; font-weight: 600; vertical-align: top;">
+        <td style="padding: 12px 10px; border-bottom: 1px solid #f0e6e8; color: #111827; font-size: 14px; text-align: right; font-weight: 700; vertical-align: middle;">
           ₹${itemTotal}
         </td>
       </tr>

@@ -7,25 +7,43 @@ import Link from 'next/link';
 const Footer = () => {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email) {
-      try {
-        const response = await fetch('/api/newsletter', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email }),
-        });
-        if (response.ok) {
-          setSubscribed(true);
-          setEmail("");
-        }
-      } catch (error) {
-        console.error("Subscription error:", error);
+    setError("");
+
+    if (!email.trim()) {
+      setError("Please enter your email address");
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      if (response.ok) {
+        setSubscribed(true);
+        setEmail("");
+      } else {
+        setError("Unable to subscribe. Please try again later.");
       }
+    } catch (err) {
+      console.error("Subscription error:", err);
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -256,22 +274,32 @@ const Footer = () => {
                 </p>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row w-full max-w-sm md:max-w-md lg:max-w-none gap-2 lg:gap-0 items-stretch justify-center md:justify-center lg:justify-start">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Your email address"
-                  className="bg-white border border-[#E3D8C4] rounded-md lg:rounded-none lg:rounded-l-md px-3 py-2 w-full text-xs focus:outline-none focus:ring-1 focus:ring-[#5C1625] text-gray-800"
-                  required
-                />
-                <button
-                  type="submit"
-                  className="bg-[#4A1521] text-white px-4 py-2 rounded-md lg:rounded-none lg:rounded-r-md text-xs font-semibold hover:bg-[#5C1625] transition-colors duration-300 shrink-0"
-                >
-                  Subscribe
-                </button>
-              </form>
+              <div>
+                <form onSubmit={handleSubmit} noValidate className="flex flex-col lg:flex-row w-full max-w-sm md:max-w-md lg:max-w-none gap-2 lg:gap-0 items-stretch justify-center md:justify-center lg:justify-start">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (error) setError("");
+                    }}
+                    placeholder="Your email address"
+                    className={`bg-white border rounded-md lg:rounded-none lg:rounded-l-md px-3 py-2 w-full text-xs focus:outline-none focus:ring-1 focus:ring-[#5C1625] text-gray-800 ${
+                      error ? 'border-red-400 bg-red-50/20' : 'border-[#E3D8C4]'
+                    }`}
+                  />
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="bg-[#4A1521] text-white px-4 py-2 rounded-md lg:rounded-none lg:rounded-r-md text-xs font-semibold hover:bg-[#5C1625] transition-colors duration-300 shrink-0 disabled:opacity-60"
+                  >
+                    {submitting ? 'Subscribing...' : 'Subscribe'}
+                  </button>
+                </form>
+                {error && (
+                  <p className="text-red-500 text-[11px] mt-1.5 text-center lg:text-left">{error}</p>
+                )}
+              </div>
             )}
             <div className="flex items-center gap-1.5 mt-3 text-xs text-gray-500 font-sans justify-center md:justify-center lg:justify-start">
               <i className="fa-solid fa-lock text-[#C19A5B] text-[11px] w-3.5 h-3.5 flex items-center justify-center shrink-0"></i>
@@ -310,7 +338,7 @@ const Footer = () => {
               <i className="fa-solid fa-truck text-[#C19A5B] text-2xl shrink-0"></i>
               <div className="text-left">
                 <h5 className="font-serif text-sm font-bold text-gray-800">Free Shipping</h5>
-                <p className="text-xs text-gray-500 font-sans mt-0.5">On orders above ₹1499</p>
+                <p className="text-xs text-gray-500 font-sans mt-0.5">On orders above ₹5000</p>
               </div>
             </div>
 

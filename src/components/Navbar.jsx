@@ -7,6 +7,7 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 const Navbar = () => {
   const cartItems = useSelector((state) => state.cart.items || []);
+  const [mounted, setMounted] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
@@ -15,6 +16,10 @@ const Navbar = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const filter = searchParams ? searchParams.get('filter') || '' : '';
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Handle scroll effect for navbar
   useEffect(() => {
@@ -78,13 +83,13 @@ const Navbar = () => {
       <div className="ticker-container relative flex overflow-x-hidden bg-jewelry-900 text-white py-2.5 text-xs font-medium tracking-wide">
         <div className="animate-ticker flex whitespace-nowrap shrink-0 gap-32 px-16">
           <span>✨ Handcrafted in India</span>
-          <span>🚚 Free Shipping Above ₹1499</span>
+          <span>🚚 Free Shipping Above ₹5000</span>
           <span>🔒 Secure Payments</span>
           <span>↩ Easy Returns</span>
         </div>
         <div className="animate-ticker flex whitespace-nowrap shrink-0 gap-32 px-16" aria-hidden="true">
           <span>✨ Handcrafted in India</span>
-          <span>🚚 Free Shipping Above ₹1499</span>
+          <span>🚚 Free Shipping Above ₹5000</span>
           <span>🔒 Secure Payments</span>
           <span>↩ Easy Returns</span>
         </div>
@@ -188,7 +193,7 @@ const Navbar = () => {
                 >
                   <div className="relative">
                     <i className="far fa-heart text-xl group-hover:scale-105 transition-transform"></i>
-                    {wishlistCount > 0 && (
+                    {mounted && wishlistCount > 0 && (
                       <span className="absolute -top-2.5 -right-2.5 bg-[#E6455F] text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center font-bold leading-none">
                         {wishlistCount}
                       </span>
@@ -205,7 +210,7 @@ const Navbar = () => {
                 >
                   <div className="relative">
                     <i className="fas fa-shopping-bag text-xl group-hover:scale-105 transition-transform"></i>
-                    {totalCartItems > 0 && (
+                    {mounted && totalCartItems > 0 && (
                       <span className="absolute -top-2.5 -right-2.5 bg-[#E6455F] text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center font-bold leading-none">
                         {totalCartItems}
                       </span>
@@ -223,7 +228,7 @@ const Navbar = () => {
                 aria-label="Wishlist"
               >
                 <i className="far fa-heart text-lg"></i>
-                {wishlistCount > 0 && (
+                {mounted && wishlistCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                     {wishlistCount}
                   </span>
@@ -235,7 +240,7 @@ const Navbar = () => {
                 aria-label="Shopping cart"
               >
                 <i className="fas fa-shopping-bag text-lg"></i>
-                {totalCartItems > 0 && (
+                {mounted && totalCartItems > 0 && (
                   <span className="absolute -top-2 -right-2 bg-jewelry-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                     {totalCartItems}
                   </span>
