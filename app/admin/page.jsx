@@ -518,17 +518,15 @@ export default function AdminDashboard() {
                 <div className="p-6 border-b border-gray-100 flex justify-between items-center">
                   <h3 className="text-lg font-bold text-gray-800">Orders History</h3>
                 </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-sm whitespace-nowrap">
-                    <thead className="bg-gray-50 text-gray-500 font-semibold border-b border-gray-100">
+                <div>
+                  <table className="w-full text-left text-sm">
+                    <thead className="bg-gray-50 text-gray-500 font-semibold border-b border-gray-100 text-xs uppercase tracking-wider">
                       <tr>
-                        <th className="p-4">Invoice No</th>
-                        <th className="p-4">Date</th>
-                        <th className="p-4">Customer Name</th>
-                        <th className="p-4">Phone</th>
-                        <th className="p-4">Delivery Address</th>
-                        <th className="p-4">Total Value</th>
-                        <th className="p-4">Status</th>
+                        <th className="p-4 w-[16%]">Order Info</th>
+                        <th className="p-4 w-[24%]">Customer & Delivery</th>
+                        <th className="p-4 w-[36%]">Products Ordered</th>
+                        <th className="p-4 w-[12%]">Payment</th>
+                        <th className="p-4 w-[12%] text-right pr-6">Status</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100 text-gray-700">
@@ -536,54 +534,143 @@ export default function AdminDashboard() {
                         groupedOrders.map(group => (
                           <Fragment key={group.date}>
                             {/* Group Date Header Row */}
-                            <tr className="bg-gray-100/70 font-bold text-jewelry-900 border-t border-b border-gray-200">
-                              <td colSpan="7" className="p-3 pl-4 font-display font-bold text-xs uppercase tracking-wider text-jewelry-800">
-                                {group.date}
+                            <tr className="bg-gray-100/80 font-bold text-jewelry-900 border-t border-b border-gray-200">
+                              <td colSpan="5" className="py-2.5 px-4 font-display font-bold text-xs uppercase tracking-wider text-jewelry-800">
+                                <span className="inline-flex items-center gap-1.5">
+                                  <i className="fa-regular fa-calendar text-[11px]"></i>
+                                  {group.date}
+                                </span>
                               </td>
                             </tr>
-                            {group.items.map(order => (
-                              <tr key={order.id} className="hover:bg-gray-50/50 transition-colors">
-                                <td className="p-4 font-mono font-bold text-jewelry-700">{order.invoiceNo}</td>
-                                <td className="p-4 text-xs text-gray-500 font-medium">{formatOrderTime(order.created_at || order.createdAt)}</td>
-                                <td className="p-4 font-medium">{order.customer.firstName} {order.customer.lastName}</td>
-                                <td className="p-4 text-xs font-mono">{order.customer.phone}</td>
-                                <td className="p-4 text-xs max-w-xs truncate" title={`${order.customer.address}, ${order.customer.city}`}>
-                                  {order.customer.address}, {order.customer.city}
-                                </td>
-                                <td className="p-4">
-                                  <div className="font-semibold text-gray-900">₹{order.total.toFixed(2)}</div>
-                                  <span className={`inline-block text-[10px] font-bold px-1.5 py-0.5 rounded mt-0.5 uppercase ${
-                                    (order.payment_method === 'razorpay' || order.customer?.paymentMethod === 'razorpay')
-                                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                      : 'bg-gray-100 text-gray-600'
-                                  }`}>
-                                    {(order.payment_method === 'razorpay' || order.customer?.paymentMethod === 'razorpay') ? 'Online (Paid)' : 'COD'}
-                                  </span>
-                                </td>
-                                <td className="p-4">
-                                  <select
-                                    value={order.status}
-                                    onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                                    className={`text-xs px-2.5 py-1.5 rounded-full font-bold border transition-colors ${
-                                      order.status === 'New' ? 'bg-blue-50 border-blue-200 text-blue-700' :
-                                      order.status === 'Processing' ? 'bg-amber-50 border-amber-200 text-amber-700' :
-                                      order.status === 'Shipped' ? 'bg-indigo-50 border-indigo-200 text-indigo-700' :
-                                      'bg-green-50 border-green-200 text-green-700'
-                                    }`}
-                                  >
-                                    <option value="New">New</option>
-                                    <option value="Processing">Processing</option>
-                                    <option value="Shipped">Shipped</option>
-                                    <option value="Delivered">Delivered</option>
-                                  </select>
-                                </td>
-                              </tr>
-                            ))}
+                            {group.items.map(order => {
+                              const orderItems = Array.isArray(order.items) 
+                                ? order.items 
+                                : (typeof order.items === 'string' ? JSON.parse(order.items || '[]') : []);
+                              const customer = typeof order.customer === 'string' ? JSON.parse(order.customer || '{}') : (order.customer || {});
+                              const addressFull = [
+                                customer.address, 
+                                customer.city, 
+                                customer.state ? `${customer.state}${customer.pincode ? ` - ${customer.pincode}` : ''}` : customer.pincode
+                              ].filter(Boolean).join(', ');
+
+                              return (
+                                <tr key={order.id} className="hover:bg-gray-50/60 transition-colors align-top">
+                                  {/* 1. Order Info */}
+                                  <td className="p-4">
+                                    <div className="font-mono font-bold text-jewelry-700 text-sm">
+                                      {order.invoiceNo}
+                                    </div>
+                                    <div className="text-xs text-gray-500 font-medium mt-1 flex items-center gap-1">
+                                      <i className="fa-regular fa-clock text-[10px] text-gray-400"></i>
+                                      {formatOrderTime(order.created_at || order.createdAt)}
+                                    </div>
+                                  </td>
+
+                                  {/* 2. Customer & Delivery Address */}
+                                  <td className="p-4">
+                                    <div className="font-semibold text-gray-900 text-sm">
+                                      {customer.firstName || ''} {customer.lastName || ''}
+                                    </div>
+                                    {customer.phone && (
+                                      <div className="text-xs font-mono text-gray-500 mt-0.5 flex items-center gap-1">
+                                        <i className="fa-solid fa-phone text-[10px] text-gray-400"></i>
+                                        {customer.phone}
+                                      </div>
+                                    )}
+                                    {addressFull && (
+                                      <div className="text-xs text-gray-600 mt-1.5 leading-relaxed bg-gray-50/80 p-1.5 rounded border border-gray-100/80 break-words">
+                                        <i className="fa-solid fa-location-dot text-[10px] text-rose-500 mr-1"></i>
+                                        {addressFull}
+                                      </div>
+                                    )}
+                                  </td>
+
+                                  {/* 3. Products Ordered */}
+                                  <td className="p-4">
+                                    <div className="flex flex-col gap-2">
+                                      {orderItems && orderItems.length > 0 ? (
+                                        orderItems.map((item, idx) => {
+                                          const exactName = item.name || item.title || item.product_name || `Item #${idx + 1}`;
+                                          const itemImg = item.image || (Array.isArray(item.images) ? item.images[0] : null) || item.image_url;
+                                          const qty = item.quantity || item.qty || 1;
+                                          return (
+                                            <div key={idx} className="flex items-center gap-2.5 bg-gray-50/90 p-2 rounded-lg border border-gray-200/70 text-xs">
+                                              {itemImg && (
+                                                <img 
+                                                  src={itemImg} 
+                                                  alt={exactName} 
+                                                  className="w-10 h-10 rounded object-cover flex-shrink-0 border border-gray-200 bg-white"
+                                                />
+                                              )}
+                                              <div className="flex-1 min-w-0">
+                                                <div className="font-medium text-gray-900 leading-snug break-words">
+                                                  {exactName}
+                                                </div>
+                                                <div className="flex flex-wrap items-center gap-1.5 mt-1 text-[11px]">
+                                                  <span className="font-bold text-jewelry-800 bg-jewelry-50 px-1.5 py-0.5 rounded border border-jewelry-200/60">
+                                                    Qty: {qty}
+                                                  </span>
+                                                  {item.selectedSize && (
+                                                    <span className="bg-rose-50 text-rose-700 px-1.5 py-0.5 rounded border border-rose-200/50 font-medium">
+                                                      Size: {item.selectedSize}
+                                                    </span>
+                                                  )}
+                                                  {item.price && (
+                                                    <span className="text-gray-500 font-medium">
+                                                      ₹{Number(item.price).toLocaleString('en-IN')}
+                                                    </span>
+                                                  )}
+                                                </div>
+                                              </div>
+                                            </div>
+                                          );
+                                        })
+                                      ) : (
+                                        <span className="text-xs text-gray-400 italic">No item details</span>
+                                      )}
+                                    </div>
+                                  </td>
+
+                                  {/* 4. Total & Payment */}
+                                  <td className="p-4">
+                                    <div className="font-bold text-base text-gray-900">
+                                      ₹{order.total.toFixed(2)}
+                                    </div>
+                                    <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded mt-1 uppercase ${
+                                      (order.payment_method === 'razorpay' || customer?.paymentMethod === 'razorpay')
+                                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                        : 'bg-gray-100 text-gray-600 border border-gray-200'
+                                    }`}>
+                                      {(order.payment_method === 'razorpay' || customer?.paymentMethod === 'razorpay') ? 'Online (Paid)' : 'COD'}
+                                    </span>
+                                  </td>
+
+                                  {/* 5. Status Selector */}
+                                  <td className="p-4 text-right pr-6">
+                                    <select
+                                      value={order.status}
+                                      onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                                      className={`text-xs px-3 py-1.5 rounded-full font-bold border transition-colors cursor-pointer shadow-sm ${
+                                        order.status === 'New' ? 'bg-blue-50 border-blue-200 text-blue-700' :
+                                        order.status === 'Processing' ? 'bg-amber-50 border-amber-200 text-amber-700' :
+                                        order.status === 'Shipped' ? 'bg-indigo-50 border-indigo-200 text-indigo-700' :
+                                        'bg-green-50 border-green-200 text-green-700'
+                                      }`}
+                                    >
+                                      <option value="New">New</option>
+                                      <option value="Processing">Processing</option>
+                                      <option value="Shipped">Shipped</option>
+                                      <option value="Delivered">Delivered</option>
+                                    </select>
+                                  </td>
+                                </tr>
+                              );
+                            })}
                           </Fragment>
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="7" className="p-12 text-center text-gray-400">No orders received yet</td>
+                          <td colSpan="5" className="p-12 text-center text-gray-400">No orders received yet</td>
                         </tr>
                       )}
                     </tbody>
